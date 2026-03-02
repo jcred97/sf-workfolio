@@ -1,0 +1,84 @@
+/*https://sfdcarjuna.com/2022/12/03/how-to-change-colors-of-slds-icons-lightning-icons/*/
+
+:host(){
+    /*--sds-c-icon-color-foreground-default: #fff;
+    --sds-c-icon-color-background: #1d4ed8;*/
+    --blue: #1d4ed8;
+}
+
+* {
+    /*padding: 0;
+    margin: 0;*/
+    outline: none;
+    border: none;
+    box-sizing: border-box;
+}
+
+img {
+    width: 100%;
+    display: flex;
+}
+
+a {
+    text-decoration: none;
+}
+
+.body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background-color: #2b4162;
+    background-image: linear-gradient(315deg, #2b4162 0%, #12100e 74%);
+    min-height: 100vh;
+    animation: fadeIn 1s;
+}
+
+nav {
+    max-width: 1200px;
+    margin: auto;
+    padding: 2rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+.nav-logo {
+    max-width: 60px;
+}
+
+.nav-logo img {
+    border-radius: 30px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    font-size: 1.2rem;
+}
+
+.link a {
+    position: relative;
+    padding-bottom: 0.75rem;
+    color: #fff;
+    font-weight: 500;
+    transition: .3s;
+}
+
+.link a:hover {
+    color: var(--blue);
+}
+
+.btn {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    color: #fff;
+    background-color: var(--blue);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    background-color: var(--blue);
+}

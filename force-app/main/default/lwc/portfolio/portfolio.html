@@ -1,0 +1,62 @@
+<template>
+    <div class="body">
+        <nav>
+            <div class="nav-logo">
+                <a href="#">
+                    <img src={profilePicture}>
+                </a>
+            </div>
+    
+            <ul class="nav-links">
+                <li class="link"><a onclick={handleDisplayHome}>Home</a></li>
+                <li class="link"><a onclick={handleDisplayAbout}>About</a></li>
+                <!--<li class="link"><a onclick={handleDisplaySkills} href="#">Skills</a></li>-->
+                <li class="link"><a onclick={handleDisplayExperience}>Experience</a></li>
+                <li class="link"><a onclick={handleDisplayContact}>Contact</a></li>
+            </ul>
+            <!--<button class="btn">Contact</button>-->
+        </nav>
+
+        <div class="content">
+            <template if:true={showHome}>
+                <c-portfolio-home 
+                    record-id={recordId} 
+                    linkedin={linkedin} 
+                    linkedin-url={linkedinUrl} 
+                    trailblazer={trailblazer}
+                    trailblazer-url={trailblazerUrl} 
+                    tech-background={techBackground}> 
+                </c-portfolio-home>
+            </template>
+    
+            <template if:true={showAbout}>
+                <c-portfolio-about
+                    record-id={recordId}
+                    profile-picture={profilePicture}> 
+                </c-portfolio-about>
+            </template>
+            <!--
+            <template if:true={showSkills}>
+                <c-portfolio-skills
+                    record-id={recordId}> 
+                </c-portfolio-skills>
+            </template>-->
+    
+            <template if:true={showExperience}>
+                <c-portfolio-experience 
+                    record-id={recordId}> 
+                </c-portfolio-experience>
+            </template>
+
+            <template if:true={showContact}>
+                <c-portfolio-contact
+                    record-id={recordId}
+                    linkedin={linkedin} 
+                    linkedin-url={linkedinUrl} 
+                    trailblazer={trailblazer}
+                    trailblazer-url={trailblazerUrl} >
+                </c-portfolio-contact>
+            </template>
+        </div>
+    </div>
+</template> 

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>Portfolio_and_Application_Tracker</members>
+        <name>CustomApplication</name>
+    </types>
+    <types>
+        <members>Job_Application__c</members>
+        <members>Portfolio__c</members>
+        <members>WorkExperience__c</members>
+        <name>CustomObject</name>
+    </types>
+    <types>
+        <members>Job_Application__c</members>
+        <members>Portfolio__c</members>
+        <members>WorkExperience__c</members>
+        <name>CustomTab</name>
+    </types>
+    <types>
+        <members>Job_Application_Record_Page</members>
+        <members>Portfolio_and_Application_Tracker_UtilityBar</members>
+        <name>FlexiPage</name>
+    </types>
+    <types>
+        <members>Job_Application__c-Job Application Layout</members>
+        <members>Portfolio__c-Portfolio Layout</members>
+        <members>WorkExperience__c-Work Experience Layout</members>
+        <name>Layout</name>
+    </types>
+    <types>
+        <members>portfolio</members>
+        <members>portfolioAbout</members>
+        <members>portfolioContact</members>
+        <members>portfolioExperience</members>
+        <members>portfolioHome</members>
+        <members>portfolioSkills</members>
+        <members>portfolioStringToHtml</members>
+        <name>LightningComponentBundle</name>
+    </types>
+    <version>65.0</version>
+</Package>

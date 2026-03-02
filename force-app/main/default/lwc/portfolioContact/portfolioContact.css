@@ -1,0 +1,141 @@
+* {
+    outline: none;
+    border: none;
+    box-sizing: border-box;
+    animation: fadeIn 1s;
+    font-size: 1rem;
+    --slds-c-input-color-background: black;
+    --slds-c-input-color-background-focus: black;
+    --slds-c-input-text-color: #fff;
+    --slds-c-input-text-color-focus: #fff;
+    --slds-c-input-color-border: gray;
+    --slds-c-input-color-border-focus: gray;
+
+    --slds-c-textarea-color-background: black;
+    --slds-c-textarea-color-background-error-focus: black;
+    --slds-c-textarea-color-background-focus: black;
+    --slds-c-textarea-color-border: gray;
+    --slds-c-textarea-color-border-focus: gray;
+    --slds-c-textarea-text-color: #fff;
+    --slds-c-textarea-text-color-error-focus: #fff;
+    --slds-c-textarea-text-color-focus: #fff;
+}
+
+a {
+    text-decoration: none;
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 5rem 2rem; 
+
+    position: relative;
+    padding-top: 2rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    gap: 2rem;
+}
+
+.content {
+    /*background-color: #323232;
+    border: 1px solid;
+    box-shadow: 5px 10px #888888;*/
+    padding: 2rem 2rem;
+    margin: 4rem 2rem;
+    border-radius: 15px;
+}
+
+hr {
+    border-top: 1px solid gray;
+    margin: 0.8rem 0rem;
+}
+
+h1 {
+    color: #fff;
+    font-weight: 500;
+    font-size: 1.2rem;
+}
+
+
+
+.btn {
+    margin-top: 1rem;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #fff;
+    background-color: #1d4ed8;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    border-radius: 10px;
+}
+
+.btn:hover {
+    background-color: #1d4ed800;
+    border-color: #fff;
+}
+
+.content-contact {
+    padding: 2rem 2rem;
+    margin: 4rem 2rem;
+    border-radius: 15px;
+    justify-self: center;
+}
+
+.content-email {
+    padding: 1rem;
+    background-color: #27272a00;
+    border: 2px solid transparent;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+}
+
+.content-email:hover {
+    background-color: #323232;
+    border-color: #fff;
+    pointer-events: auto;
+    /*cursor: pointer;*/
+}
+
+.email-icon {
+    padding: 1rem;
+}
+
+div h2 {
+    color: #fff;
+    font-size: 1rem;
+    margin-bottom: 0.2rem;
+    font-weight: 500;
+}
+
+div h3 {
+    color: #fff;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    font-weight: 500;
+    color: #1d4ed8;
+}
+
+.social-icon {
+    height: 40px;
+    width: 40px;
+    margin: 16px 16px 0px 0px;
+}
+
+.social-links {
+    justify-content: center;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}

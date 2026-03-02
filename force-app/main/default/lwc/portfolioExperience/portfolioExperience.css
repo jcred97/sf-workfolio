@@ -1,0 +1,128 @@
+* {
+    outline: none;
+    border: none;
+    box-sizing: border-box;
+    animation: fadeIn 1s;
+    font-size: 1.2rem;
+}
+
+:host {
+    --sds-c-card-color-background: #27272a00;
+    --slds-c-card-color-border: #27272a00;
+    --slds-c-card-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0);
+}
+
+.no-hover {
+    pointer-events: none;
+}
+
+.container {
+    max-width: 90vw;
+    margin: auto;
+    padding: 5rem 2rem; 
+
+    position: relative;
+    padding-top: 2rem;
+    display: grid;
+    align-items: center;
+    gap: 2rem;
+    pointer-events: none;
+}
+
+.container .content {
+    color: #ccc;
+}
+
+.container .content .contentExperience{
+    padding: 1rem;
+    background-color: #27272a00;
+    border: 2px solid transparent;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    pointer-events: auto;
+}
+
+.container .content .contentExperience:hover {
+    background-color: #323232;
+    border-color: #fff;
+    pointer-events: auto;
+}
+
+.companyLogo {
+    display: grid;
+}
+
+.companyLogo lightning-formatted-rich-text{
+    justify-self: center;
+}
+
+lightning-card h1 {
+    font-size: 1.2rem;
+}
+
+lightning-card h2 {
+    font-size: 1rem;
+    padding-bottom: 1rem;
+}
+
+lightning-card h3 {
+    font-size: 1rem;
+}
+
+lightning-card h4 {
+    font-size: 1rem;
+    padding-bottom: 1rem;
+}
+
+lightning-card lightning-formatted-rich-text {
+    font-size: 0.9rem;
+}
+
+
+/*
+
+.blue-background-icon-color {
+    --sds-c-icon-color-background: #1d4ed8;
+}
+
+.white-foreground-default-color {
+    --sds-c-icon-color-foreground-default: #fff;
+}
+
+.slds-timeline__item_task:before {
+    background-color: #ccc;
+}
+
+
+lightning-formatted-rich-text {
+    background-color: #ccc;
+}
+
+
+div p{
+    color: #ccc;
+}
+
+.container .content article {
+    background-color: #27272a00;
+    border: 2px solid transparent;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    pointer-events: auto;
+}
+
+.container .content article:hover {
+    background-color: #323232;
+    border-color: #fff;
+    pointer-events: auto;
+}*/
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}

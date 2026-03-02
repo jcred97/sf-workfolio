@@ -1,0 +1,45 @@
+<template>
+    <div class="container">
+        <div class="content">
+            <h1>Send me a message</h1>
+            <hr>
+            <div class="slds-grid slds-gutters">
+                <div class="slds-col">
+                    <lightning-input type="text" name="firstName" placeholder="First Name*" value={firstName} onchange={inputHandler}> </lightning-input>
+                </div>
+                <div class="slds-col">
+                    <lightning-input type="text" name="lastName" placeholder="Last Name*" value={lastName} onchange={inputHandler}> </lightning-input>
+                </div>
+            </div>
+            <lightning-input type="email" name="emailAddress" placeholder="Email Address*" value={emailAddress} onchange={inputHandler}> </lightning-input>
+            <lightning-input type="text" name="subject" placeholder="Subject" value={subject} onchange={inputHandler}> </lightning-input>
+            <lightning-textarea name="message" placeholder="Type your message here" value={message} onchange={inputHandler}></lightning-textarea>
+
+            <button class="btn" onclick={sendDataAndEmail}>Send Message</button>
+        </div>
+        <div class="content-contact">
+            <h1>Contact Details</h1>
+            <hr>
+            <div class="content-email">
+                <div class="slds-grid">
+                    <div class="email-icon">
+                        <lightning-icon icon-name="utility:email" alternative-text="email" title="email"></lightning-icon>
+                    </div>
+                    <div>
+                        <h2>Email Me</h2>
+                        <h3>{email}</h3>   
+                    </div>
+                </div>
+            </div>
+
+            <div class="slds-grid social-links">
+                <a href={linkedinUrl} target="_blank">
+                    <img src={linkedin} class="social-icon">
+                </a>
+                <a href={trailblazerUrl} target="_blank">
+                    <img src={trailblazer} class="social-icon">
+                </a>
+            </div>
+        </div>
+    </div>
+</template>

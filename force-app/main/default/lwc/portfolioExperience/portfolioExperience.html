@@ -1,0 +1,79 @@
+<template>
+    <div class="container">
+        <div class="content">
+            <!--
+            <ul class="slds-timeline">
+                <template for:each={workExperienceList} for:item="work">
+                    <li key={work.id}>
+                        <div class="slds-timeline__item_expandable slds-timeline__item_task slds-is-open">
+                            <div class="slds-media">
+                                <div class="slds-media__figure">
+                                    <button class="slds-button slds-button_icon white-foreground-default-color">
+                                        <lightning-icon icon-name="utility:switch" alternative-text="switch" size="x-small" title="switch"></lightning-icon>
+                                    </button>
+                                    <div class="slds-icon_container slds-icon-standard-task slds-timeline__icon blue-background-icon-color" title="task">
+                                        <lightning-icon icon-name="standard:task" alternative-text="task" size="small" title="task"></lightning-icon>
+                                    </div>
+                                </div>
+                                <div class="slds-media__body">
+                                    <div class="slds-grid slds-grid_align-spread slds-timeline__trigger">
+                                        <div class="slds-grid slds-grid_vertical-align-center slds-truncate_container_75 slds-no-space">
+                                            <h3 class="slds-truncate" title={work.Role}>
+                                                <strong>{work.Role}</strong>
+                                            </h3>
+                                        </div>
+                                        <div class="slds-timeline__actions slds-timeline__actions_inline">
+                                            <template if:true={work.IsCurrent}>
+                                                <p class="slds-timeline__date"><strong>{work.JobStartDate} - Current</strong></p>
+                                            </template>
+        
+                                            <template if:false={work.IsCurrent}>
+                                                <p class="slds-timeline__date"><strong>{work.JobStartDate} - {work.JobEndDate}</strong></p>
+                                            </template>
+                                        </div>
+                                    </div>
+                                    <p class="slds-var-m-horizontal_xx-small">
+                                        <strong>{work.CompanyName}</strong>, {work.WorkLocation}
+                                    </p>
+                                    <article class="slds-box slds-timeline__item_details slds-theme_shade slds-m-top_x-small slds-m-horizontal_xx-small slds-p-around_medium" id="task-item-expanded-65">
+                                        <div>
+                                            <lightning-formatted-rich-text value={work.Description}></lightning-formatted-rich-text>
+                                        </div>
+                                    </article>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </template>
+            </ul>-->
+            <div class="slds-grid slds-wrap">
+                <template for:each={workExperienceList} for:item="work">
+                    <div key={work.Id} class="slds-col slds-size_1-of-3">
+                        <div class="contentExperience">
+                            <lightning-card>
+                                <div class="companyLogo">
+                                    <lightning-formatted-rich-text value={work.CompanyLogo}></lightning-formatted-rich-text>
+                                </div>
+                                <h1><strong>{work.Role}</strong></h1>
+
+                                <template if:true={work.IsCurrent}>
+                                    <h2>{work.JobStartDate} - Current</h2>
+                                </template>
+
+                                <template if:false={work.IsCurrent}>
+                                    <h2>{work.JobStartDate} - {work.JobEndDate}</h2>
+                                </template>
+
+                                <h3><strong>{work.CompanyName}</strong></h3>
+                                <h4>{work.WorkLocation}</h4>
+
+                                <lightning-formatted-rich-text value={work.Description}></lightning-formatted-rich-text>
+                            </lightning-card>
+                        </div>
+                        
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>        
+</template>

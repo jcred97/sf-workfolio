@@ -1,0 +1,23 @@
+<template>
+    <div class="container">
+        <div class="content">
+            <span class="blur"></span>
+            <span class="blur"></span>
+            <h1><span>{nickname}</span> - {designation}</h1>
+            <h2>6+ years of experience building high-performance, maintainable Salesforce solutions</h2>
+            <p>{introduction}</p>
+            
+            <div class="slds-grid social-links">
+                <a href={linkedinUrl} target="_blank">
+                    <img src={linkedin} class="social-icon">
+                </a>
+                <a href={trailblazerUrl} target="_blank">
+                    <img src={trailblazer} class="social-icon">
+                </a>
+            </div>
+        </div>
+        <div class="image">
+            <img src={techBackground}>
+        </div>
+    </div>
+</template>
