@@ -1,73 +1,56 @@
-import { LightningElement, wire, api } from 'lwc';
-
+import { LightningElement, api } from 'lwc';
 import PortfolioAssets from '@salesforce/resourceUrl/PortfolioAssets';
 
 export default class Portfolio extends LightningElement {
+
     profilePicture = `${PortfolioAssets}/PortfolioAssets/portfolioPicture.jpg`;
     techBackground = `${PortfolioAssets}/PortfolioAssets/techBackground.png`;
     linkedin = `${PortfolioAssets}/PortfolioAssets/Social/linkedin.svg`;
     trailblazer = `${PortfolioAssets}/PortfolioAssets/Social/trailhead2.png`;
 
-    showHome = true;
-    showAbout = false;
-    showSkills = false;
-    showExperience = false;
-    projects = false;
-    showContact = false;
+    @api recordId;
+    @api linkedinUrl;
+    @api trailblazerUrl;
 
-    @api recordId; //a005g00003NV3ktAAD
-    @api linkedinUrl; //https://www.linkedin.com/in/jcdred/
-    @api trailblazerUrl; //https://www.salesforce.com/trailblazer/u4v1u2g1fp3ifg4eh4
+    // 🔥 single source of truth
+    activeSection = 'home';
 
-    handleDisplayHome(){
-        this.showHome = true;
-        this.showAbout = false;
-        this.showSkills = false;
-        this.showExperience = false;
-        this.projects = false;
-        this.showContact = false;
+    // computed visibility
+    get showHome() {
+        return this.activeSection === 'home';
     }
 
-    handleDisplayAbout(){
-        this.showHome = false;
-        this.showAbout = true;
-        this.showSkills = false;
-        this.showExperience = false;
-        this.projects = false;
-        this.showContact = false;
+    get showExperience() {
+        return this.activeSection === 'experience';
     }
 
-    handleDisplaySkills(){
-        this.showHome = false;
-        this.showAbout = false;
-        this.showSkills = true;
-        this.showExperience = false;
-        this.projects = false;
-        this.showContact = false;
+    get showContact() {
+        return this.activeSection === 'contact';
     }
 
-    handleDisplayExperience(){
-        this.showHome = false;
-        this.showAbout = false;
-        this.showSkills = false;
-        this.showExperience = true;
-        this.projects = false;
-        this.showContact = false;
+    // active classes
+    get homeClass() {
+        return this.activeSection === 'home' ? 'active' : '';
     }
 
-    handleDisplayProjects(){
-        this.showHome = false;
-        this.showAbout = false;
-        this.showExperience = false;
-        this.projects = true;
-        this.showContact = false;
+    get experienceClass() {
+        return this.activeSection === 'experience' ? 'active' : '';
     }
 
-    handleDisplayContact(){
-        this.showHome = false;
-        this.showAbout = false;
-        this.showExperience = false;
-        this.projects = false;
-        this.showContact = true;
+    get contactClass() {
+        return this.activeSection === 'contact' ? 'active' : '';
+    }
+
+    // handlers
+    handleDisplayHome() {
+        this.activeSection = 'home';
+    }
+
+    handleDisplayExperience() {
+        this.activeSection = 'experience';
+    }
+
+    handleDisplayContact() {
+        this.activeSection = 'contact';
     }
 }

@@ -1,95 +1,160 @@
-/*https://sfdcarjuna.com/2022/12/03/how-to-change-colors-of-slds-icons-lightning-icons/*/
-
-:host(){
+/* =========================================================
+   THEME VARIABLES
+   Central place for colors / design tokens
+========================================================= */
+:host {
     /*--sds-c-icon-color-foreground-default: #fff;
     --sds-c-icon-color-background: #1d4ed8;*/
     --blue: #1d4ed8;
 }
 
+
+/* =========================================================
+   GLOBAL RESET
+   Normalize styles across elements
+========================================================= */
 * {
-    /*padding: 0;
-    margin: 0;*/
+    box-sizing: border-box;
     outline: none;
     border: none;
-    box-sizing: border-box;
 }
 
 img {
     width: 100%;
-    display: flex;
+    display: block; /* flex → block (more appropriate) */
 }
 
 a {
     text-decoration: none;
 }
 
+
+/* =========================================================
+   PAGE BACKGROUND
+========================================================= */
 .body {
     font-family: "Segoe UI", Arial, sans-serif;
-    background-color: #2b4162;
-    background-image: linear-gradient(315deg, #2b4162 0%, #12100e 74%);
     min-height: 100vh;
+
+    /* Gradient background */
+    background: linear-gradient(315deg, #2b4162 0%, #12100e 74%);
+
     animation: fadeIn 1s;
 }
 
+
+/* =========================================================
+   NAVBAR LAYOUT
+========================================================= */
 nav {
     max-width: 1200px;
     margin: auto;
-    padding: 2rem 1rem;
+    padding: 1.5rem 1rem;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 2rem;
 }
 
+
+/* =========================================================
+   LOGO
+========================================================= */
 .nav-logo {
-    width: 48px;
-    height: 48px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--blue);
 }
 
-.nav-logo img {
-    width: 48px;
-    height: 48px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.3s ease;
-}
 
-.nav-logo img:hover {
-    transform: scale(1.05);
-    border-color: var(--blue);
-}
-
+/* =========================================================
+   NAVIGATION LINKS
+========================================================= */
 .nav-links {
     list-style: none;
     display: flex;
     align-items: center;
-    gap: 3rem;
-    font-size: 1.2rem;
+    gap: 2.5rem;
 }
 
+/* Base link style */
 .link a {
     position: relative;
-    padding-bottom: 0.75rem;
-    color: #fff;
+    font-size: 1rem;
     font-weight: 500;
-    transition: .3s;
+    color: #fff;
+    cursor: pointer;
+
+    transition: color 0.3s ease;
 }
 
+
+/* =========================================================
+   HOVER + ACTIVE EFFECT (Underline Animation)
+========================================================= */
+
+/* underline base */
+.link a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+
+    width: 0%;
+    height: 2px;
+    background: var(--blue);
+
+    transition: width 0.3s ease;
+}
+
+/* hover state */
 .link a:hover {
     color: var(--blue);
 }
 
+.link a:hover::after {
+    width: 100%;
+}
+
+/* active state (controlled via JS) */
+.link a.active {
+    color: var(--blue);
+}
+
+.link a.active::after {
+    width: 100%;
+}
+
+
+/* =========================================================
+   BUTTON (Optional / Future Use)
+========================================================= */
 .btn {
     padding: 1rem 2rem;
     font-size: 1rem;
     color: #fff;
+
     background-color: var(--blue);
     border-radius: 5px;
     cursor: pointer;
+
     transition: all 0.3s ease;
 }
 
 .btn:hover {
-    background-color: var(--blue);
+    opacity: 0.9; /* better than same color */
+}
+
+
+/* =========================================================
+   ANIMATIONS
+========================================================= */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }

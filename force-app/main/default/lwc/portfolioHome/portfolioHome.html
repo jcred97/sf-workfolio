@@ -1,24 +1,35 @@
 <template>
     <div class="container">
         <div class="content">
-            <span class="blur"></span>
-            <span class="blur"></span>
-            <h1>{fullName}</h1>
-            <h2>{designation}</h2>
+
+            <!-- PROFILE HEADER -->
+            <div class="profile-header">
+                <img src={profilePicture} class="profile-pic"/>
+
+                <div class="profile-text">
+                    <h1>{fullName}</h1>
+                    <h2>{designation}</h2>
+                </div>
+            </div>
+
+            <!-- DESCRIPTION -->
             <h3>{experienceSummary}{introduction}</h3>
             <p>{subIntroduction}</p>
             
+            <!-- SOCIAL LINKS -->
             <div class="slds-grid social-links">
                 <a href={linkedinUrl} target="_blank">
-                    <img src={linkedin} class="social-icon">
+                    <img src={linkedin} class="social-icon"/>
                 </a>
                 <a href={trailblazerUrl} target="_blank">
-                    <img src={trailblazer} class="social-icon">
+                    <img src={trailblazer} class="social-icon"/>
                 </a>
             </div>
         </div>
+
+        <!-- RIGHT SIDE IMAGE -->
         <div class="image">
-            <img src={techBackground}>
+            <img src={techBackground}/>
         </div>
     </div>
 </template>

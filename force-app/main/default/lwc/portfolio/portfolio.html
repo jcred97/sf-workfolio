@@ -2,19 +2,20 @@
     <div class="body">
         <nav>
             <div class="nav-logo">
-                <a href="#">
-                    <img src={profilePicture}>
-                </a>
+                <a href="#">JOHN CARLO RED</a>
             </div>
     
             <ul class="nav-links">
-                <li class="link"><a onclick={handleDisplayHome}>Home</a></li>
-                <li class="link"><a onclick={handleDisplayAbout}>About</a></li>
-                <!--<li class="link"><a onclick={handleDisplaySkills} href="#">Skills</a></li>-->
-                <li class="link"><a onclick={handleDisplayExperience}>Experience</a></li>
-                <li class="link"><a onclick={handleDisplayContact}>Contact</a></li>
+                <li class="link">
+                    <a class={homeClass} onclick={handleDisplayHome}>Home</a>
+                </li>
+                <li class="link">
+                    <a class={experienceClass} onclick={handleDisplayExperience}>Experience</a>
+                </li>
+                <li class="link">
+                    <a class={contactClass} onclick={handleDisplayContact}>Contact</a>
+                </li>
             </ul>
-            <!--<button class="btn">Contact</button>-->
         </nav>
 
         <div class="content">
@@ -25,26 +26,13 @@
                     linkedin-url={linkedinUrl} 
                     trailblazer={trailblazer}
                     trailblazer-url={trailblazerUrl} 
-                    tech-background={techBackground}> 
+                    tech-background={techBackground}
+                    profile-picture={profilePicture}> 
                 </c-portfolio-home>
             </template>
     
-            <template if:true={showAbout}>
-                <c-portfolio-about
-                    record-id={recordId}
-                    profile-picture={profilePicture}> 
-                </c-portfolio-about>
-            </template>
-            <!--
-            <template if:true={showSkills}>
-                <c-portfolio-skills
-                    record-id={recordId}> 
-                </c-portfolio-skills>
-            </template>-->
-    
             <template if:true={showExperience}>
-                <c-portfolio-experience 
-                    record-id={recordId}> 
+                <c-portfolio-experience record-id={recordId}> 
                 </c-portfolio-experience>
             </template>
 
@@ -54,9 +42,9 @@
                     linkedin={linkedin} 
                     linkedin-url={linkedinUrl} 
                     trailblazer={trailblazer}
-                    trailblazer-url={trailblazerUrl} >
+                    trailblazer-url={trailblazerUrl}>
                 </c-portfolio-contact>
             </template>
         </div>
     </div>
-</template> 
+</template>

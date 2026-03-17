@@ -14,6 +14,7 @@ export default class PortfolioHome extends LightningElement {
     @api trailblazer;
     @api trailblazerUrl;
     @api techBackground;
+    @api profilePicture;
 
     @wire(getRecord, {
         recordId: '$recordId', 
