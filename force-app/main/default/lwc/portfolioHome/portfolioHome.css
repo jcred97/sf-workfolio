@@ -148,3 +148,51 @@ a {
         opacity: 1;
     }
 }
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 768px) {
+    .container {
+        grid-template-columns: 1fr;
+        padding: 2rem 1.2rem;
+        text-align: center;
+    }
+
+    .profile-header {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .profile-pic {
+        width: 90px;
+        height: 90px;
+    }
+
+    .profile-text h1 {
+        font-size: 1.8rem;
+    }
+
+    .profile-text h2 {
+        font-size: 1rem;
+    }
+
+    .container .content h3 {
+        font-size: 0.95rem;
+    }
+
+    .container .content p {
+        font-size: 0.9rem;
+    }
+
+    .container .image img {
+        max-width: 260px;
+        margin-top: 2rem;
+    }
+
+    .social-links {
+        justify-content: center;
+    }
+}
