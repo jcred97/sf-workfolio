@@ -4,7 +4,7 @@
     <externalId>false</externalId>
     <formula>CASE(ImageURL__c, 
 &quot;eei.png&quot;, IMAGE(&quot;/resource/PortfolioAssets/PortfolioAssets/Company/&quot; + ImageURL__c , &quot;company&quot;, 200, 200), 
-&quot;accenture_white.png&quot;, IMAGE(&quot;/resource/PortfolioAssets/PortfolioAssets/Company/&quot; + ImageURL__c , &quot;company&quot;, 200, 400),
+&quot;accenture_white.png&quot;, IMAGE(&quot;/resource/PortfolioAssets/PortfolioAssets/Company/&quot; + ImageURL__c , &quot;company&quot;, 200, 200),
 &quot;cloudstaff_white.png&quot;, IMAGE(&quot;/resource/PortfolioAssets/PortfolioAssets/Company/&quot; + ImageURL__c , &quot;company&quot;, 200, 200),
 &quot;quantrics.png&quot;, IMAGE(&quot;/resource/PortfolioAssets/PortfolioAssets/Company/&quot; + ImageURL__c , &quot;company&quot;, 200, 200),
 &quot;kulturra.png&quot;, IMAGE(&quot;/resource/PortfolioAssets/PortfolioAssets/Company/&quot; + ImageURL__c , &quot;company&quot;, 200, 200),

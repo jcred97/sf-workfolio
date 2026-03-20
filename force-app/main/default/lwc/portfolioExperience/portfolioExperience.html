@@ -3,26 +3,29 @@
         <template for:each={workExperienceList} for:item="work">
             <div key={work.id} class="experience-card">
 
+                <!-- HEADER -->
                 <div class="card-header">
                     <div class="logo" lwc:dom="manual"></div>
+
+                    <div class="header-text">
+                        <h2 class="role">{work.Role}</h2>
+                        <p class="company">{work.CompanyName}</p>
+                        <p class="date">
+                            <template if:true={work.IsCurrent}>
+                                {work.JobStartDate} – Current
+                            </template>
+                            <template if:false={work.IsCurrent}>
+                                {work.JobStartDate} – {work.JobEndDate}
+                            </template>
+                        </p>
+                        <!-- LOCATION -->
+                        <p class="location">{work.WorkLocation}</p>
+                    </div>
                 </div>
 
-                <h2 class="role">{work.Role}</h2>
-
-                <p class="date">
-                    <template if:true={work.IsCurrent}>
-                        {work.JobStartDate} – Current
-                    </template>
-                    <template if:false={work.IsCurrent}>
-                        {work.JobStartDate} – {work.JobEndDate}
-                    </template>
-                </p>
-
-                <p class="company">{work.CompanyName}</p>
-                <p class="location">{work.WorkLocation}</p>
-
+                <!-- TECH STACK -->
                 <div class="tech-stack" if:true={work.TechStack}>
-                    <div class="tech-label">Tech Stack:</div>
+                    <div class="tech-label">Tech Stack</div>
                     <div class="tech-pills">
                         <template for:each={work.TechStack} for:item="tech">
                             <span key={tech} class="tech-pill">{tech}</span>
@@ -30,6 +33,7 @@
                     </div>
                 </div>
 
+                <!-- DESCRIPTION -->
                 <div class="description">
                     <lightning-formatted-rich-text value={work.Description}>
                     </lightning-formatted-rich-text>

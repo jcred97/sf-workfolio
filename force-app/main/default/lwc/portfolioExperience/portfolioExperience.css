@@ -1,25 +1,34 @@
+:host {
+    --blue: #1d4ed8;
+}
+
+/* =========================================================
+   BASE
+========================================================= */
+
 * {
     outline: none;
     border: none;
     box-sizing: border-box;
-    animation: fadeIn 1s;
     font-size: 1rem;
 }
 
+/* =========================================================
+   LAYOUT (1 COLUMN — PREMIUM WIDTH)
+========================================================= */
+
 .experience-container {
-    max-width: 1200px;
-    margin: auto;
-    padding: 4rem 2rem;
     display: grid;
     grid-template-columns: 1fr;
+    max-width: 750px;
+    margin: auto;
+    padding: 4rem 2rem;
     gap: 2rem;
 }
 
-@media (min-width: 1024px) {
-    .experience-container {
-        grid-template-columns: 1fr 1fr;
-    }
-}
+/* =========================================================
+   CARD
+========================================================= */
 
 .experience-card {
     background: rgba(255, 255, 255, 0.03);
@@ -27,6 +36,7 @@
     border-radius: 16px;
     padding: 2rem;
     transition: all 0.3s ease;
+    animation: fadeIn 0.6s ease;
 }
 
 .experience-card:hover {
@@ -35,56 +45,77 @@
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
 }
 
+/* =========================================================
+   HEADER (FIXED)
+========================================================= */
+
 .card-header {
     display: flex;
+    align-items: flex-start;
+    gap: 14px;
+}
+
+.logo {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: flex-start;
     justify-content: center;
-    margin-bottom: 1rem;
+    flex-shrink: 0;
 }
 
 .logo img {
-    max-height: 70px;
+    max-width: 100%;
+    max-height: 100%;
     object-fit: contain;
+    opacity: 0.85;
 }
+
+.header-text {
+    display: flex;
+    flex-direction: column;
+}
+
+/* =========================================================
+   TEXT
+========================================================= */
 
 .role {
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: #fff;
-    margin-bottom: 0.5rem;
-}
-
-.date {
-    font-size: 0.9rem;
+    font-size: 1rem;
+    font-weight: 500;
     color: #9ca3af;
-    margin-bottom: 0.75rem;
 }
 
 .company {
     font-size: 1rem;
-    font-weight: 500;
-    color: #e5e7eb;
+    font-weight: 600;
+    color: #fff;
+}
+
+.date {
+    font-size: 0.8rem;
+    color: #9ca3af;
+    margin-top: 2px;
 }
 
 .location {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     color: #9ca3af;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1rem;
 }
 
-.description {
-    font-size: 0.9rem;
-    color: #d1d5db;
-    line-height: 1.6;
-}
+/* =========================================================
+   TECH STACK
+========================================================= */
 
 .tech-stack {
-    margin-top: 6px;
-    margin-bottom: 12px;
+    margin-top: 10px;
+    margin-bottom: 14px;
 }
 
 .tech-label {
-    font-size: 0.85rem;
-    margin-bottom: 8px;
+    font-size: 0.75rem;
+    margin-bottom: 6px;
     color: #7dd3fc;
 }
 
@@ -97,24 +128,49 @@
 .tech-pill {
     padding: 6px 12px;
     border-radius: 999px;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     background: rgba(125, 211, 252, 0.15);
     border: 1px solid rgba(125, 211, 252, 0.4);
     color: #7dd3fc;
     transition: all 0.2s ease;
+    opacity: 0.85;
 }
 
 .tech-pill:hover {
     background: rgba(125, 211, 252, 0.25);
     transform: translateY(-2px);
+    opacity: 1;
 }
+
+/* =========================================================
+   DESCRIPTION
+========================================================= */
+
+.description {
+    font-size: 0.9rem;
+    color: #d1d5db;
+    line-height: 1.7;
+}
+
+.description ul {
+    padding-left: 1.2rem;
+}
+
+.description li {
+    margin-bottom: 8px;
+}
+
+/* =========================================================
+   ANIMATION
+========================================================= */
 
 @keyframes fadeIn {
     from {
         opacity: 0;
+        transform: translateY(6px);
     }
-
     to {
         opacity: 1;
+        transform: translateY(0);
     }
 }
