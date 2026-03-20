@@ -28,8 +28,22 @@
         </div>
 
         <!-- RIGHT SIDE IMAGE -->
-        <div class="image">
-            <img src={techBackground}/>
+        <div class="cert-grid">
+            <template for:each={certifications} for:item="cert">
+                <img key={cert.name} src={cert.image} class="cert-badge"/>
+            </template>
         </div>
+    </div>
+
+    <!-- CONTACT SECTION (MOVED FROM SEPARATE PAGE) -->
+    <div class="contact-section">
+        <h2 class="contact-title">Let’s work together</h2>
+        <c-portfolio-contact
+            record-id={recordId}
+            linkedin={linkedin}
+            linkedin-url={linkedinUrl}
+            trailblazer={trailblazer}
+            trailblazer-url={trailblazerUrl}>
+        </c-portfolio-contact>
     </div>
 </template>

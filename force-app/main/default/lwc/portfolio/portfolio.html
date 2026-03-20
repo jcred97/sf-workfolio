@@ -12,9 +12,6 @@
                 <li class="link">
                     <a class={experienceClass} onclick={handleDisplayExperience}>Experience</a>
                 </li>
-                <li class="link">
-                    <a class={contactClass} onclick={handleDisplayContact}>Contact</a>
-                </li>
             </ul>
         </nav>
 
@@ -26,24 +23,14 @@
                     linkedin-url={linkedinUrl} 
                     trailblazer={trailblazer}
                     trailblazer-url={trailblazerUrl} 
-                    tech-background={techBackground}
-                    profile-picture={profilePicture}> 
+                    profile-picture={profilePicture}
+                    certifications={certifications}> 
                 </c-portfolio-home>
             </template>
     
             <template if:true={showExperience}>
                 <c-portfolio-experience record-id={recordId}> 
                 </c-portfolio-experience>
-            </template>
-
-            <template if:true={showContact}>
-                <c-portfolio-contact
-                    record-id={recordId}
-                    linkedin={linkedin} 
-                    linkedin-url={linkedinUrl} 
-                    trailblazer={trailblazer}
-                    trailblazer-url={trailblazerUrl}>
-                </c-portfolio-contact>
             </template>
         </div>
     </div>

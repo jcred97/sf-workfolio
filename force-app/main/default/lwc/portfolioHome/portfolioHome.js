@@ -13,8 +13,8 @@ export default class PortfolioHome extends LightningElement {
     @api linkedinUrl;
     @api trailblazer;
     @api trailblazerUrl;
-    @api techBackground;
     @api profilePicture;
+    @api certifications = [];
 
     @wire(getRecord, {
         recordId: '$recordId', 

@@ -24,7 +24,7 @@ a {
 /* =========================================================
    MAIN LAYOUT (2-COLUMN GRID)
    Left: Profile Content
-   Right: Illustration / Tech Image
+   Right: Illustration / Certifications
 ========================================================= */
 .container {
     max-width: 1200px;
@@ -62,7 +62,7 @@ a {
     object-fit: cover;
 
     /* soft border + glow */
-    border: 3px solid rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.15);
     padding: 4px;
 
     /* gradient ring effect */
@@ -111,13 +111,25 @@ a {
 
 
 /* =========================================================
-   RIGHT SIDE IMAGE (TECH ILLUSTRATION)
+   RIGHT SIDE (Certification)
 ========================================================= */
-.container .image img {
-    max-width: 600px;
-    margin: auto;
+.cert-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 110px);
+    gap: 20px;
+    justify-content: center;
 }
 
+.cert-badge {
+    width: 100px;
+    object-fit: contain;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.cert-badge:hover {
+    transform: translateY(-5px) scale(1.05);
+    filter: drop-shadow(0 10px 20px rgba(59,130,246,0.4));
+}
 
 /* =========================================================
    SOCIAL ICONS (LinkedIn / Trailhead)
@@ -135,6 +147,25 @@ a {
     transform: scale(1.1); /* subtle hover interaction */
 }
 
+/* =========================================================
+   CONTACT SECTION (FULL WIDTH BELOW HERO)
+========================================================= */
+
+.contact-section {
+    grid-column: span 2;
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.contact-title {
+    text-align: center;
+    color: #ffffff;
+    font-size: 2rem;
+    font-weight: 600;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+}
 
 /* =========================================================
    ANIMATIONS
@@ -188,8 +219,8 @@ a {
     }
 
     .container .image img {
-        max-width: 260px;
-        margin-top: 2rem;
+        max-width: 180px;
+        margin-top: 1.5rem;
     }
 
     .social-links {

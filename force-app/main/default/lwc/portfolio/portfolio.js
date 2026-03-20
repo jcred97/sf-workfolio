@@ -4,9 +4,31 @@ import PortfolioAssets from '@salesforce/resourceUrl/PortfolioAssets';
 export default class Portfolio extends LightningElement {
 
     profilePicture = `${PortfolioAssets}/PortfolioAssets/portfolioPicture.jpg`;
-    techBackground = `${PortfolioAssets}/PortfolioAssets/techBackground.png`;
     linkedin = `${PortfolioAssets}/PortfolioAssets/Social/linkedin.svg`;
     trailblazer = `${PortfolioAssets}/PortfolioAssets/Social/trailhead2.png`;
+
+    certifications = [
+        {
+            name: 'Platform Developer 1',
+            image: `${PortfolioAssets}/PortfolioAssets/CertificateLogo/platformdeveloper1.png`
+        },
+        {
+            name: 'Platform App Builder',
+            image: `${PortfolioAssets}/PortfolioAssets/CertificateLogo/platformappbuilder.png`
+        },
+        {
+            name: 'Platform Administrator',
+            image: `${PortfolioAssets}/PortfolioAssets/CertificateLogo/platformadministrator.png`
+        },
+        {
+            name: 'Agentforce Specialist',
+            image: `${PortfolioAssets}/PortfolioAssets/CertificateLogo/agentforcespecialist.png`
+        },
+        {
+            name: 'Platform Foundations',
+            image: `${PortfolioAssets}/PortfolioAssets/CertificateLogo/platformfoundations.png`
+        }
+    ];
 
     @api recordId;
     @api linkedinUrl;
@@ -22,10 +44,6 @@ export default class Portfolio extends LightningElement {
 
     get showExperience() {
         return this.activeSection === 'experience';
-    }
-
-    get showContact() {
-        return this.activeSection === 'contact';
     }
 
     // active classes
@@ -48,9 +66,5 @@ export default class Portfolio extends LightningElement {
 
     handleDisplayExperience() {
         this.activeSection = 'experience';
-    }
-
-    handleDisplayContact() {
-        this.activeSection = 'contact';
     }
 }

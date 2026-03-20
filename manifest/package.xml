@@ -34,7 +34,6 @@
     </types>
     <types>
         <members>portfolio</members>
-        <members>portfolioAbout</members>
         <members>portfolioContact</members>
         <members>portfolioExperience</members>
         <members>portfolioHome</members>
