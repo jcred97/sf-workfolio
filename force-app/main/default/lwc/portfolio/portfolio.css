@@ -37,6 +37,7 @@ a {
 .body {
     font-family: "Segoe UI", Arial, sans-serif;
     min-height: 100vh;
+    padding-top: 1rem;
 
     /* Gradient background */
     background: linear-gradient(315deg, #2b4162 0%, #12100e 74%);
@@ -56,8 +57,13 @@ nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
 
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    backdrop-filter: blur(10px);
+}
 
 /* =========================================================
    LOGO
