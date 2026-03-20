@@ -295,10 +295,15 @@ hr {
 }
 
 @media (max-width: 768px) {
-    .container {
-        grid-template-columns: 1fr;
-        padding: 2rem 1.2rem;
-        gap: 1.5rem;
+    .content {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+
+    .content lightning-input,
+    .content lightning-textarea {
+        margin-bottom: 0;
     }
 
     .content,
@@ -328,6 +333,8 @@ hr {
     }
 
     .name-row {
+        display: grid;
         grid-template-columns: 1fr;
+        gap: 1rem;
     }
 }
