@@ -29,15 +29,27 @@
             </template>
 
             <!-- Full Name Input -->
-            <lightning-input
-                type="text"
-                name="fullName"
-                label="Full Name"
-                variant="label-hidden"
-                placeholder="Full Name"
-                value={fullName}
-                onchange={inputHandler}>
-            </lightning-input>
+            <div class="name-row">
+                <lightning-input
+                    type="text"
+                    name="firstName"
+                    label="First Name"
+                    variant="label-hidden"
+                    placeholder="First Name"
+                    value={firstName}
+                    onchange={inputHandler}>
+                </lightning-input>
+
+                <lightning-input
+                    type="text"
+                    name="lastName"
+                    label="Last Name"
+                    variant="label-hidden"
+                    placeholder="Last Name"
+                    value={lastName}
+                    onchange={inputHandler}>
+                </lightning-input>
+            </div>
 
             <!-- Email Address Input -->
             <lightning-input

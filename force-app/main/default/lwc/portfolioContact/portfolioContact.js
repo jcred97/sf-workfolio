@@ -32,7 +32,8 @@ export default class PortfolioContact extends LightningElement {
        FORM STATE (Two-way bound via onchange handler)
     ========================================================= */
 
-    fullName = '';
+    firstName = '';
+    lastName = '';
     emailAddress = '';
     message = '';
 
@@ -91,7 +92,8 @@ export default class PortfolioContact extends LightningElement {
 
         try {
             await sendContactMessage({
-                fullName: this.fullName,
+                firstName: this.firstName,
+                lastName: this.lastName,
                 emailAddress: this.emailAddress,
                 message: this.message
             });
@@ -164,7 +166,8 @@ export default class PortfolioContact extends LightningElement {
     ========================================================= */
 
     resetForm() {
-        this.fullName = '';
+        this.firstName = '';
+        this.lastName = '';
         this.emailAddress = '';
         this.message = '';
     }

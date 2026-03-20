@@ -25,17 +25,23 @@ public with sharing class PortfolioController {
      * @throws AuraHandledException if validation fails
      */
     @AuraEnabled
-    public static void sendContactMessage(String fullName, String emailAddress, String message) {
+    public static void sendContactMessage(String firstName, String lastName, String emailAddress, String message) {
         /* =====================================================
            INPUT VALIDATION
            Prevents blank submissions & unnecessary email usage
         ===================================================== */
-        if (String.isBlank(fullName) ||
+        if (String.isBlank(firstName) ||
+            String.isBlank(lastName) ||
             String.isBlank(emailAddress) ||
             String.isBlank(message)) {
 
             throw new AuraHandledException('Please complete all required fields.');
         }
+
+        /* =====================================================
+           DERIVE FULL NAME (FIX)
+        ===================================================== */
+        String fullName = firstName + ' ' + lastName;
 
         /* =====================================================
            EMAIL CONSTRUCTION
@@ -68,5 +74,24 @@ public with sharing class PortfolioController {
            Wrapped in array to support bulk-safe structure
         ===================================================== */
         Messaging.sendEmail(new Messaging.SingleEmailMessage[] { email });
+
+        createLead(firstName, lastName, emailAddress, message);
+    }
+
+    /* =========================================================
+       LEAD CREATION (Reusable Method)
+    ========================================================= */
+    private static void createLead(String firstName, String lastName, String emailAddress, String message) {
+        Lead newLead = new Lead(
+            FirstName = firstName,
+            LastName = String.isBlank(lastName) ? 'Unknown' : lastName,
+            Email = emailAddress,
+            Description = message,
+            Company = 'Website Inquiry',
+            LeadSource = 'Website',
+            Status = 'Open - Not Contacted'
+        );
+
+        insert newLead;
     }
 }

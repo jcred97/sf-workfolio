@@ -2,8 +2,7 @@
 private class PortfolioControllerTest {
 
     /* =====================================================
-       TEST: Successful Email Send
-       Ensures no exception is thrown for valid input
+       TEST: Successful Email + Lead Creation
     ===================================================== */
     @IsTest
     static void testSendContactMessage_Success() {
@@ -11,22 +10,29 @@ private class PortfolioControllerTest {
         Test.startTest();
 
         PortfolioController.sendContactMessage(
-            'John Doe',
+            'John',
+            'Doe',
             'john@example.com',
             'Hello, this is a test message.'
         );
 
         Test.stopTest();
 
-        // If no exception is thrown, test passes.
-        // Email sending is automatically mocked in test context.
-        System.assert(true, 'Email method executed successfully.');
+        // Verify Lead was created
+        List<Lead> leads = [
+            SELECT Id, FirstName, LastName, Email
+            FROM Lead
+            WHERE Email = 'john@example.com'
+        ];
+
+        System.assertEquals(1, leads.size(), 'Lead should be created');
+        System.assertEquals('John', leads[0].FirstName);
+        System.assertEquals('Doe', leads[0].LastName);
     }
 
 
     /* =====================================================
-       TEST: Validation Failure (Blank Fields)
-       Ensures AuraHandledException is thrown
+       TEST: Validation Failure
     ===================================================== */
     @IsTest
     static void testSendContactMessage_BlankFields() {
@@ -34,11 +40,13 @@ private class PortfolioControllerTest {
         Boolean exceptionThrown = false;
 
         try {
-            PortfolioController.sendContactMessage('', '', '');
-        } catch (Exception ex) {
+            PortfolioController.sendContactMessage(
+                '', '', '', ''
+            );
+        } catch (AuraHandledException ex) {
             exceptionThrown = true;
         }
 
-        System.assert(exceptionThrown,'Expected an exception for blank fields.');
+        System.assert(exceptionThrown, 'Expected an exception for blank fields.');
     }
 }

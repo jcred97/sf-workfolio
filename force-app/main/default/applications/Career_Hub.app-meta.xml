@@ -9,13 +9,13 @@
     <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
     <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
     <isNavTabPersistenceDisabled>false</isNavTabPersistenceDisabled>
-    <label>Portfolio and Application Tracker</label>
+    <isOmniPinnedViewEnabled>false</isOmniPinnedViewEnabled>
+    <label>Career Hub</label>
     <navType>Standard</navType>
-    <tabs>standard-Account</tabs>
+    <tabs>standard-Lead</tabs>
     <tabs>standard-Contact</tabs>
-    <tabs>standard-Opportunity</tabs>
+    <tabs>standard-Account</tabs>
     <tabs>Job_Application__c</tabs>
-    <tabs>WorkExperience__c</tabs>
     <tabs>Portfolio__c</tabs>
     <uiType>Lightning</uiType>
     <utilityBar>Portfolio_and_Application_Tracker_UtilityBar</utilityBar>

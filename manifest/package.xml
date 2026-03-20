@@ -6,7 +6,7 @@
         <name>ApexClass</name>
     </types>
     <types>
-        <members>Portfolio_and_Application_Tracker</members>
+        <members>Career_Hub</members>
         <name>CustomApplication</name>
     </types>
     <types>
@@ -23,7 +23,6 @@
     </types>
     <types>
         <members>Job_Application_Record_Page</members>
-        <members>Portfolio_and_Application_Tracker_UtilityBar</members>
         <name>FlexiPage</name>
     </types>
     <types>

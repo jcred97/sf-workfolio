@@ -1,5 +1,5 @@
 /* =========================================================
-   GLOBAL RESET (Scoped to this component)
+   GLOBAL RESET
    Prevent layout inconsistencies across browsers
 ========================================================= */
 
@@ -13,9 +13,8 @@ a {
 
 
 /* =========================================================
-   MAIN LAYOUT — 2 COLUMN GRID
-   Left: Contact Form
-   Right: Contact Info
+   LAYOUT (GRID + STRUCTURE)
+   Main container and form grouping
 ========================================================= */
 
 .container {
@@ -28,9 +27,15 @@ a {
     align-items: start;
 }
 
+.name-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
 
 /* =========================================================
-   CARD STYLE (Glass / Modern UI)
+   CARD UI (GLASS STYLE)
 ========================================================= */
 
 .content,
@@ -42,20 +47,17 @@ a {
     transition: all 0.3s ease;
 }
 
-/* Subtle hover highlight */
 .content:hover,
 .content-contact:hover {
     border-color: rgba(255,255,255,0.2);
 }
 
-/* Fade-in animation on mount */
 .container,
 .content,
 .content-contact {
     animation: fadeIn 0.6s ease;
 }
 
-/* Make form button full width */
 .content .btn {
     width: 100%;
 }
@@ -79,7 +81,7 @@ hr {
 
 
 /* =========================================================
-   BUTTON STYLING (Primary CTA)
+   BUTTONS (PRIMARY CTA)
 ========================================================= */
 
 .btn {
@@ -96,7 +98,6 @@ hr {
     outline: none;
 }
 
-/* Elevated hover interaction */
 .btn:hover {
     transform: translateY(-3px);
     box-shadow: 0 12px 25px rgba(37, 99, 235, 0.45);
@@ -106,7 +107,6 @@ hr {
     transform: translateY(0);
 }
 
-/* Disabled state during async operation */
 .btn:disabled {
     opacity: 0.6;
     cursor: not-allowed;
@@ -115,7 +115,7 @@ hr {
 
 
 /* =========================================================
-   EMAIL CONTACT SECTION
+   EMAIL SECTION
 ========================================================= */
 
 .content-email {
@@ -129,12 +129,10 @@ hr {
     border: 1px solid rgba(255,255,255,0.15);
 }
 
-/* Icon alignment */
 .email-icon {
     padding-right: 1rem;
 }
 
-/* Email text container */
 .email-wrapper {
     display: flex;
     flex-direction: column;
@@ -146,7 +144,6 @@ hr {
     font-weight: 500;
 }
 
-/* Email + Copy icon row */
 .email-row {
     display: flex;
     align-items: center;
@@ -154,7 +151,6 @@ hr {
     margin-top: 0.3rem;
 }
 
-/* Email link styling */
 .email-link {
     font-size: 1.05rem;
     color: #1d4ed8;
@@ -167,7 +163,6 @@ hr {
     transform: translateX(2px);
 }
 
-/* Copy icon micro-interaction */
 .copy-icon {
     cursor: pointer;
     opacity: 0.6;
@@ -181,7 +176,7 @@ hr {
 
 
 /* =========================================================
-   SOCIAL MEDIA LINKS
+   SOCIAL LINKS
 ========================================================= */
 
 .social-links {
@@ -196,7 +191,6 @@ hr {
     display: flex;
     align-items: center;
     justify-content: center;
-    /*background: rgba(255,255,255,0.05);*/
     border-radius: 12px;
     margin-right: 1rem;
     transition: background 0.3s ease, transform 0.2s ease;
@@ -215,7 +209,6 @@ hr {
 
 /* =========================================================
    SLDS DARK MODE OVERRIDES
-   Customizing base lightning-input + lightning-textarea
 ========================================================= */
 
 :host {
@@ -234,7 +227,6 @@ hr {
     --slds-c-textarea-text-color-focus: #fff;
 }
 
-/* Vertical spacing for SLDS inputs */
 .content lightning-input,
 .content lightning-textarea {
     display: block;
@@ -329,6 +321,13 @@ hr {
     }
 
     .social-links {
+        margin-top: 2rem;
+        display: flex;
+        gap: 0.75rem;
         justify-content: center;
+    }
+
+    .name-row {
+        grid-template-columns: 1fr;
     }
 }
