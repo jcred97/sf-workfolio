@@ -1,97 +1,45 @@
-/**
- * PortfolioController
- * -----------------------------------------------------
- * Handles portfolio contact form submissions.
- *
- * Responsibilities:
- * - Validate incoming request
- * - Construct outbound email
- * - Send notification to portfolio owner
- *
- * Security:
- * - with sharing enforced
- * - No DML operations
- * - Input validation required before execution
- */
 public with sharing class PortfolioController {
 
-    /**
-     * Sends contact form submission via email.
-     *
-     * @param fullName     Name entered by user
-     * @param emailAddress User's reply-to email
-     * @param message      User's message body
-     *
-     * @throws AuraHandledException if validation fails
-     */
     @AuraEnabled
-    public static void sendContactMessage(String firstName, String lastName, String emailAddress, String message) {
-        /* =====================================================
-           INPUT VALIDATION
-           Prevents blank submissions & unnecessary email usage
-        ===================================================== */
-        if (String.isBlank(firstName) ||
-            String.isBlank(lastName) ||
-            String.isBlank(emailAddress) ||
-            String.isBlank(message)) {
-
-            throw new AuraHandledException('Please complete all required fields.');
+    public static void submitContact(String firstName, String lastName, String emailAddress, String message) {
+        if (String.isBlank(firstName) || String.isBlank(lastName) || String.isBlank(emailAddress) || String.isBlank(message)) {
+            throw new AuraHandledException('All fields are required.');
         }
 
-        /* =====================================================
-           DERIVE FULL NAME (FIX)
-        ===================================================== */
-        String fullName = firstName + ' ' + lastName;
+        if (!Pattern.matches('^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$',emailAddress)) {
+            throw new AuraHandledException('Invalid email format.');
+        }
+    
+        List<Lead> leads = [
+            SELECT Id, FirstName, LastName, Email, Description, Message__c
+            FROM Lead
+            WHERE Email = :emailAddress
+            LIMIT 1
+        ];
 
-        /* =====================================================
-           EMAIL CONSTRUCTION
-           Using SingleEmailMessage for direct notification
-        ===================================================== */
-        Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
+        List<Lead> leadsToUpsert = new List<Lead>();
 
-        // Destination (Portfolio Owner)
-        email.setToAddresses(new String[] { 'john.carlo.d.red@gmail.com' });
+        if (!leads.isEmpty()) {
+            for (Lead l : leads) {
+                l.FirstName = firstName;
+                l.LastName = lastName;
+                l.Description = 'Old Message:\n' + l.Message__c;
+                l.Message__c = message;
 
-        // Allow direct reply to sender
-        email.setReplyTo(emailAddress);
+                leadsToUpsert.add(l);
+            }
 
-        // Display sender name in email header
-        email.setSenderDisplayName(fullName);
+        } else {
+            leadsToUpsert.add(new Lead(
+                FirstName = firstName,
+                LastName = lastName,
+                Email = emailAddress,
+                Company = 'Portfolio Contact',
+                Message__c = message,
+                LeadSource = 'Website'
+            ));
+        }
 
-        // Subject Line
-        email.setSubject('New Portfolio Inquiry from ' + fullName);
-
-        // Email Body (Plain Text)
-        email.setPlainTextBody(
-            'New message from your portfolio website\n\n' +
-            'Name: ' + fullName + '\n' +
-            'Email: ' + emailAddress + '\n\n' +
-            'Message:\n' + message
-        );
-
-        /* =====================================================
-           SEND EMAIL
-           Wrapped in array to support bulk-safe structure
-        ===================================================== */
-        Messaging.sendEmail(new Messaging.SingleEmailMessage[] { email });
-
-        createLead(firstName, lastName, emailAddress, message);
-    }
-
-    /* =========================================================
-       LEAD CREATION (Reusable Method)
-    ========================================================= */
-    private static void createLead(String firstName, String lastName, String emailAddress, String message) {
-        Lead newLead = new Lead(
-            FirstName = firstName,
-            LastName = String.isBlank(lastName) ? 'Unknown' : lastName,
-            Email = emailAddress,
-            Description = message,
-            Company = 'Website Inquiry',
-            LeadSource = 'Website',
-            Status = 'Open - Not Contacted'
-        );
-
-        insert newLead;
+        upsert leadsToUpsert;
     }
 }
