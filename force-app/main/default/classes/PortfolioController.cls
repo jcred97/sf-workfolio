@@ -1,45 +1,77 @@
 public with sharing class PortfolioController {
 
+    @TestVisible private static Boolean forceEmailFailure = false;
+    @TestVisible private static Boolean forceNoEmailResult = false;
+    @TestVisible private static Boolean forceException = false;
+
     @AuraEnabled
-    public static void submitContact(String firstName, String lastName, String emailAddress, String message) {
-        if (String.isBlank(firstName) || String.isBlank(lastName) || String.isBlank(emailAddress) || String.isBlank(message)) {
-            throw new AuraHandledException('All fields are required.');
-        }
+    public static void sendContactMessage(String firstName, String lastName, String emailAddress, String message) {
 
-        if (!Pattern.matches('^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$',emailAddress)) {
-            throw new AuraHandledException('Invalid email format.');
-        }
-    
-        List<Lead> leads = [
-            SELECT Id, FirstName, LastName, Email, Description, Message__c
-            FROM Lead
-            WHERE Email = :emailAddress
-            LIMIT 1
-        ];
+        validateInput(firstName, lastName, emailAddress, message);
 
-        List<Lead> leadsToUpsert = new List<Lead>();
+        firstName    = firstName.trim();
+        lastName     = String.isBlank(lastName) ? 'Unknown' : lastName.trim();
+        emailAddress = emailAddress.trim();
+        message      = message.trim();
 
-        if (!leads.isEmpty()) {
-            for (Lead l : leads) {
-                l.FirstName = firstName;
-                l.LastName = lastName;
-                l.Description = 'Old Message:\n' + l.Message__c;
-                l.Message__c = message;
+        String fullName = firstName + ' ' + lastName;
 
-                leadsToUpsert.add(l);
+        Boolean emailSent = false;
+        String errorMsg;
+
+        try {
+            emailSent = sendEmail(fullName, emailAddress, message);
+
+            if (!emailSent) {
+                errorMsg = 'Email sending failed';
             }
 
-        } else {
-            leadsToUpsert.add(new Lead(
-                FirstName = firstName,
-                LastName = lastName,
-                Email = emailAddress,
-                Company = 'Portfolio Contact',
-                Message__c = message,
-                LeadSource = 'Website'
-            ));
+        } catch (Exception e) {
+            emailSent = false;
+            errorMsg = e.getMessage();
         }
 
-        upsert leadsToUpsert;
+        insert new Lead(
+            FirstName = firstName,
+            LastName = lastName,
+            Email = emailAddress,
+            Company = 'Website Inquiry',
+            LeadSource = 'Website',
+            Status = 'Open - Not Contacted',
+            Email_Status__c  = emailSent ? 'Sent' : 'Failed',
+            Email_Error__c   = emailSent ? null : errorMsg,
+            Email_Message__c = message
+        );
+    }
+
+    private static void validateInput(String firstName, String lastName, String emailAddress, String message) {
+        if (String.isBlank(firstName) || String.isBlank(lastName) || String.isBlank(emailAddress) || String.isBlank(message)) {
+            throw new AuraHandledException('Please complete all required fields.');
+        }
+    }
+
+    private static Boolean sendEmail(String fullName, String emailAddress, String message) {
+        if (forceException) {
+            throw new AuraHandledException('Forced exception for testing');
+        }
+
+        if (forceEmailFailure) {
+            return false;
+        }
+
+        if (forceNoEmailResult) {
+            return false;
+        }
+
+        Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
+        email.setToAddresses(new String[] { 'john.carlo.d.red@gmail.com' });
+        email.setReplyTo(emailAddress);
+        email.setSenderDisplayName(fullName);
+        email.setSubject('New Portfolio Inquiry from ' + fullName);
+        email.setPlainTextBody(message);
+
+        Messaging.SendEmailResult[] results = Messaging.sendEmail(new Messaging.SingleEmailMessage[] { email });
+
+        return (results != null && results.size() > 0 && results[0].isSuccess());
     }
 }

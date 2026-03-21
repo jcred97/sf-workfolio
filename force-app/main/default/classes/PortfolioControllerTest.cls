@@ -1,111 +1,107 @@
 @IsTest
 private class PortfolioControllerTest {
 
-    // =========================================
-    // TEST: Create New Lead
-    // =========================================
+    private static String uniqueEmail(String prefix) {
+        return prefix + Datetime.now().getTime() + '@test.com';
+    }
+
     @IsTest
-    static void testCreateNewLead() {
+    static void testSuccess() {
+        String email = uniqueEmail('success');
 
         Test.startTest();
-
-        PortfolioController.submitContact('John', 'Doe', 'john@test.com', 'Hello, this is a new inquiry');
-
+        PortfolioController.sendContactMessage('John', 'Doe', email, 'Hello');
         Test.stopTest();
 
-        Lead createdLead = [
-            SELECT Id, FirstName, LastName, Email, Message__c
+        Lead lead = [
+            SELECT FirstName, LastName, Email_Status__c
             FROM Lead
-            WHERE Email = 'john@test.com'
+            WHERE Email = :email
             LIMIT 1
         ];
 
-        System.assertNotEquals(null, createdLead);
-        System.assertEquals('John', createdLead.FirstName);
-        System.assertEquals('Doe', createdLead.LastName);
-        System.assertEquals('Hello, this is a new inquiry', createdLead.Message__c);
+        System.assertEquals('John', lead.FirstName);
+        System.assertEquals('Doe', lead.LastName);
+        System.assertEquals('Sent', lead.Email_Status__c);
     }
 
-
-    // =========================================
-    // TEST: Update Existing Lead
-    // =========================================
     @IsTest
-    static void testUpdateExistingLead() {
+    static void testBlankFields() {
+        Boolean exceptionThrown = false;
 
-        Lead existing = new Lead(
-            FirstName = 'Old',
-            LastName = 'Name',
-            Email = 'existing@test.com',
-            Company = 'Test Co',
-            Description = 'Old Message',
-            Message__c = 'New Message'
-        );
-        insert existing;
+        try {
+            PortfolioController.sendContactMessage('', '', '', '');
+        } catch (AuraHandledException e) {
+            exceptionThrown = true;
+        }
+
+        System.assert(exceptionThrown, 'Expected AuraHandledException to be thrown');
+    }
+
+    @IsTest
+    static void testEmailFailure() {
+        String email = uniqueEmail('fail');
+
+        PortfolioController.forceEmailFailure = true;
 
         Test.startTest();
-
-        PortfolioController.submitContact('New', 'Name', 'existing@test.com', 'New Message');
-
+        PortfolioController.sendContactMessage('Jane', 'Doe', email, 'Failure');
         Test.stopTest();
 
-        Lead updatedLead = [
-            SELECT Id, FirstName, LastName, Description, Message__c
+        Lead lead = [
+            SELECT Email_Status__c
             FROM Lead
-            WHERE Email = 'existing@test.com'
+            WHERE Email = :email
             LIMIT 1
         ];
 
-        System.assertEquals('New', updatedLead.FirstName);
-        System.assertEquals('Name', updatedLead.LastName);
+        System.assertEquals('Failed', lead.Email_Status__c);
 
-        System.assert(updatedLead.Description.contains('Old Message'), 'Description should contain previous message');
-
-        System.assertEquals( 'New Message', updatedLead.Message__c, 'Message__c should store latest message');
+        PortfolioController.forceEmailFailure = false;
     }
 
-
-    // =========================================
-    // TEST: Invalid Input (Missing Fields)
-    // =========================================
     @IsTest
-    static void testMissingFields() {
+    static void testExceptionPath() {
+        String email = uniqueEmail('exception');
 
-        Boolean exceptionThrown = false;
+        PortfolioController.forceException = true;
 
-        try {
-            PortfolioController.submitContact(
-                '',
-                'Doe',
-                'test@test.com',
-                'Message'
-            );
-        } catch (Exception e) {
-            exceptionThrown = true;
-        }
+        Test.startTest();
+        PortfolioController.sendContactMessage('Error', 'Case', email, 'Exception');
+        Test.stopTest();
 
-        System.assert(exceptionThrown, 'Expected exception was not thrown');
+        Lead lead = [
+            SELECT Email_Status__c, Email_Error__c
+            FROM Lead
+            WHERE Email = :email
+            LIMIT 1
+        ];
+
+        System.assertEquals('Failed', lead.Email_Status__c);
+        System.assertNotEquals(null, lead.Email_Error__c);
+
+        PortfolioController.forceException = false;
     }
 
-
-    // =========================================
-    // TEST: Invalid Email Format
-    // =========================================
     @IsTest
-    static void testInvalidEmail() {
-        Boolean exceptionThrown = false;
+    static void testNoEmailResult() {
+        String email = uniqueEmail('noresult');
 
-        try {
-            PortfolioController.submitContact(
-                'John',
-                'Doe',
-                'invalid-email',
-                'Message'
-            );
-        } catch (Exception e) {
-            exceptionThrown = true;
-        }
+        PortfolioController.forceNoEmailResult = true;
 
-        System.assert(exceptionThrown, 'Expected exception was not thrown');
+        Test.startTest();
+        PortfolioController.sendContactMessage('Edge', 'Case', email, 'Test');
+        Test.stopTest();
+
+        Lead lead = [
+            SELECT Email_Status__c
+            FROM Lead
+            WHERE Email = :email
+            LIMIT 1
+        ];
+
+        System.assertEquals('Failed', lead.Email_Status__c);
+
+        PortfolioController.forceNoEmailResult = false;
     }
 }

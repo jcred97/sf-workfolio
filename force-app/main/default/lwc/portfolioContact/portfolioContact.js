@@ -1,6 +1,6 @@
 import { LightningElement, api, wire } from 'lwc';
 import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
-import submitContact from '@salesforce/apex/PortfolioController.submitContact';
+import sendContactMessage from '@salesforce/apex/PortfolioController.sendContactMessage';
 import EMAIL from '@salesforce/schema/Portfolio__c.Email__c';
 
 /**
@@ -91,7 +91,7 @@ export default class PortfolioContact extends LightningElement {
         this.resetBanners();
 
         try {
-            await submitContact({
+            await sendContactMessage({
                 firstName: this.firstName,
                 lastName: this.lastName,
                 emailAddress: this.emailAddress,
