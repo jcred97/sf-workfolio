@@ -29,8 +29,11 @@
     cursor: pointer;
 }
 
-.card-header h2 {
+.card-header h3 {
     color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
 }
 
 .toggle {
