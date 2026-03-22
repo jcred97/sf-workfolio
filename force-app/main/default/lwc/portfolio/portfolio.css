@@ -1,19 +1,13 @@
 /* =========================================================
    THEME VARIABLES
-   Central place for colors / design tokens
 ========================================================= */
 :host {
-    /*--sds-c-icon-color-foreground-default: #fff;
-    --sds-c-icon-color-background: #1d4ed8;*/
-    /* ADD to EXPERIENCE CLOUD HEAD*/
-    /*<link rel="shortcut icon" href="/resource/Favicon?v=2" type="image/x-icon" />/>*/
     --blue: #1d4ed8;
 }
 
 
 /* =========================================================
    GLOBAL RESET
-   Normalize styles across elements
 ========================================================= */
 * {
     box-sizing: border-box;
@@ -39,15 +33,13 @@ a {
     min-height: 100vh;
     padding-top: 1rem;
 
-    /* Gradient background */
     background: linear-gradient(315deg, #2b4162 0%, #12100e 74%);
-
     animation: fadeIn 1s;
 }
 
 
 /* =========================================================
-   NAVBAR LAYOUT
+   NAVBAR
 ========================================================= */
 nav {
     max-width: 1200px;
@@ -65,9 +57,6 @@ nav {
     backdrop-filter: blur(10px);
 }
 
-/* =========================================================
-   LOGO
-========================================================= */
 .nav-logo {
     font-size: 1.1rem;
     font-weight: 600;
@@ -77,7 +66,7 @@ nav {
 
 
 /* =========================================================
-   NAVIGATION LINKS
+   NAV LINKS
 ========================================================= */
 .nav-links {
     list-style: none;
@@ -86,23 +75,19 @@ nav {
     gap: 2.5rem;
 }
 
-/* Base link style */
 .link a {
     position: relative;
     font-size: 1rem;
     font-weight: 500;
     color: #fff;
     cursor: pointer;
-
     transition: color 0.3s ease;
 }
 
 
 /* =========================================================
-   HOVER + ACTIVE EFFECT (Underline Animation)
+   LINK ANIMATION (HOVER + ACTIVE)
 ========================================================= */
-
-/* underline base */
 .link a::after {
     content: "";
     position: absolute;
@@ -116,7 +101,6 @@ nav {
     transition: width 0.3s ease;
 }
 
-/* hover state */
 .link a:hover {
     color: var(--blue);
 }
@@ -125,7 +109,6 @@ nav {
     width: 100%;
 }
 
-/* active state (controlled via JS) */
 .link a.active {
     color: var(--blue);
 }
@@ -151,7 +134,25 @@ nav {
 }
 
 .btn:hover {
-    opacity: 0.9; /* better than same color */
+    opacity: 0.9;
+}
+
+
+/* =========================================================
+   TAB TRANSITIONS
+========================================================= */
+.content {
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.fade-out {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.content:not(.fade-out) {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 
@@ -159,18 +160,14 @@ nav {
    ANIMATIONS
 ========================================================= */
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
+
 
 /* =========================================================
    RESPONSIVE
 ========================================================= */
-
 @media (max-width: 768px) {
     nav {
         padding: 1rem;

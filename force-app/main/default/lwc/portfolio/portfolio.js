@@ -1,6 +1,10 @@
 import { LightningElement, api } from 'lwc';
 import PortfolioAssets from '@salesforce/resourceUrl/PortfolioAssets';
 
+/* =========================================================
+   CONSTANTS
+========================================================= */
+
 const BASE_PATH = `${PortfolioAssets}/PortfolioAssets`;
 
 const SECTION = {
@@ -9,9 +13,26 @@ const SECTION = {
     SKILLS: 'skills'
 };
 
+/* =========================================================
+   COMPONENT
+========================================================= */
+
 export default class Portfolio extends LightningElement {
 
+    /* =========================================================
+       PUBLIC API
+    ========================================================= */
+
+    @api recordId;
+    @api linkedinUrl;
+    @api trailblazerUrl;
+
+    /* =========================================================
+       ASSETS
+    ========================================================= */
+
     profilePicture = `${BASE_PATH}/portfolioPicture.jpg`;
+
     social = {
         linkedin: `${BASE_PATH}/Social/linkedin.svg`,
         trailblazer: `${BASE_PATH}/Social/trailhead2.png`
@@ -25,26 +46,25 @@ export default class Portfolio extends LightningElement {
         { name: 'Platform Foundations', image: `${BASE_PATH}/CertificateLogo/platformfoundations.png` }
     ];
 
-    @api recordId;
-    @api linkedinUrl;
-    @api trailblazerUrl;
-
-    // =========================
-    // STATE
-    // =========================
+    /* =========================================================
+       STATE
+    ========================================================= */
 
     activeSection = SECTION.HOME;
+    isTransitioning = false;
 
-    // =========================
-    // HELPERS
-    // =========================
+    /* =========================================================
+       HELPERS
+    ========================================================= */
+
     isActive(section) {
         return this.activeSection === section;
     }
 
-    // =========================
-    // UI STATE
-    // =========================
+    /* =========================================================
+       UI STATE (GETTERS)
+    ========================================================= */
+
     get showHome() {
         return this.isActive(SECTION.HOME);
     }
@@ -69,13 +89,26 @@ export default class Portfolio extends LightningElement {
         return this.isActive(SECTION.SKILLS) ? 'active' : '';
     }
 
-    // =========================
-    // NAVIGATION (ONE HANDLER)
-    // =========================
+    get contentClass() {
+        return this.isTransitioning
+            ? 'content fade-out'
+            : 'content';
+    }
+
+    /* =========================================================
+       NAVIGATION (SMOOTH TRANSITION)
+    ========================================================= */
+
     handleNavigation(event) {
         const section = event.target.dataset.section;
-        if (section) {
+
+        if (!section || section === this.activeSection) return;
+
+        this.isTransitioning = true;
+
+        setTimeout(() => {
             this.activeSection = section;
-        }
+            this.isTransitioning = false;
+        }, 250); // Matches CSS timing
     }
 }

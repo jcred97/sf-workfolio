@@ -1,45 +1,104 @@
 <template>
     <div class="experience-container">
-        <template for:each={workExperienceList} for:item="work">
-            <div key={work.id} class="experience-card">
 
-                <!-- HEADER -->
-                <div class="card-header">
-                    <div class="logo" lwc:dom="manual"></div>
+        <!-- =========================
+             🖥️ DESKTOP: LEFT (TIMELINE)
+        ========================== -->
+        <div class="experience-list">
+            <template for:each={workExperienceList} for:item="work">
+                <div key={work.id}
+                     class={work.leftClass}
+                     data-id={work.id}
+                     onclick={selectExperience}>
 
-                    <div class="header-text">
-                        <h2 class="role">{work.Role}</h2>
-                        <p class="company">{work.CompanyName}</p>
-                        <p class="date">
-                            <template if:true={work.IsCurrent}>
-                                {work.JobStartDate} – Current
-                            </template>
-                            <template if:false={work.IsCurrent}>
-                                {work.JobStartDate} – {work.JobEndDate}
-                            </template>
-                        </p>
-                        <!-- LOCATION -->
-                        <p class="location">{work.WorkLocation}</p>
+                    <div class="company">{work.CompanyName}</div>
+                    <div class="role">{work.Role}</div>
+
+                    <div class="meta-header">
+                        {work.JobStartDate} – {work.displayEnd}
                     </div>
                 </div>
+            </template>
+        </div>
 
-                <!-- TECH STACK -->
-                <div class="tech-stack" if:true={work.TechStack}>
-                    <div class="tech-label">Tech Stack</div>
-                    <div class="tech-pills">
-                        <template for:each={work.TechStack} for:item="tech">
-                            <span key={tech} class="tech-pill">{tech}</span>
+
+        <!-- =========================
+             🖥️ DESKTOP: RIGHT (DETAIL)
+        ========================== -->
+        <div class="experience-detail">
+            <template for:each={workExperienceList} for:item="work">
+                <div key={work.id} class={work.rightClass}>
+
+                    <h3>{work.CompanyName}</h3>
+
+                    <div class="meta">
+                        {work.Role} • {work.JobStartDate} – {work.displayEnd} • {work.WorkLocation}
+                    </div>
+
+                    <!-- Tech Stack -->
+                    <template if:true={work.TechStack}>
+                        <div class="tag-group">
+                            <template for:each={work.TechStack} for:item="tech">
+                                <span key={tech} class="skill-tag">{tech}</span>
+                            </template>
+                        </div>
+                    </template>
+
+                    <!-- Description -->
+                    <div class="description">
+                        <lightning-formatted-rich-text value={work.Description}>
+                        </lightning-formatted-rich-text>
+                    </div>
+
+                </div>
+            </template>
+        </div>
+
+
+        <!-- =========================
+             📱 MOBILE: ACCORDION
+        ========================== -->
+        <div class="experience-mobile">
+            <template for:each={workExperienceList} for:item="work">
+                <div key={work.id} class="experience-card node">
+
+                    <!-- Header -->
+                    <div class="node-header"
+                         onclick={toggleCard}
+                         data-id={work.id}>
+
+                        <div>
+                            <div class="company">{work.CompanyName}</div>
+                            <div class="role">{work.Role}</div>
+
+                            <div class="meta-header">
+                                {work.JobStartDate} – {work.displayEnd} • {work.WorkLocation}
+                            </div>
+                        </div>
+
+                        <span class="toggle">{work.icon}</span>
+                    </div>
+
+                    <!-- Body -->
+                    <div class={work.bodyClass}>
+
+                        <template if:true={work.TechStack}>
+                            <div class="tag-group">
+                                <template for:each={work.TechStack} for:item="tech">
+                                    <span key={tech} class="skill-tag">{tech}</span>
+                                </template>
+                            </div>
                         </template>
+
+                        <div class="description">
+                            <lightning-formatted-rich-text value={work.Description}>
+                            </lightning-formatted-rich-text>
+                        </div>
+
                     </div>
                 </div>
+            </template>
+        </div>
 
-                <!-- DESCRIPTION -->
-                <div class="description">
-                    <lightning-formatted-rich-text value={work.Description}>
-                    </lightning-formatted-rich-text>
-                </div>
-
-            </div>
-        </template>
     </div>
 </template>

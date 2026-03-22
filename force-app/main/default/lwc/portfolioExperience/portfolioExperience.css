@@ -1,207 +1,245 @@
-:host {
-    --blue: #1d4ed8;
-}
-
-/* =========================================================
-   BASE
-========================================================= */
-
-* {
-    outline: none;
-    border: none;
-    box-sizing: border-box;
-    font-size: 1rem;
-}
-
-/* =========================================================
-   LAYOUT (1 COLUMN — PREMIUM WIDTH)
-========================================================= */
-
+/* =====================================
+   📦 CONTAINER & LAYOUT
+===================================== */
 .experience-container {
-    display: grid;
-    grid-template-columns: 1fr;
-    max-width: 750px;
+    max-width: 1000px;
     margin: auto;
-    padding: 4rem 2rem;
-    gap: 2rem;
-}
-
-/* =========================================================
-   CARD
-========================================================= */
-
-.experience-card {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 16px;
     padding: 2rem;
-    transition: all 0.3s ease;
-    animation: fadeIn 0.6s ease;
 }
 
-.experience-card:hover {
-    transform: translateY(-6px);
-    border-color: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+/* DESKTOP */
+@media (min-width: 768px) {
+    .experience-container {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 32px;
+    }
+
+    .experience-mobile {
+        display: none;
+    }
 }
 
-/* =========================================================
-   HEADER (FIXED)
-========================================================= */
+/* MOBILE */
+@media (max-width: 767px) {
+    .experience-container {
+        display: block;
+    }
 
-.card-header {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
+    .experience-list,
+    .experience-detail {
+        display: none !important;
+    }
+
+    .experience-mobile {
+        display: block !important;
+    }
 }
 
-.logo {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    flex-shrink: 0;
-}
 
-.logo img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    opacity: 0.85;
-}
-
-.header-text {
+/* =====================================
+   📍 TIMELINE
+===================================== */
+.experience-list {
+    position: relative;
     display: flex;
     flex-direction: column;
+    gap: 20px;
+    padding-left: 20px;
 }
 
-/* =========================================================
-   TEXT
-========================================================= */
-
-.role {
-    font-size: 1rem;
-    font-weight: 500;
-    color: #9ca3af;
+.experience-list::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(
+        to bottom,
+        rgba(96,165,250,0.3),
+        rgba(96,165,250,0.05)
+    );
 }
 
-.company {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #fff;
+.exp-item {
+    position: relative;
+    padding: 12px 14px 12px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: all 0.25s ease;
 }
 
-.date {
-    font-size: 0.8rem;
-    color: #9ca3af;
-    margin-top: 2px;
+.exp-item::before {
+    content: '';
+    position: absolute;
+    left: -14px;
+    top: 18px;
+    width: 8px;
+    height: 8px;
+    background: #60a5fa;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(96,165,250,0.7);
 }
 
-.location {
-    font-size: 0.8rem;
-    color: #9ca3af;
-    margin-bottom: 1rem;
-}
-
-/* =========================================================
-   TECH STACK
-========================================================= */
-
-.tech-stack {
-    margin-top: 10px;
-    margin-bottom: 14px;
-}
-
-.tech-label {
-    font-size: 0.75rem;
-    margin-bottom: 6px;
-    color: #7dd3fc;
-}
-
-.tech-pills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.tech-pill {
-    padding: 6px 12px;
-    border-radius: 999px;
-    font-size: 0.7rem;
-    background: rgba(125, 211, 252, 0.15);
-    border: 1px solid rgba(125, 211, 252, 0.4);
-    color: #7dd3fc;
-    transition: all 0.2s ease;
-    opacity: 0.85;
-}
-
-.tech-pill:hover {
-    background: rgba(125, 211, 252, 0.25);
-    transform: translateY(-2px);
+.exp-item:hover {
+    background: rgba(255,255,255,0.05);
     opacity: 1;
 }
 
-/* =========================================================
-   DESCRIPTION
-========================================================= */
-
-.description {
-    font-size: 0.9rem;
-    color: #d1d5db;
-    line-height: 1.7;
+.exp-item.active {
+    opacity: 1;
+    background: rgba(29, 78, 216, 0.15);
 }
 
-.description ul {
-    padding-left: 1.2rem;
+.exp-item.active::before {
+    background: #3b82f6;
+    box-shadow: 0 0 14px rgba(59,130,246,0.9);
+}
+
+.exp-item.active::after {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: #60a5fa;
+    border-radius: 2px;
+}
+
+
+/* =====================================
+   📄 DETAIL PANEL (FIXED ANIMATION)
+===================================== */
+.experience-detail {
+    position: relative;
+}
+
+.detail-content {
+    position: relative;
+    width: 100%;
+    max-width: 720px;
+
+    opacity: 0;
+    transform: translateX(20px);
+
+    transition: opacity 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+    pointer-events: none;
+
+    /* 🔥 KEY FIX */
+    visibility: hidden;
+    height: 0;
+    overflow: hidden;
+}
+
+.detail-content.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+
+    visibility: visible;
+    height: auto;
+    overflow: visible;
+
+    background: #111;
+    border-radius: 14px;
+    padding: 22px;
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+
+
+/* =====================================
+   📝 TEXT
+===================================== */
+.company {
+    color: #fff;
+    font-weight: 600;
+}
+
+.role {
+    font-size: 0.85rem;
+    color: #9ca3af;
+}
+
+.meta-header {
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.meta {
+    font-size: 0.8rem;
+    color: #9ca3af;
+    margin-bottom: 12px;
+}
+
+
+/* =====================================
+   🏷️ TAGS
+===================================== */
+.tag-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 12px 0;
+}
+
+.skill-tag {
+    background: rgba(29, 78, 216, 0.15);
+    color: #60a5fa;
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    border: 1px solid rgba(29, 78, 216, 0.3);
+}
+
+
+/* =====================================
+   📖 DESCRIPTION
+===================================== */
+.description {
+    font-size: 0.85rem;
+    color: #d1d5db;
+    line-height: 1.6;
 }
 
 .description li {
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
-/* =========================================================
-   ANIMATION
-========================================================= */
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(6px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* =====================================
+   📱 MOBILE
+===================================== */
+.experience-card {
+    background: #111;
+    border-radius: 12px;
+    padding: 1rem;
+    border: 1px solid rgba(255,255,255,0.05);
+    margin-bottom: 1rem;
 }
 
-/* =========================================================
-   RESPONSIVE
-========================================================= */
+.node-header {
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+}
 
-@media (max-width: 768px) {
-    .experience-container {
-        padding: 2rem 1.2rem;
-    }
+.node-children {
+    overflow: hidden;
+    height: 0;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
 
-    .experience-card {
-        padding: 1.3rem;
-    }
+.node-children.open {
+    opacity: 1;
+}
 
-    .role {
-        font-size: 0.9rem;
-    }
-
-    .company {
-        font-size: 0.95rem;
-    }
-
-    .description {
-        font-size: 0.85rem;
-    }
-
-    .tech-pill {
-        font-size: 0.65rem;
-        padding: 4px 8px;
-    }
+.toggle {
+    color: #60a5fa;
+    font-size: 18px;
 }
