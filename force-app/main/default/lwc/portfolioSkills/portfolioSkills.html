@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <template for:each={treeData} for:item="category">
-            <div key={category.Id} class="skill-card">
+            <div key={category.Id} class={category.cssClass}>
 
                 <!-- HEADER -->
                 <div class="card-header"

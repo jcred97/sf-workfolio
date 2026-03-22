@@ -1,7 +1,20 @@
 .node {
     margin-top: 8px;
+    position: relative;
 }
 
+/* 🔥 MAIN VERTICAL LINE */
+.node::before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 10px;
+    bottom: 0;
+    width: 1px;
+    background: rgba(96, 165, 250, 0.2);
+}
+
+/* HEADER */
 .node-header {
     display: flex;
     justify-content: space-between;
@@ -10,17 +23,58 @@
     cursor: pointer;
     color: #aaa;
 
-    padding: 6px 0;
+    padding: 6px 0 6px 16px;
     font-size: 14px;
 
-    transition: all 0.2s ease;
+    transition: color 0.2s ease;
+    position: relative;
 }
 
+/* 🔥 DOT */
+.node-header::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 6px;
+    height: 6px;
+    background: #60a5fa;
+    border-radius: 50%;
+
+    box-shadow: 0 0 6px rgba(96, 165, 250, 0.6);
+}
+
+/* 🔥 CONNECTOR */
+.node-header::after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 10px;
+    height: 1px;
+    background: rgba(96, 165, 250, 0.3);
+}
+
+/* LABEL (prevents layout shift) */
+.node-label {
+    transition: transform 0.2s ease, text-shadow 0.2s ease;
+}
+
+/* HOVER */
 .node-header:hover {
     color: #fff;
-    transform: translateX(4px);
 }
 
+.node-header:hover .node-label {
+    transform: translateX(4px);
+    text-shadow: 0 0 6px rgba(96, 165, 250, 0.6);
+}
+
+/* CHILDREN */
 .node-children {
     margin-left: 12px;
     margin-top: 8px;
@@ -33,6 +87,14 @@
     animation: expand 0.25s ease-out;
 }
 
+/* TAG GROUP */
+.tag-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* TAG */
 .skill-tag {
     background: rgba(29, 78, 216, 0.15);
     color: #60a5fa;
@@ -56,12 +118,7 @@
     box-shadow: 0 4px 12px rgba(29, 78, 216, 0.4);
 }
 
-.tag-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
+/* TOGGLE */
 .toggle {
     transition: transform 0.2s ease;
 }
@@ -70,6 +127,7 @@
     transform: rotate(90deg);
 }
 
+/* ANIMATION */
 @keyframes expand {
     from {
         opacity: 0;
@@ -78,5 +136,32 @@
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+/* 📱 MOBILE OPTIMIZATION */
+@media (max-width: 600px) {
+
+    .node-header {
+        font-size: 13px;
+        padding: 8px 0 8px 16px;
+    }
+
+    .node-label {
+        line-height: 1.4;
+    }
+
+    .node-children {
+        gap: 8px;
+        margin-left: 10px;
+    }
+
+    .tag-group {
+        gap: 6px;
+    }
+
+    .skill-tag {
+        font-size: 11px;
+        padding: 5px 8px;
     }
 }

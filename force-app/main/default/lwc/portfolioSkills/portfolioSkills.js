@@ -20,31 +20,30 @@ export default class PortfolioSkills extends LightningElement {
         if (!id) return;
 
         this.treeData = this.treeData.map(item => {
-            if (item.Id === id) {
-                const isOpen = !item.isOpen;
+            const isOpen = item.Id === id ? !item.isOpen : item.isOpen;
 
-                return {
-                    ...item,
-                    isOpen,
-                    icon: isOpen ? '−' : '+'
-                };
-            }
-            return item;
+            return {
+                ...item,
+                isOpen,
+                icon: isOpen ? '−' : '+',
+                cssClass: item.Name === 'CRM' && isOpen
+                    ? 'skill-card full-width'
+                    : 'skill-card'
+            };
         });
     }
 
-    // 🔥 MAIN FIX: normalize children into proper tags
+    // 🔥 FULL INIT (OPEN BY DEFAULT + CRM WIDTH LOGIC)
     initializeTree(nodes) {
         return nodes.map(node => {
             let children = node.children
                 ? this.initializeTree(node.children)
                 : [];
 
-            // 🔥 HANDLE BAD DATA (e.g. "CSSHTMLJavascript")
+            // Handle bad data (combined strings)
             if (children.length === 1 && !children[0].children?.length) {
                 const raw = children[0].Name;
 
-                // detect combined words (no space, no comma)
                 if (raw && raw.length > 10 && !raw.includes(' ')) {
                     const split = raw.match(/[A-Z][a-z]+/g);
 
@@ -57,7 +56,6 @@ export default class PortfolioSkills extends LightningElement {
                     }
                 }
 
-                // detect CSV
                 if (raw && raw.includes(',')) {
                     children = raw.split(',').map((name, i) => ({
                         Id: `${children[0].Id}-${i}`,
@@ -67,11 +65,16 @@ export default class PortfolioSkills extends LightningElement {
                 }
             }
 
+            const isOpen = true;
+
             return {
                 ...node,
-                isOpen: false,
-                icon: '+',
+                isOpen,
+                icon: isOpen ? '−' : '+',
                 children,
+                cssClass: node.Name === 'CRM' && isOpen
+                    ? 'skill-card full-width'
+                    : 'skill-card',
                 allChildrenAreLeaf: children.every(
                     child => !child.children || child.children.length === 0
                 )

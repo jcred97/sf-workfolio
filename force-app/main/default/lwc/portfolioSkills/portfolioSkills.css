@@ -8,6 +8,22 @@
     gap: 1.5rem;
 }
 
+/* 📱 TABLET */
+@media (max-width: 900px) {
+    .container {
+        grid-template-columns: 1fr;
+        padding: 1.5rem;
+    }
+}
+
+/* 📱 MOBILE */
+@media (max-width: 600px) {
+    .container {
+        padding: 1rem;
+        gap: 1rem;
+    }
+}
+
 .skill-card {
     background: #111;
     border-radius: 12px;
@@ -23,6 +39,18 @@
     border-color: #1d4ed8;
 }
 
+/* CRM full width */
+.full-width {
+    grid-column: span 2;
+}
+
+/* 📱 override for mobile */
+@media (max-width: 900px) {
+    .full-width {
+        grid-column: span 1 !important;
+    }
+}
+
 .card-header {
     display: flex;
     justify-content: space-between;
@@ -33,7 +61,13 @@
     color: #fff;
     font-size: 18px;
     font-weight: 600;
-    letter-spacing: 0.5px;
+}
+
+/* 📱 mobile title */
+@media (max-width: 600px) {
+    .card-header h3 {
+        font-size: 16px;
+    }
 }
 
 .toggle {
@@ -45,10 +79,10 @@
     margin-top: 12px;
 }
 
+/* TREE + TAGS */
 .node-children {
     margin-left: 12px;
     margin-top: 8px;
-
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -58,27 +92,27 @@
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
+    overflow: hidden;
 }
 
 .skill-tag {
     background: rgba(29, 78, 216, 0.15);
     color: #60a5fa;
-
     padding: 6px 12px;
     border-radius: 999px;
-
     font-size: 12px;
-    font-weight: 500;
-
     border: 1px solid rgba(29, 78, 216, 0.3);
-
-    transition: all 0.2s ease;
-    cursor: pointer;
 }
 
-.skill-tag:hover {
-    background: #1d4ed8;
-    color: #fff;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(29, 78, 216, 0.4);
+/* 📱 mobile tags */
+@media (max-width: 600px) {
+    .skill-tag {
+        font-size: 11px;
+        padding: 5px 8px;
+    }
+
+    .skill-card {
+        padding: 0.8rem;
+        border-radius: 10px;
+    }
 }
