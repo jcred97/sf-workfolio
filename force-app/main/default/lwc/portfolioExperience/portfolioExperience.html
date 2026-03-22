@@ -17,6 +17,10 @@
                     <div class="meta-header">
                         {work.JobStartDate} – {work.displayEnd}
                     </div>
+
+                    <div class="meta">
+                        {work.WorkLocation}
+                    </div>
                 </div>
             </template>
         </div>
@@ -28,13 +32,7 @@
         <div class="experience-detail">
             <template for:each={workExperienceList} for:item="work">
                 <div key={work.id} class={work.rightClass}>
-
-                    <h3>{work.CompanyName}</h3>
-
-                    <div class="meta">
-                        {work.Role} • {work.JobStartDate} – {work.displayEnd} • {work.WorkLocation}
-                    </div>
-
+                    
                     <!-- Tech Stack -->
                     <template if:true={work.TechStack}>
                         <div class="tag-group">
