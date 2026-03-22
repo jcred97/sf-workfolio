@@ -10,7 +10,14 @@
         <name>CustomApplication</name>
     </types>
     <types>
+        <members>Lead.Email_Error__c</members>
+        <members>Lead.Email_Message__c</members>
+        <members>Lead.Email_Status__c</members>
+        <name>CustomField</name>
+    </types>
+    <types>
         <members>Job_Application__c</members>
+        <members>Skill__c</members>
         <members>Portfolio__c</members>
         <members>WorkExperience__c</members>
         <name>CustomObject</name>
@@ -26,6 +33,7 @@
         <name>FlexiPage</name>
     </types>
     <types>
+        <members>Lead-Lead Layout</members>
         <members>Job_Application__c-Job Application Layout</members>
         <members>Portfolio__c-Portfolio Layout</members>
         <members>WorkExperience__c-Work Experience Layout</members>
@@ -38,7 +46,14 @@
         <members>portfolioHome</members>
         <members>portfolioSkills</members>
         <members>portfolioStringToHtml</members>
+        <members>skillNode</members>
         <name>LightningComponentBundle</name>
+    </types>
+    <types>
+        <members>Portfolio__c</members>
+        <members>Skill__c</members>
+        <members>WorkExperience__c</members>
+        <name>SharingRules</name>
     </types>
     <types>
         <members>PortfolioAssets</members>

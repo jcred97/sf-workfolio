@@ -104,4 +104,37 @@ private class PortfolioControllerTest {
 
         PortfolioController.forceNoEmailResult = false;
     }
+
+    @IsTest
+    static void testGetSkills() {
+        // Create Portfolio
+        Portfolio__c portfolio = new Portfolio__c(
+            Name = 'Test Portfolio',
+            FullName__c = 'Test Test'
+        );
+        insert portfolio;
+
+        // Create Skills
+        Skill__c skill1 = new Skill__c(
+            Name = 'Apex',
+            Portfolio__c = portfolio.Id,
+            Priority__c = 1
+        );
+
+        Skill__c skill2 = new Skill__c(
+            Name = 'LWC',
+            Portfolio__c = portfolio.Id,
+            Priority__c = 2
+        );
+
+        insert new List<Skill__c>{ skill1, skill2 };
+
+        Test.startTest();
+        List<Skill__c> result = PortfolioController.getSkills(portfolio.Id);
+        Test.stopTest();
+
+        System.assertEquals(2, result.size(), 'Should return 2 skills');
+        System.assertEquals('Apex', result[0].Name);
+        System.assertEquals('LWC', result[1].Name);
+    }
 }

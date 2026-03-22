@@ -23,7 +23,7 @@
 
 img {
     width: 100%;
-    display: block; /* flex → block (more appropriate) */
+    display: block;
 }
 
 a {
@@ -136,7 +136,7 @@ nav {
 
 
 /* =========================================================
-   BUTTON (Optional / Future Use)
+   BUTTON
 ========================================================= */
 .btn {
     padding: 1rem 2rem;

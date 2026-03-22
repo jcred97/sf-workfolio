@@ -1,0 +1,45 @@
+<template>
+    <template if:true={hasChildren}>
+        
+        <div class="node">
+
+            <div class="node-header" onclick={toggle}>
+                <span>{node.Name}</span>
+                <span class="toggle">{icon}</span>
+            </div>
+
+            <template if:true={node.isOpen}>
+                <div class="node-children">
+
+                    <template if:true={allChildrenAreLeaf}>
+                        <div class="tag-group">
+                            <template for:each={node.children} for:item="child">
+                                <span 
+                                    key={child.Id} 
+                                    class="skill-tag"
+                                    data-name={child.Name}
+                                    onclick={handleTagClick}>
+                                    {child.Name}
+                                </span>
+                            </template>
+                        </div>
+                    </template>
+
+                    <template if:false={allChildrenAreLeaf}>
+                        <template for:each={node.children} for:item="child">
+                            <c-skill-node key={child.Id} node={child}></c-skill-node>
+                        </template>
+                    </template>
+
+                </div>
+            </template>
+        </div>
+
+    </template>
+
+    <template if:false={hasChildren}>
+        <span class="skill-tag">
+            {node.Name}
+        </span>
+    </template>
+</template>

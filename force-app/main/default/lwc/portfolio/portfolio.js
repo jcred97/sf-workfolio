@@ -1,70 +1,81 @@
 import { LightningElement, api } from 'lwc';
 import PortfolioAssets from '@salesforce/resourceUrl/PortfolioAssets';
 
+const BASE_PATH = `${PortfolioAssets}/PortfolioAssets`;
+
+const SECTION = {
+    HOME: 'home',
+    EXPERIENCE: 'experience',
+    SKILLS: 'skills'
+};
+
 export default class Portfolio extends LightningElement {
 
-    profilePicture = `${PortfolioAssets}/PortfolioAssets/portfolioPicture.jpg`;
-    linkedin = `${PortfolioAssets}/PortfolioAssets/Social/linkedin.svg`;
-    trailblazer = `${PortfolioAssets}/PortfolioAssets/Social/trailhead2.png`;
+    profilePicture = `${BASE_PATH}/portfolioPicture.jpg`;
+    social = {
+        linkedin: `${BASE_PATH}/Social/linkedin.svg`,
+        trailblazer: `${BASE_PATH}/Social/trailhead2.png`
+    };
 
     certifications = [
-        {
-            name: 'Platform Developer 1',
-            image: `${PortfolioAssets}/PortfolioAssets/CertificateLogo/platformdeveloper1.png`
-        },
-        {
-            name: 'Platform App Builder',
-            image: `${PortfolioAssets}/PortfolioAssets/CertificateLogo/platformappbuilder.png`
-        },
-        {
-            name: 'Platform Administrator',
-            image: `${PortfolioAssets}/PortfolioAssets/CertificateLogo/platformadministrator.png`
-        },
-        {
-            name: 'Agentforce Specialist',
-            image: `${PortfolioAssets}/PortfolioAssets/CertificateLogo/agentforcespecialist.png`
-        },
-        {
-            name: 'Platform Foundations',
-            image: `${PortfolioAssets}/PortfolioAssets/CertificateLogo/platformfoundations.png`
-        }
+        { name: 'Platform Developer 1', image: `${BASE_PATH}/CertificateLogo/platformdeveloper1.png` },
+        { name: 'Platform App Builder', image: `${BASE_PATH}/CertificateLogo/platformappbuilder.png` },
+        { name: 'Platform Administrator', image: `${BASE_PATH}/CertificateLogo/platformadministrator.png` },
+        { name: 'Agentforce Specialist', image: `${BASE_PATH}/CertificateLogo/agentforcespecialist.png` },
+        { name: 'Platform Foundations', image: `${BASE_PATH}/CertificateLogo/platformfoundations.png` }
     ];
 
     @api recordId;
     @api linkedinUrl;
     @api trailblazerUrl;
 
-    // 🔥 single source of truth
-    activeSection = 'home';
+    // =========================
+    // STATE
+    // =========================
 
-    // computed visibility
+    activeSection = SECTION.HOME;
+
+    // =========================
+    // HELPERS
+    // =========================
+    isActive(section) {
+        return this.activeSection === section;
+    }
+
+    // =========================
+    // UI STATE
+    // =========================
     get showHome() {
-        return this.activeSection === 'home';
+        return this.isActive(SECTION.HOME);
     }
 
     get showExperience() {
-        return this.activeSection === 'experience';
+        return this.isActive(SECTION.EXPERIENCE);
     }
 
-    // active classes
+    get showSkills() {
+        return this.isActive(SECTION.SKILLS);
+    }
+
     get homeClass() {
-        return this.activeSection === 'home' ? 'active' : '';
+        return this.isActive(SECTION.HOME) ? 'active' : '';
     }
 
     get experienceClass() {
-        return this.activeSection === 'experience' ? 'active' : '';
+        return this.isActive(SECTION.EXPERIENCE) ? 'active' : '';
     }
 
-    get contactClass() {
-        return this.activeSection === 'contact' ? 'active' : '';
+    get skillsClass() {
+        return this.isActive(SECTION.SKILLS) ? 'active' : '';
     }
 
-    // handlers
-    handleDisplayHome() {
-        this.activeSection = 'home';
-    }
-
-    handleDisplayExperience() {
-        this.activeSection = 'experience';
+    // =========================
+    // NAVIGATION (ONE HANDLER)
+    // =========================
+    handleNavigation(event) {
+        const section = event.target.dataset.section;
+        if (section) {
+            this.activeSection = section;
+        }
     }
 }

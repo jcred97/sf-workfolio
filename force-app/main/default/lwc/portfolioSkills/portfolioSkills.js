@@ -1,36 +1,137 @@
-import { LightningElement, wire, api } from 'lwc';
-import { getRecord  } from 'lightning/uiRecordApi';
-import TECH_FIELD from '@salesforce/schema/Portfolio__c.TechnicalSkills__c';
-import SOFT_SKILLS_FIELD from '@salesforce/schema/Portfolio__c.SoftSkills__c';
-import SOFTWARE_FIELD from '@salesforce/schema/Portfolio__c.SoftwareTools__c';
-import METHODOLOGIES_FIELD from '@salesforce/schema/Portfolio__c.Methodologies__c';
+import { LightningElement, api, wire } from 'lwc';
+import getSkills from '@salesforce/apex/PortfolioController.getSkills';
 
 export default class PortfolioSkills extends LightningElement {
     @api recordId;
+    treeData = [];
 
-    techSkills = [];
-    softSkills = [];
-    methodologies = [];
-    toolSkills = [];
-
-    @wire(getRecord, {
-        recordId: '$recordId',
-        fields:[TECH_FIELD, SOFT_SKILLS_FIELD, SOFTWARE_FIELD, METHODOLOGIES_FIELD]
-    })skillHandler({data, error}) {
+    @wire(getSkills, { portfolioId: '$recordId' })
+    wiredSkills({ data, error }) {
         if (data) {
-            console.log("Skills Data", JSON.stringify(data));
-        }
-
-        if (error) {
-            console.error("Skills Error", error);
+            const tree = this.buildTree(data);
+            this.treeData = this.initializeTree(tree);
+        } else if (error) {
+            console.error(error);
         }
     }
 
-    formatSkills(data) {
-        const {SoftSkills__c, TechnicalSkills__c, SoftwareTools__c, Methodologies__c} = data.fields;
-        this.techSkills = TechnicalSkills__c ? TechnicalSkills__c.value.split(',') : [];
-        this.softSkills = SoftSkills__c ? SoftSkills__c.value.split(',') : [];
-        this.methodologies = Methodologies__c ? Methodologies__c.value.split(',') : [];
-        this.toolSkills = SoftwareTools__c ? SoftwareTools__c.value.split(',') : [];
+    toggleCard(event) {
+        const id = event?.currentTarget?.dataset?.id;
+        if (!id) return;
+
+        this.treeData = this.treeData.map(item => {
+            if (item.Id === id) {
+                const isOpen = !item.isOpen;
+
+                return {
+                    ...item,
+                    isOpen,
+                    icon: isOpen ? '−' : '+'
+                };
+            }
+            return item;
+        });
+    }
+
+    // 🔥 MAIN FIX: normalize children into proper tags
+    initializeTree(nodes) {
+        return nodes.map(node => {
+            let children = node.children
+                ? this.initializeTree(node.children)
+                : [];
+
+            // 🔥 HANDLE BAD DATA (e.g. "CSSHTMLJavascript")
+            if (children.length === 1 && !children[0].children?.length) {
+                const raw = children[0].Name;
+
+                // detect combined words (no space, no comma)
+                if (raw && raw.length > 10 && !raw.includes(' ')) {
+                    const split = raw.match(/[A-Z][a-z]+/g);
+
+                    if (split && split.length > 1) {
+                        children = split.map((name, i) => ({
+                            Id: `${children[0].Id}-${i}`,
+                            Name: name,
+                            children: []
+                        }));
+                    }
+                }
+
+                // detect CSV
+                if (raw && raw.includes(',')) {
+                    children = raw.split(',').map((name, i) => ({
+                        Id: `${children[0].Id}-${i}`,
+                        Name: name.trim(),
+                        children: []
+                    }));
+                }
+            }
+
+            return {
+                ...node,
+                isOpen: false,
+                icon: '+',
+                children,
+                allChildrenAreLeaf: children.every(
+                    child => !child.children || child.children.length === 0
+                )
+            };
+        });
+    }
+
+    buildTree(data) {
+        const map = new Map();
+        const roots = [];
+
+        data.forEach(skill => {
+            map.set(skill.Id, { ...skill, children: [] });
+        });
+
+        data.forEach(skill => {
+            if (skill.Parent_Skill__c) {
+                map.get(skill.Parent_Skill__c)?.children.push(map.get(skill.Id));
+            } else {
+                roots.push(map.get(skill.Id));
+            }
+        });
+
+        return roots;
+    }
+
+    handleToggle(event) {
+        const id = event.detail?.id;
+        if (!id) return;
+
+        this.treeData = this.toggleNode(this.treeData, id);
+    }
+
+    toggleNode(nodes, id) {
+        return nodes.map(node => {
+            if (node.Id === id) {
+                const isOpen = !node.isOpen;
+
+                return {
+                    ...node,
+                    isOpen,
+                    icon: isOpen ? '−' : '+'
+                };
+            }
+
+            if (node.children && node.children.length > 0) {
+                return {
+                    ...node,
+                    children: this.toggleNode(node.children, id)
+                };
+            }
+
+            return node;
+        });
+    }
+
+    handleTagClick(event) {
+        const skillName = event.detail?.name;
+        if (!skillName) return;
+
+        console.log('Clicked skill:', skillName);
     }
 }

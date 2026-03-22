@@ -113,6 +113,12 @@
         <fields>NAME</fields>
         <relatedList>WorkExperience__c.Portfolio__c</relatedList>
     </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <fields>Parent_Skill__c</fields>
+        <fields>Priority__c</fields>
+        <relatedList>Skill__c.Portfolio__c</relatedList>
+    </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>
     <showInteractionLogPanel>false</showInteractionLogPanel>

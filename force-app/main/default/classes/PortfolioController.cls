@@ -74,4 +74,14 @@ public with sharing class PortfolioController {
 
         return (results != null && results.size() > 0 && results[0].isSuccess());
     }
+
+    @AuraEnabled(cacheable=true)
+    public static List<Skill__c> getSkills(Id portfolioId) {
+        return [
+            SELECT Id, Name, Priority__c, Parent_Skill__c
+            FROM Skill__c
+            WHERE Portfolio__c = :portfolioId
+            ORDER BY Priority__c ASC NULLS LAST
+        ];
+    }
 }
