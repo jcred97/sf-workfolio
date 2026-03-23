@@ -40,16 +40,20 @@ a {
 
 .content,
 .content-contact {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 16px;
-    padding: 2.5rem;
+    background: #111;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    padding: 2.2rem;
     transition: all 0.3s ease;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
 }
 
 .content:hover,
 .content-contact:hover {
-    border-color: rgba(255,255,255,0.2);
+    border-color: rgba(29, 78, 216, 0.4);
+    box-shadow: 0 10px 30px rgba(59,130,246,0.15);
+    transform: translateY(-4px);
 }
 
 .container,
@@ -90,7 +94,7 @@ hr {
     font-size: 0.95rem;
     font-weight: 500;
     color: #fff;
-    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
     border: none;
     border-radius: 12px;
     cursor: pointer;
@@ -119,14 +123,16 @@ hr {
 ========================================================= */
 
 .content-email {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 10px;
     padding: 1.2rem;
-    border-radius: 14px;
-    transition: background 0.3s ease, border 0.3s ease;
+    transition: 0.3s;
 }
 
 .content-email:hover {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.15);
+    border-color: #1d4ed8;
+    transform: translateY(-2px);
 }
 
 .email-icon {
@@ -182,28 +188,17 @@ hr {
 .social-links {
     margin-top: 2rem;
     display: flex;
-    align-items: center;
-}
-
-.social-box {
-    height: 48px;
-    width: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 12px;
-    margin-right: 1rem;
-    transition: background 0.3s ease, transform 0.2s ease;
-}
-
-.social-box:hover {
-    background: rgba(255,255,255,0.1);
-    transform: translateY(-3px);
+    gap: 1rem;
 }
 
 .social-icon {
-    height: 26px;
-    width: 26px;
+    width: 40px;
+    height: 40px;
+    transition: transform 0.2s ease;
+}
+
+.social-icon:hover {
+    transform: scale(1.1);
 }
 
 
@@ -308,7 +303,17 @@ hr {
 
     .content,
     .content-contact {
+        background: #111;
+        border-radius: 12px;
         padding: 1.5rem;
+        border: 1px solid rgba(255,255,255,0.05);
+        transition: 0.3s;
+    }
+
+    .content:hover,
+    .content-contact:hover {
+        transform: translateY(-4px);
+        border-color: #1d4ed8;
     }
 
     h1 {
@@ -321,6 +326,7 @@ hr {
     }
 
     .email-link {
+        color: #60a5fa;
         font-size: 0.9rem;
         word-break: break-all;
     }

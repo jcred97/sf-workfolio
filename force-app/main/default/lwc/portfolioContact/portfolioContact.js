@@ -26,6 +26,8 @@ export default class PortfolioContact extends LightningElement {
     @api linkedinUrl;
     @api trailblazer;
     @api trailblazerUrl;
+    @api github;
+    @api githubUrl;
 
 
     /* =========================================================
