@@ -13,6 +13,8 @@
         <members>Lead.Email_Error__c</members>
         <members>Lead.Email_Message__c</members>
         <members>Lead.Email_Status__c</members>
+        <members>Lead.Previous_Message__c</members>
+        <members>Lead.External_Id__c</members>
         <name>CustomField</name>
     </types>
     <types>
@@ -20,12 +22,14 @@
         <members>Lead_Submission__e</members>
         <members>Skill__c</members>
         <members>Portfolio__c</members>
+        <members>Portfolio_Setting__c</members>
         <members>WorkExperience__c</members>
         <name>CustomObject</name>
     </types>
     <types>
         <members>Job_Application__c</members>
         <members>Portfolio__c</members>
+        <members>Portfolio_Setting__c</members>
         <members>WorkExperience__c</members>
         <name>CustomTab</name>
     </types>
@@ -41,6 +45,7 @@
         <members>Lead-Lead Layout</members>
         <members>Job_Application__c-Job Application Layout</members>
         <members>Portfolio__c-Portfolio Layout</members>
+        <members>Portfolio_Setting__c-Portfolio Setting Layout</members>
         <members>WorkExperience__c-Work Experience Layout</members>
         <name>Layout</name>
     </types>
@@ -55,7 +60,8 @@
         <name>LightningComponentBundle</name>
     </types>
     <types>
-        <members>Workfolio_Guest_Site_Access</members>
+        <members>Workfolio_All_Access</members>
+        <members>Workfolio_Guest_Site_User_Permission</members>
         <name>PermissionSet</name>
     </types>
     <types>

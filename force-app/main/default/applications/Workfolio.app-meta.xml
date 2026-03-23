@@ -17,6 +17,7 @@
     <tabs>standard-Account</tabs>
     <tabs>Job_Application__c</tabs>
     <tabs>Portfolio__c</tabs>
+    <tabs>Portfolio_Setting__c</tabs>
     <uiType>Lightning</uiType>
     <utilityBar>Portfolio_and_Application_Tracker_UtilityBar</utilityBar>
 </CustomApplication>

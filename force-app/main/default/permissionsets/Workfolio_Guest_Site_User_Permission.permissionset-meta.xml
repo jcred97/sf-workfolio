@@ -115,7 +115,7 @@
         <readable>true</readable>
     </fieldPermissions>
     <hasActivationRequired>false</hasActivationRequired>
-    <label>Workfolio Guest Site Access</label>
+    <label>Workfolio Guest Site User Permission</label>
     <objectPermissions>
         <allowCreate>true</allowCreate>
         <allowDelete>false</allowDelete>

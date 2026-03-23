@@ -144,19 +144,25 @@
             <!-- Social Media Links -->
             <div class="social-links">
                 <!-- LinkedIn Profile -->
-                <a href={linkedinUrl} target="_blank">
-                    <img src={linkedin} alt="LinkedIn" class="social-icon">
-                </a>
+                <template if:true={linkedinUrl}>
+                    <a href={linkedinUrl} target="_blank">
+                        <img src={linkedin} alt="LinkedIn" class="social-icon">
+                    </a>
+                </template>
 
                 <!-- Github Profile -->
-                <a href={githubUrl} target="_blank">
-                    <img src={github} alt="Github" class="social-icon">
-                </a>
+                <template if:true={githubUrl}>
+                    <a href={githubUrl} target="_blank">
+                        <img src={github} alt="Github" class="social-icon">
+                    </a>
+                </template>
 
                 <!-- Trailhead / Trailblazer Profile -->
-                <a href={trailblazerUrl} target="_blank">
-                    <img src={trailblazer} alt="Trailhead" class="social-icon">
-                </a>
+                <template if:true={trailblazerUrl}>
+                    <a href={trailblazerUrl} target="_blank">
+                        <img src={trailblazer} alt="Trailhead" class="social-icon">
+                    </a>
+                </template>
             </div>
         </div>
     </div>
