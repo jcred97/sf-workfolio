@@ -5,33 +5,23 @@
              NAVBAR
         ========================================= -->
         <nav>
-
             <!-- LOGO -->
             <div class="nav-logo">
-                <a href="#">JOHN CARLO RED</a>
+                <a href="#">{fullName}</a>
             </div>
 
             <!-- NAV LINKS -->
             <ul class="nav-links">
                 <li class="link">
-                    <a class={homeClass} data-section="home" onclick={handleNavigation}>
-                        Home
-                    </a>
+                    <a class={homeClass} data-section="home" onclick={handleNavigation}>Home</a>
                 </li>
-
                 <li class="link">
-                    <a class={experienceClass} data-section="experience" onclick={handleNavigation}>
-                        Experience
-                    </a>
+                    <a class={experienceClass} data-section="experience" onclick={handleNavigation}>Experience</a>
                 </li>
-
                 <li class="link">
-                    <a class={skillsClass} data-section="skills" onclick={handleNavigation}>
-                        Skills
-                    </a>
+                    <a class={skillsClass} data-section="skills" onclick={handleNavigation}>Skills</a>
                 </li>
             </ul>
-
         </nav>
 
         <!-- ========================================
@@ -44,11 +34,11 @@
                 <c-portfolio-home
                     record-id={recordId}
                     linkedin={social.linkedin}
-                    linkedin-url={linkedinUrl}
                     trailblazer={social.trailblazer}
-                    trailblazer-url={trailblazerUrl}
+                    github={social.github}
                     profile-picture={profilePicture}
-                    certifications={certifications}>
+                    certifications={certifications}
+                    onnamechange={handleNameChange}>
                 </c-portfolio-home>
             </template>
 

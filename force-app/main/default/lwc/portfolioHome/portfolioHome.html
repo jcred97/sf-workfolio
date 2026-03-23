@@ -18,12 +18,23 @@
             
             <!-- SOCIAL LINKS -->
             <div class="slds-grid social-links">
-                <a href={linkedinUrl} target="_blank">
-                    <img src={linkedin} class="social-icon"/>
-                </a>
-                <a href={trailblazerUrl} target="_blank">
-                    <img src={trailblazer} class="social-icon"/>
-                </a>
+                <template if:true={linkedinUrl}>
+                    <a href={linkedinUrl} target="_blank">
+                        <img src={linkedin} class="social-icon"/>
+                    </a>
+                </template>
+
+                <template if:true={githubUrl}>
+                    <a href={githubUrl} target="_blank">
+                        <img src={github} class="social-icon"/>
+                    </a>
+                </template>
+
+                <template if:true={trailblazerUrl}>
+                    <a href={trailblazerUrl} target="_blank">
+                        <img src={trailblazer} class="social-icon"/>
+                    </a>
+                </template>
             </div>
         </div>
 

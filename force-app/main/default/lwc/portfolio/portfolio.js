@@ -13,6 +13,8 @@ const SECTION = {
     SKILLS: 'skills'
 };
 
+const TRANSITION_DURATION = 250;
+
 /* =========================================================
    COMPONENT
 ========================================================= */
@@ -22,20 +24,24 @@ export default class Portfolio extends LightningElement {
     /* =========================================================
        PUBLIC API
     ========================================================= */
-
     @api recordId;
-    @api linkedinUrl;
-    @api trailblazerUrl;
+
+    /* =========================================================
+       STATE
+    ========================================================= */
+    activeSection = SECTION.HOME;
+    isTransitioning = false;
+    fullName = '';
 
     /* =========================================================
        ASSETS
     ========================================================= */
-
     profilePicture = `${BASE_PATH}/portfolioPicture.jpg`;
 
     social = {
         linkedin: `${BASE_PATH}/Social/linkedin.svg`,
-        trailblazer: `${BASE_PATH}/Social/trailhead2.png`
+        trailblazer: `${BASE_PATH}/Social/trailhead2.png`,
+        github: `${BASE_PATH}/Social/github-white.svg`
     };
 
     certifications = [
@@ -47,16 +53,8 @@ export default class Portfolio extends LightningElement {
     ];
 
     /* =========================================================
-       STATE
-    ========================================================= */
-
-    activeSection = SECTION.HOME;
-    isTransitioning = false;
-
-    /* =========================================================
        HELPERS
     ========================================================= */
-
     isActive(section) {
         return this.activeSection === section;
     }
@@ -64,7 +62,6 @@ export default class Portfolio extends LightningElement {
     /* =========================================================
        UI STATE (GETTERS)
     ========================================================= */
-
     get showHome() {
         return this.isActive(SECTION.HOME);
     }
@@ -78,21 +75,32 @@ export default class Portfolio extends LightningElement {
     }
 
     get homeClass() {
-        return this.isActive(SECTION.HOME) ? 'active' : '';
+        return this.showHome ? 'active' : '';
     }
 
     get experienceClass() {
-        return this.isActive(SECTION.EXPERIENCE) ? 'active' : '';
+        return this.showExperience ? 'active' : '';
     }
 
     get skillsClass() {
-        return this.isActive(SECTION.SKILLS) ? 'active' : '';
+        return this.showSkills ? 'active' : '';
     }
 
     get contentClass() {
-        return this.isTransitioning
-            ? 'content fade-out'
-            : 'content';
+        return `content ${this.isTransitioning ? 'fade-out' : ''}`;
+    }
+
+    /* =========================================================
+       EVENTS
+    ========================================================= */
+
+    handleNameChange(event) {
+        const newName = event.detail ? event.detail.toUpperCase() : '';
+
+        // Prevent unnecessary rerender
+        if (newName !== this.fullName) {
+            this.fullName = newName;
+        }
     }
 
     /* =========================================================
@@ -109,6 +117,6 @@ export default class Portfolio extends LightningElement {
         setTimeout(() => {
             this.activeSection = section;
             this.isTransitioning = false;
-        }, 250); // Matches CSS timing
+        }, TRANSITION_DURATION);
     }
 }

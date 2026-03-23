@@ -5,14 +5,11 @@
     --blue: #1d4ed8;
 }
 
-
 /* =========================================================
-   GLOBAL RESET
+   RESET
 ========================================================= */
 * {
     box-sizing: border-box;
-    outline: none;
-    border: none;
 }
 
 img {
@@ -24,9 +21,8 @@ a {
     text-decoration: none;
 }
 
-
 /* =========================================================
-   PAGE BACKGROUND
+   PAGE
 ========================================================= */
 .body {
     font-family: "Segoe UI", Arial, sans-serif;
@@ -34,9 +30,8 @@ a {
     padding-top: 1rem;
 
     background: linear-gradient(315deg, #2b4162 0%, #12100e 74%);
-    animation: fadeIn 1s;
+    animation: fadeIn 0.8s ease;
 }
-
 
 /* =========================================================
    NAVBAR
@@ -47,8 +42,8 @@ nav {
     padding: 1.5rem 1rem;
 
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
 
     position: sticky;
     top: 0;
@@ -64,82 +59,64 @@ nav {
     color: var(--blue);
 }
 
-
 /* =========================================================
    NAV LINKS
 ========================================================= */
 .nav-links {
     list-style: none;
     display: flex;
-    align-items: center;
-    gap: 2.5rem;
+    gap: 2rem;
 }
 
 .link a {
     position: relative;
-    font-size: 1rem;
-    font-weight: 500;
     color: #fff;
-    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
     transition: color 0.3s ease;
 }
 
-
-/* =========================================================
-   LINK ANIMATION (HOVER + ACTIVE)
-========================================================= */
+/* Hover underline */
 .link a::after {
     content: "";
     position: absolute;
     left: 0;
     bottom: -6px;
-
     width: 0%;
     height: 2px;
     background: var(--blue);
-
     transition: width 0.3s ease;
 }
 
-.link a:hover {
-    color: var(--blue);
-}
-
-.link a:hover::after {
-    width: 100%;
-}
-
+.link a:hover,
 .link a.active {
     color: var(--blue);
 }
 
+.link a:hover::after,
 .link a.active::after {
     width: 100%;
 }
-
 
 /* =========================================================
    BUTTON
 ========================================================= */
 .btn {
     padding: 1rem 2rem;
-    font-size: 1rem;
     color: #fff;
-
     background-color: var(--blue);
     border-radius: 5px;
     cursor: pointer;
-
-    transition: all 0.3s ease;
+    transition: opacity 0.3s ease;
 }
 
 .btn:hover {
     opacity: 0.9;
 }
 
-
 /* =========================================================
-   TAB TRANSITIONS
+   TRANSITIONS
 ========================================================= */
 .content {
     transition: opacity 0.25s ease, transform 0.25s ease;
@@ -150,20 +127,13 @@ nav {
     transform: translateY(10px);
 }
 
-.content:not(.fade-out) {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-
 /* =========================================================
-   ANIMATIONS
+   ANIMATION
 ========================================================= */
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
 }
-
 
 /* =========================================================
    RESPONSIVE
