@@ -6,7 +6,7 @@
         <name>ApexClass</name>
     </types>
     <types>
-        <members>Career_Hub</members>
+        <members>Workfolio</members>
         <name>CustomApplication</name>
     </types>
     <types>
@@ -17,6 +17,7 @@
     </types>
     <types>
         <members>Job_Application__c</members>
+        <members>Lead_Submission__e</members>
         <members>Skill__c</members>
         <members>Portfolio__c</members>
         <members>WorkExperience__c</members>
@@ -31,6 +32,10 @@
     <types>
         <members>Job_Application_Record_Page</members>
         <name>FlexiPage</name>
+    </types>
+    <types>
+        <members>PE_Lead_Upsert_Portfolio_Submission</members>
+        <name>Flow</name>
     </types>
     <types>
         <members>Lead-Lead Layout</members>
@@ -48,6 +53,10 @@
         <members>portfolioStringToHtml</members>
         <members>skillNode</members>
         <name>LightningComponentBundle</name>
+    </types>
+    <types>
+        <members>Workfolio_Guest_Site_Access</members>
+        <name>PermissionSet</name>
     </types>
     <types>
         <members>Portfolio__c</members>
