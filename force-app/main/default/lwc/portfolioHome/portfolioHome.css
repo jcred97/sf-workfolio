@@ -4,11 +4,6 @@
 ========================================================= */
 * {
     box-sizing: border-box;
-    outline: none;
-    border: none;
-
-    /* subtle entrance animation */
-    animation: fadeIn 1s;
 }
 
 img {
@@ -66,7 +61,7 @@ a {
     padding: 4px;
 
     /* gradient ring effect */
-    background: radial-gradient(circle, #3b82f6, #1e3a8a);
+    background: radial-gradient(circle, var(--primary-color), var(--secondary-color));
 }
 
 
@@ -76,7 +71,7 @@ a {
 .profile-text h1 {
     margin: 0;
 
-    color: #fff;
+    color: var(--text-primary);
     font-size: 2.5rem;
     font-weight: 700;
 }
@@ -84,7 +79,7 @@ a {
 .profile-text h2 {
     margin-top: 0.3rem;
 
-    color: #cbd5f5;
+    color: var(--text-secondary);
     font-size: 1.3rem;
     font-weight: 400;
 }
@@ -97,7 +92,7 @@ a {
 .container .content h3 {
     margin-bottom: 1rem;
 
-    color: #e0e0e0;
+    color: var(--text-muted);
     font-size: 1.1rem;
     font-weight: 400;
 }
@@ -105,7 +100,7 @@ a {
 .container .content p {
     margin-bottom: 2rem;
 
-    color: #ccc;
+    color: var(--text-muted);
     font-size: 1rem;
 }
 
@@ -128,7 +123,7 @@ a {
 
 .cert-badge:hover {
     transform: translateY(-5px) scale(1.05);
-    filter: drop-shadow(0 10px 20px rgba(59,130,246,0.4));
+    filter: drop-shadow(0 10px 20px var(--primary-color));
 }
 
 /* =========================================================
@@ -155,12 +150,12 @@ a {
     grid-column: span 2;
     margin-top: 2.5rem;
     padding-top: 2rem;
-    border-top: 1px solid rgba(255,255,255,0.08);
+    border-top: 1px solid var(--border);
 }
 
 .contact-title {
     text-align: center;
-    color: #ffffff;
+    color: var(--text-primary);
     font-size: 2rem;
     font-weight: 600;
     margin-top: 1rem;

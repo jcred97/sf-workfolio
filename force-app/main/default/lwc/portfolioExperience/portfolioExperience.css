@@ -51,14 +51,14 @@
 .experience-list::before {
     content: '';
     position: absolute;
-    left: 8px;
+    left: 9px;
     top: 0;
     bottom: 0;
     width: 2px;
     background: linear-gradient(
         to bottom,
-        rgba(96,165,250,0.3),
-        rgba(96,165,250,0.05)
+        var(--accent-color),
+        transparent
     );
 }
 
@@ -78,13 +78,13 @@
     top: 18px;
     width: 8px;
     height: 8px;
-    background: #60a5fa;
+    background: var(--accent-color);
     border-radius: 50%;
-    box-shadow: 0 0 10px rgba(96,165,250,0.7);
+    box-shadow: 0 0 10px var(--primary-color);
 }
 
 .exp-item:hover {
-    background: rgba(255,255,255,0.05);
+    background: var(--card-bg-color);
     opacity: 1;
 }
 
@@ -94,19 +94,20 @@
 }
 
 .exp-item.active::before {
-    background: #3b82f6;
-    box-shadow: 0 0 14px rgba(59,130,246,0.9);
+    background: var(--primary-color);
+    box-shadow: 0 0 14px var(--primary-color);
 }
 
 .exp-item.active::after {
     content: '';
     position: absolute;
-    left: 2px;
+    left: -11.5px;
     top: 0;
     bottom: 0;
     width: 3px;
-    background: #60a5fa;
+    background: var(--primary-color);
     border-radius: 2px;
+    box-shadow: 0 0 10px var(--primary-color);
 }
 
 
@@ -144,11 +145,11 @@
     height: auto;
     overflow: visible;
 
-    background: #111;
-    border-radius: 14px;
+    background: var(--card-bg-color);
+    border-radius: var(--card-radius);
     padding: 22px;
-    border: 1px solid rgba(255,255,255,0.06);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    border: 1px solid var(--border);
+    box-shadow: 0 10px 30px var(--card-shadow);
 }
 
 
@@ -156,23 +157,23 @@
    📝 TEXT
 ===================================== */
 .company {
-    color: #fff;
+    color: var(--text-primary);
     font-weight: 600;
 }
 
 .role {
     font-size: 0.85rem;
-    color: #9ca3af;
+    color: var(--text-secondary);
 }
 
 .meta-header {
     font-size: 0.75rem;
-    color: #6b7280;
+    color: var(--text-muted);
 }
 
 .meta {
     font-size: 0.8rem;
-    color: #9ca3af;
+    color: var(--text-secondary);
     margin-bottom: 12px;
 }
 
@@ -189,11 +190,21 @@
 
 .skill-tag {
     background: rgba(29, 78, 216, 0.15);
-    color: #60a5fa;
+    color: var(--accent-color);
     padding: 5px 10px;
     border-radius: 999px;
     font-size: 11px;
-    border: 1px solid rgba(29, 78, 216, 0.3);
+    border: 1px solid var(--primary-color);
+
+    display: inline-block;
+    transition: all 0.25s ease;
+}
+
+.skill-tag:hover {
+    transform: translateY(-4px);
+    border-color: var(--primary-color);
+
+    box-shadow: 0 6px 14px var(--card-shadow);
 }
 
 
@@ -202,7 +213,7 @@
 ===================================== */
 .description {
     font-size: 0.85rem;
-    color: #d1d5db;
+    color: var(--text-secondary);
     line-height: 1.6;
 }
 
@@ -215,10 +226,10 @@
    📱 MOBILE
 ===================================== */
 .experience-card {
-    background: #111;
-    border-radius: 12px;
+    background: var(--card-bg-color);
+    border-radius: var(--card-radius);
     padding: 1rem;
-    border: 1px solid rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
     margin-bottom: 1rem;
 }
 

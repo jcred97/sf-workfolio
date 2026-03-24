@@ -53,4 +53,20 @@ public with sharing class PortfolioController {
             ORDER BY Priority__c ASC NULLS LAST
         ];
     }
+
+    @AuraEnabled(cacheable=true)
+    public static Portfolio_Setting__c getPortfolioSettings() {
+        return [
+            SELECT 
+                Primary_Color__c,
+                Background_Color__c,
+                Card_Background__c,
+                Border_Color__c,
+                Primary_Text_Color__c,
+                Secondary_Text_Color__c,
+                Muted_Text_Color__c
+            FROM Portfolio_Setting__c
+            LIMIT 1
+        ];
+    }
 }

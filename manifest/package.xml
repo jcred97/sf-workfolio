@@ -66,6 +66,7 @@
     </types>
     <types>
         <members>Portfolio__c</members>
+        <members>Portfolio_Setting__c</members>
         <members>Skill__c</members>
         <members>WorkExperience__c</members>
         <name>SharingRules</name>

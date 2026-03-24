@@ -2,7 +2,25 @@
    THEME VARIABLES
 ========================================================= */
 :host {
-    --blue: #1d4ed8;
+    --primary-color: #3b82f6;
+    --secondary-color: #1e40af;
+    --accent-color: #60a5fa;
+
+    --background-color: #020617;
+    --card-bg-color: #111827;
+    --border: rgba(255,255,255,0.08);
+
+    --text-primary: #ffffff;
+    --text-secondary: #cbd5f5;
+    --text-muted: #94a3b8;
+
+    --btn-gradient-start: #3b82f6;
+    --btn-gradient-end: #1d4ed8;
+    --btn-text: #ffffff;
+
+    --card-radius: 14px;
+    --card-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    --hover-border: #3b82f6;
 }
 
 /* =========================================================
@@ -29,7 +47,7 @@ a {
     min-height: 100vh;
     padding-top: 1rem;
 
-    background: linear-gradient(315deg, #2b4162 0%, #12100e 74%);
+    background: var(--background-color);
     animation: fadeIn 0.8s ease;
 }
 
@@ -56,7 +74,7 @@ nav {
     font-size: 1.1rem;
     font-weight: 600;
     letter-spacing: 1px;
-    color: var(--blue);
+    color: var(--primary-color);
 }
 
 /* =========================================================
@@ -70,7 +88,7 @@ nav {
 
 .link a {
     position: relative;
-    color: #fff;
+    color: var(--text-primary);
     font-weight: 500;
     font-size: 0.95rem;
     letter-spacing: 0.5px;
@@ -85,34 +103,18 @@ nav {
     bottom: -6px;
     width: 0%;
     height: 2px;
-    background: var(--blue);
+    background: var(--primary-color);
     transition: width 0.3s ease;
 }
 
 .link a:hover,
 .link a.active {
-    color: var(--blue);
+    color: var(--primary-color);
 }
 
 .link a:hover::after,
 .link a.active::after {
     width: 100%;
-}
-
-/* =========================================================
-   BUTTON
-========================================================= */
-.btn {
-    padding: 1rem 2rem;
-    color: #fff;
-    background-color: var(--blue);
-    border-radius: 5px;
-    cursor: pointer;
-    transition: opacity 0.3s ease;
-}
-
-.btn:hover {
-    opacity: 0.9;
 }
 
 /* =========================================================

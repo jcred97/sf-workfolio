@@ -25,18 +25,18 @@
 }
 
 .skill-card {
-    background: #111;
-    border-radius: 12px;
+    background: var(--card-bg-color);
+    border-radius: var(--card-radius);
     padding: 1rem;
     transition: 0.3s;
-    border: 1px solid rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
     align-self: start;
     overflow: visible;
 }
 
 .skill-card:hover {
     transform: translateY(-4px);
-    border-color: #1d4ed8;
+    border-color: var(--primary-color);
 }
 
 /* CRM full width */
@@ -58,7 +58,7 @@
 }
 
 .card-header h3 {
-    color: #fff;
+    color: var(--text-primary);
     font-size: 18px;
     font-weight: 600;
 }
@@ -71,7 +71,7 @@
 }
 
 .toggle {
-    color: #1d4ed8;
+    color: var(--primary-color);
     font-size: 20px;
 }
 
@@ -97,11 +97,11 @@
 
 .skill-tag {
     background: rgba(29, 78, 216, 0.15);
-    color: #60a5fa;
+    color: var(--accent-color);
     padding: 6px 12px;
     border-radius: 999px;
     font-size: 12px;
-    border: 1px solid rgba(29, 78, 216, 0.3);
+    border: 1px solid var(--primary-color);
 }
 
 /* 📱 mobile tags */
@@ -113,6 +113,7 @@
 
     .skill-card {
         padding: 0.8rem;
-        border-radius: 10px;
+        border-radius: var(--card-radius);
+        box-shadow: var(--card-shadow);
     }
 }

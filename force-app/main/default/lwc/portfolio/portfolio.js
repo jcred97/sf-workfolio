@@ -1,5 +1,6 @@
 import { LightningElement, api } from 'lwc';
 import PortfolioAssets from '@salesforce/resourceUrl/PortfolioAssets';
+import getPortfolioSettings from '@salesforce/apex/PortfolioController.getPortfolioSettings';
 
 /* =========================================================
    CONSTANTS
@@ -43,6 +44,50 @@ export default class Portfolio extends LightningElement {
         trailblazer: `${BASE_PATH}/Social/trailhead2.png`,
         github: `${BASE_PATH}/Social/github-white.svg`
     };
+
+    connectedCallback() {
+        this.loadSettings();
+    }
+
+    async loadSettings() {
+        try {
+            const data = await getPortfolioSettings();
+
+            if (data) {
+                this.applyTheme(data);
+            }
+        } catch (error) {
+            console.error('Theme load error', error);
+        }
+    }
+
+    applyTheme(settings) {
+        const style = this.template.host.style;
+
+        // COLORS
+        style.setProperty('--primary-color', settings.Primary_Color__c || '#3b82f6');
+        style.setProperty('--secondary-color', settings.Secondary_Color__c || '#1e40af');
+        style.setProperty('--accent-color', settings.Accent_Color__c || '#60a5fa');
+
+        style.setProperty('--background-color', settings.Background_Color__c || '#020617');
+        style.setProperty('--card-bg-color', settings.Card_Background__c || '#111827');
+        style.setProperty('--border', settings.Border_Color__c || 'rgba(255,255,255,0.08)');
+
+        // TEXT
+        style.setProperty('--text-primary', settings.Primary_Text_Color__c || '#ffffff');
+        style.setProperty('--text-secondary', settings.Secondary_Text_Color__c || '#cbd5f5');
+        style.setProperty('--text-muted', settings.Muted_Text_Color__c || '#94a3b8');
+
+        // BUTTON
+        style.setProperty('--btn-gradient-start', settings.Button_Gradient_Start__c || '#3b82f6');
+        style.setProperty('--btn-gradient-end', settings.Button_Gradient_End__c || '#1d4ed8');
+        style.setProperty('--btn-text', settings.Button_Text_Color__c || '#ffffff');
+
+        // EFFECTS
+        style.setProperty('--card-radius', settings.Card_Border_Radius__c || '14px');
+        style.setProperty('--card-shadow', settings.Card_Shadow__c || '0 10px 30px rgba(0,0,0,0.4)');
+        style.setProperty('--hover-border', settings.Hover_Border_Color__c || '#3b82f6');
+    }
 
     certifications = [
         { name: 'Platform Developer 1', image: `${BASE_PATH}/CertificateLogo/platformdeveloper1.png` },

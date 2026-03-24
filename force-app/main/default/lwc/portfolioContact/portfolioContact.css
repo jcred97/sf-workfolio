@@ -40,19 +40,18 @@ a {
 
 .content,
 .content-contact {
-    background: #111;
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 14px;
+    background: var(--card-bg-color);
+    border: 1px solid var(--border);
+    border-radius: var(--card-radius);
     padding: 2.2rem;
     transition: all 0.3s ease;
-
-    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    box-shadow: var(--card-shadow);
 }
 
 .content:hover,
 .content-contact:hover {
-    border-color: rgba(29, 78, 216, 0.4);
-    box-shadow: 0 10px 30px rgba(59,130,246,0.15);
+    border-color: var(--primary-color);
+    box-shadow: 0 10px 30px var(--primary-color);
     transform: translateY(-4px);
 }
 
@@ -72,14 +71,14 @@ a {
 ========================================================= */
 
 h1 {
-    color: #fff;
+    color: var(--text-primary);
     font-weight: 600;
     font-size: 1.4rem;
     margin-bottom: 0.5rem;
 }
 
 hr {
-    border-top: 1px solid rgba(255,255,255,0.1);
+    border-top: 1px solid var(--border);
     margin: 0.5rem 0 2rem 0;
 }
 
@@ -94,7 +93,7 @@ hr {
     font-size: 0.95rem;
     font-weight: 500;
     color: #fff;
-    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    background: linear-gradient(135deg, var(--btn-gradient-start), var(--btn-gradient-end));
     border: none;
     border-radius: 12px;
     cursor: pointer;
@@ -104,7 +103,7 @@ hr {
 
 .btn:hover {
     transform: translateY(-3px);
-    box-shadow: 0 12px 25px rgba(37, 99, 235, 0.45);
+    box-shadow: 0 12px 25px var(--primary-color);
 }
 
 .btn:active {
@@ -123,8 +122,8 @@ hr {
 ========================================================= */
 
 .content-email {
-    background: rgba(255,255,255,0.02);
-    border: 1px solid rgba(255,255,255,0.05);
+    background: var(--card-bg-color);
+    border: 1px solid var(--border);
     border-radius: 10px;
     padding: 1.2rem;
     transition: 0.3s;
@@ -207,19 +206,19 @@ hr {
 ========================================================= */
 
 :host {
-    --slds-c-input-color-background: #0f0f12;
-    --slds-c-input-color-background-focus: #0f0f12;
-    --slds-c-input-text-color: #fff;
-    --slds-c-input-text-color-focus: #fff;
-    --slds-c-input-color-border: rgba(255,255,255,0.15);
-    --slds-c-input-color-border-focus: #1d4ed8;
+    --slds-c-input-color-background: var(--card-bg-color);
+    --slds-c-input-color-background-focus: var(--card-bg-color);
+    --slds-c-input-text-color: var(--text-primary);
+    --slds-c-input-text-color-focus: var(--text-primary);
+    --slds-c-input-color-border: var(--border);
+    --slds-c-input-color-border-focus: var(--primary-color);
 
-    --slds-c-textarea-color-background: #0f0f12;
-    --slds-c-textarea-color-background-focus: #0f0f12;
-    --slds-c-textarea-color-border: rgba(255,255,255,0.15);
-    --slds-c-textarea-color-border-focus: #1d4ed8;
-    --slds-c-textarea-text-color: #fff;
-    --slds-c-textarea-text-color-focus: #fff;
+    --slds-c-textarea-color-background: var(--card-bg-color);
+    --slds-c-textarea-color-background-focus: var(--card-bg-color);
+    --slds-c-textarea-color-border: var(--border);
+    --slds-c-textarea-color-border-focus: var(--primary-color);
+    --slds-c-textarea-text-color: var(--text-primary);
+    --slds-c-textarea-text-color-focus: var(--text-primary);
 }
 
 .content lightning-input,
@@ -303,17 +302,17 @@ hr {
 
     .content,
     .content-contact {
-        background: #111;
-        border-radius: 12px;
+        background: var(--card-bg-color);
+        border-radius: var(--card-radius);
         padding: 1.5rem;
-        border: 1px solid rgba(255,255,255,0.05);
+        border: 1px solid var(--border);
         transition: 0.3s;
     }
 
     .content:hover,
     .content-contact:hover {
         transform: translateY(-4px);
-        border-color: #1d4ed8;
+        border-color: var(--primary-color);
     }
 
     h1 {
@@ -326,7 +325,7 @@ hr {
     }
 
     .email-link {
-        color: #60a5fa;
+        color: var(--accent-color);
         font-size: 0.9rem;
         word-break: break-all;
     }
