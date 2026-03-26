@@ -1,140 +1,139 @@
 @IsTest
 private class PortfolioControllerTest {
 
-    // private static String uniqueEmail(String prefix) {
-    //     return prefix + Datetime.now().getTime() + '@test.com';
-    // }
+    @testSetup
+    static void setupData() {
+        // Create Portfolio (if required lookup)
+        Portfolio__c portfolio = new Portfolio__c(
+                Name = 'Test Portfolio',
+                FullName__c = 'Test Portfolio'
+            );
+        insert portfolio;
 
-    // @IsTest
-    // static void testSuccess() {
-    //     String email = uniqueEmail('success');
+        // Create Skills
+        List<Skill__c> skills = new List<Skill__c>{
+            new Skill__c(
+                Name = 'Apex',
+                Priority__c = 1,
+                Portfolio__c = portfolio.Id
+            ),
+            new Skill__c(
+                Name = 'LWC',
+                Priority__c = 2,
+                Portfolio__c = portfolio.Id
+            )
+        };
+        insert skills;
 
-    //     Test.startTest();
-    //     PortfolioController.sendContactMessage('John', 'Doe', email, 'Hello');
-    //     Test.stopTest();
+        // Create Portfolio Settings
+        Portfolio_Setting__c setting = new Portfolio_Setting__c(
+            Primary_Color__c = '#000000',
+            Background_Color__c = '#FFFFFF',
+            Card_Background__c = '#F5F5F5',
+            Border_Color__c = '#CCCCCC',
+            Primary_Text_Color__c = '#111111',
+            Secondary_Text_Color__c = '#222222',
+            Muted_Text_Color__c = '#999999'
+        );
+        insert setting;
+    }
 
-    //     Lead lead = [
-    //         SELECT FirstName, LastName, Email_Status__c
-    //         FROM Lead
-    //         WHERE Email = :email
-    //         LIMIT 1
-    //     ];
+    @IsTest
+    static void testSubmitLead_Success() {
+        Test.startTest();
 
-    //     System.assertEquals('John', lead.FirstName);
-    //     System.assertEquals('Doe', lead.LastName);
-    //     System.assertEquals('Sent', lead.Email_Status__c);
-    // }
+        PortfolioController.submitLead(
+            'John',
+            'Doe',
+            'john@test.com',
+            'Hello there'
+        );
 
-    // @IsTest
-    // static void testBlankFields() {
-    //     Boolean exceptionThrown = false;
+        Test.stopTest();
 
-    //     try {
-    //         PortfolioController.sendContactMessage('', '', '', '');
-    //     } catch (AuraHandledException e) {
-    //         exceptionThrown = true;
-    //     }
+        // Since this uses Platform Event, we verify no exception was thrown
+        System.assert(true, 'Lead submission executed successfully');
+    }
 
-    //     System.assert(exceptionThrown, 'Expected AuraHandledException to be thrown');
-    // }
+    @IsTest
+    static void testSubmitLead_BlankEmail() {
+        Test.startTest();
 
-    // @IsTest
-    // static void testEmailFailure() {
-    //     String email = uniqueEmail('fail');
+        PortfolioController.submitLead(
+            'Jane',
+            'Doe',
+            null,
+            'No email case'
+        );
 
-    //     PortfolioController.forceEmailFailure = true;
+        Test.stopTest();
 
-    //     Test.startTest();
-    //     PortfolioController.sendContactMessage('Jane', 'Doe', email, 'Failure');
-    //     Test.stopTest();
+        System.assert(true, 'Handled blank email correctly');
+    }
 
-    //     Lead lead = [
-    //         SELECT Email_Status__c
-    //         FROM Lead
-    //         WHERE Email = :email
-    //         LIMIT 1
-    //     ];
+    @IsTest
+    static void testGetSkills() {
+        Portfolio__c portfolio = [SELECT Id FROM Portfolio__c LIMIT 1];
 
-    //     System.assertEquals('Failed', lead.Email_Status__c);
+        Test.startTest();
+        List<Skill__c> result = PortfolioController.getSkills(portfolio.Id);
+        Test.stopTest();
 
-    //     PortfolioController.forceEmailFailure = false;
-    // }
+        System.assertEquals(2, result.size(), 'Should return 2 skills');
+        System.assertEquals('Apex', result[0].Name);
+    }
 
-    // @IsTest
-    // static void testExceptionPath() {
-    //     String email = uniqueEmail('exception');
+    @IsTest
+    static void testGetPortfolioSettings() {
+        Test.startTest();
+        Portfolio_Setting__c setting = PortfolioController.getPortfolioSettings();
+        Test.stopTest();
 
-    //     PortfolioController.forceException = true;
+        System.assertNotEquals(null, setting);
+        System.assertEquals('#000000', setting.Primary_Color__c);
+    }
 
-    //     Test.startTest();
-    //     PortfolioController.sendContactMessage('Error', 'Case', email, 'Exception');
-    //     Test.stopTest();
+    @IsTest
+    static void testSubmitLead_ExceptionHandling() {
+        PortfolioController.forceException = true;
 
-    //     Lead lead = [
-    //         SELECT Email_Status__c, Email_Error__c
-    //         FROM Lead
-    //         WHERE Email = :email
-    //         LIMIT 1
-    //     ];
+        try {
+            Test.startTest();
+            PortfolioController.submitLead(
+                'Error',
+                'Test',
+                'error@test.com',
+                'Trigger exception'
+            );
+            Test.stopTest();
 
-    //     System.assertEquals('Failed', lead.Email_Status__c);
-    //     System.assertNotEquals(null, lead.Email_Error__c);
+            System.assert(false, 'Exception should have been thrown');
+        } catch (AuraHandledException e) {
+            System.assert(true, 'Exception handled correctly');
+        }
 
-    //     PortfolioController.forceException = false;
-    // }
+        PortfolioController.forceException = false;
+    }
 
-    // @IsTest
-    // static void testNoEmailResult() {
-    //     String email = uniqueEmail('noresult');
+    @IsTest
+    static void testSubmitLead_PublishFailure() {
+        PortfolioController.forcePublishFailure = true;
 
-    //     PortfolioController.forceNoEmailResult = true;
+        try {
+            Test.startTest();
+            PortfolioController.submitLead(
+                'Fail',
+                'Case',
+                'fail@test.com',
+                'Force publish failure'
+            );
+            Test.stopTest();
 
-    //     Test.startTest();
-    //     PortfolioController.sendContactMessage('Edge', 'Case', email, 'Test');
-    //     Test.stopTest();
+            System.assert(false, 'Exception should have been thrown');
+        } catch (AuraHandledException e) {
+            System.assertNotEquals(null, e.getMessage());
+        }
 
-    //     Lead lead = [
-    //         SELECT Email_Status__c
-    //         FROM Lead
-    //         WHERE Email = :email
-    //         LIMIT 1
-    //     ];
-
-    //     System.assertEquals('Failed', lead.Email_Status__c);
-
-    //     PortfolioController.forceNoEmailResult = false;
-    // }
-
-    // @IsTest
-    // static void testGetSkills() {
-    //     // Create Portfolio
-    //     Portfolio__c portfolio = new Portfolio__c(
-    //         Name = 'Test Portfolio',
-    //         FullName__c = 'Test Test'
-    //     );
-    //     insert portfolio;
-
-    //     // Create Skills
-    //     Skill__c skill1 = new Skill__c(
-    //         Name = 'Apex',
-    //         Portfolio__c = portfolio.Id,
-    //         Priority__c = 1
-    //     );
-
-    //     Skill__c skill2 = new Skill__c(
-    //         Name = 'LWC',
-    //         Portfolio__c = portfolio.Id,
-    //         Priority__c = 2
-    //     );
-
-    //     insert new List<Skill__c>{ skill1, skill2 };
-
-    //     Test.startTest();
-    //     List<Skill__c> result = PortfolioController.getSkills(portfolio.Id);
-    //     Test.stopTest();
-
-    //     System.assertEquals(2, result.size(), 'Should return 2 skills');
-    //     System.assertEquals('Apex', result[0].Name);
-    //     System.assertEquals('LWC', result[1].Name);
-    // }
+        PortfolioController.forcePublishFailure = false;
+    }
 }

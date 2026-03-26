@@ -3,14 +3,15 @@ public with sharing class PortfolioController {
     @TestVisible private static Boolean forceEmailFailure = false;
     @TestVisible private static Boolean forceNoEmailResult = false;
     @TestVisible private static Boolean forceException = false;
+    @TestVisible private static Boolean forcePublishFailure = false;
 
     @AuraEnabled
     public static void submitLead(String firstName, String lastName, String emailAddress, String message) {
         try {
-            // Generate External ID (idempotency)
+            if (forceException) {
+                throw new AuraHandledException('Forced exception for testing');
+            }
             String externalId = generateExternalId(emailAddress);
-
-            // Create Platform Event
             Lead_Submission__e eventRecord = new Lead_Submission__e(
                 First_Name__c = firstName,
                 Last_Name__c = lastName,
@@ -23,10 +24,9 @@ public with sharing class PortfolioController {
                 External_Id__c = externalId
             );
 
-            // Publish Event
             Database.SaveResult result = EventBus.publish(eventRecord);
 
-            if (!result.isSuccess()) {
+            if (forcePublishFailure || !result.isSuccess()) {
                 throw new AuraHandledException('Failed to submit lead.');
             }
 
