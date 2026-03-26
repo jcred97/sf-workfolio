@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>Previous_Message__c</fullName>
-    <label>Previous Message</label>
+    <fullName>Email_Log__c</fullName>
+    <label>Email Log</label>
     <length>32768</length>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

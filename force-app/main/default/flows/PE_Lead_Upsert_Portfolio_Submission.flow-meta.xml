@@ -1,7 +1,238 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Send_Custom_Notification_to_Queue_Members</name>
+        <label>Send Custom Notification to Queue Members</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>customNotificationAction</actionName>
+        <actionType>customNotificationAction</actionType>
+        <connector>
+            <targetReference>Send_Email</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>customNotifTypeId</name>
+            <value>
+                <elementReference>Get_Custom_Notification_Type.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientIds</name>
+            <value>
+                <elementReference>varUserIds</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>title</name>
+            <value>
+                <elementReference>notificationTitle</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>body</name>
+            <value>
+                <elementReference>notificationBody</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>targetId</name>
+            <value>
+                <elementReference>targetId</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>customNotificationAction</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Email</name>
+        <label>Send Email</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>PortfolioLeadEmailAction</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Check_If_Email_is_Sent</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailType</name>
+            <value>
+                <elementReference>emailType</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>leadId</name>
+            <value>
+                <elementReference>targetId</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientEmail</name>
+            <value>
+                <stringValue>john.carlo.d.red@outlook.com</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>PortfolioLeadEmailAction</nameSegment>
+        <offset>0</offset>
+        <outputParameters>
+            <assignToReference>emailLog</assignToReference>
+            <name>message</name>
+        </outputParameters>
+        <outputParameters>
+            <assignToReference>isEmailSent</assignToReference>
+            <name>success</name>
+        </outputParameters>
+    </actionCalls>
     <apiVersion>66.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Assign_Create_Lead_Variables</name>
+        <label>Assign Create Lead Variables</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>notificationBody</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>newLeadBody</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>notificationTitle</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>New Lead</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>targetId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Create_Lead.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>emailType</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>create</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Send_Custom_Notification_to_Queue_Members</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Email_Status_to_Faield</name>
+        <label>Assign Email Status to Faield</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>emailStatus</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Failed</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Lead_Email_Status</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Email_Status_to_Sent</name>
+        <label>Assign Email Status to Sent</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>emailStatus</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Sent</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Lead_Email_Status</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Members_to_Variable</name>
+        <label>Assign Members to Variable</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varUserIds</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Iterate_on_Queue_Members.UserOrGroupId</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Iterate_on_Queue_Members</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Update_Lead_Variables</name>
+        <label>Assign Update Lead Variables</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>notificationBody</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>existingLeadBody</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>notificationTitle</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Update from Existing Lead</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>targetId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Lead_Record.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>emailType</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>update</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Send_Custom_Notification_to_Queue_Members</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Check_If_Email_is_Sent</name>
+        <label>Check If Email is Sent</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Assign_Email_Status_to_Faield</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Email is not sent</defaultConnectorLabel>
+        <rules>
+            <name>Email_is_Sent</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>isEmailSent</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Email_Status_to_Sent</targetReference>
+            </connector>
+            <label>Email is Sent</label>
+        </rules>
+    </decisions>
     <decisions>
         <name>Check_if_it_exists</name>
         <label>Check if it exists</label>
@@ -38,7 +269,21 @@
 Ensures idempotency using External_Id__c. Creates or updates Lead records asynchronously.</description>
     <environments>Default</environments>
     <interviewLabel>PE Lead Upsert Portfolio Submission {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>PE Lead Upsert Portfolio Submission</label>
+    <label>PE - Lead Upsert - Portfolio Submission</label>
+    <loops>
+        <name>Iterate_on_Queue_Members</name>
+        <label>Iterate on Queue Members</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>Get_Queue_Members</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Assign_Members_to_Variable</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Check_if_it_exists</targetReference>
+        </noMoreValuesConnector>
+    </loops>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -63,6 +308,9 @@ Ensures idempotency using External_Id__c. Creates or updates Lead records asynch
         <label>Create Lead</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <connector>
+            <targetReference>Assign_Create_Lead_Variables</targetReference>
+        </connector>
         <inputAssignments>
             <field>Company</field>
             <value>
@@ -121,13 +369,34 @@ Ensures idempotency using External_Id__c. Creates or updates Lead records asynch
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
     <recordLookups>
+        <name>Get_Custom_Notification_Type</name>
+        <label>Get Custom Notification Type</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Queue</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Portfolio_Lead_Notification</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>CustomNotificationType</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <name>Get_Lead_Record</name>
         <label>Get Lead Record</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Check_if_it_exists</targetReference>
+            <targetReference>Get_Custom_Notification_Type</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -141,11 +410,63 @@ Ensures idempotency using External_Id__c. Creates or updates Lead records asynch
         <object>Lead</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
+    <recordLookups>
+        <name>Get_Queue</name>
+        <label>Get Queue</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Queue_Members</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Type</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Queue</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Portfolio_Leads</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Group</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Queue_Members</name>
+        <label>Get Queue Members</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Iterate_on_Queue_Members</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>GroupId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Queue.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>GroupMember</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <recordUpdates>
         <name>Update_Lead</name>
         <label>Update Lead</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <connector>
+            <targetReference>Assign_Update_Lead_Variables</targetReference>
+        </connector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>External_Id__c</field>
@@ -161,9 +482,36 @@ Ensures idempotency using External_Id__c. Creates or updates Lead records asynch
             </value>
         </inputAssignments>
         <inputAssignments>
-            <field>Previous_Message__c</field>
+            <field>Previous_Email_Message__c</field>
             <value>
                 <elementReference>Get_Lead_Record.Email_Message__c</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Lead</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Lead_Email_Status</name>
+        <label>Update Lead Email Status</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>targetId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Email_Log__c</field>
+            <value>
+                <elementReference>emailLog</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Email_Status__c</field>
+            <value>
+                <elementReference>emailStatus</elementReference>
             </value>
         </inputAssignments>
         <object>Lead</object>
@@ -178,5 +526,81 @@ Ensures idempotency using External_Id__c. Creates or updates Lead records asynch
         <object>Lead_Submission__e</object>
         <triggerType>PlatformEvent</triggerType>
     </start>
-    <status>Draft</status>
+    <status>Obsolete</status>
+    <textTemplates>
+        <name>existingLeadBody</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Lead Updated: {!Get_Lead_Record.FirstName} {!Get_Lead_Record.LastName}
+New Message Received</text>
+    </textTemplates>
+    <textTemplates>
+        <name>newLeadBody</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>New Lead: {!$Record.First_Name__c} {!$Record.Last_Name__c}
+Source: {!$Record.Lead_Source__c}</text>
+    </textTemplates>
+    <variables>
+        <name>emailLog</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>emailStatus</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>emailType</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>isEmailSent</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>lead</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Lead</objectType>
+    </variables>
+    <variables>
+        <name>notificationBody</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>notificationTitle</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>targetId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>varUserIds</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
 </Flow>

@@ -4,6 +4,10 @@
         <apexClass>PortfolioController</apexClass>
         <enabled>true</enabled>
     </classAccesses>
+    <classAccesses>
+        <apexClass>PortfolioLeadEmailAction</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
     <fieldPermissions>
         <editable>false</editable>
         <field>Portfolio_Setting__c.Accent_Color__c</field>

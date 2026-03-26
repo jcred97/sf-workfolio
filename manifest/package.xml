@@ -3,6 +3,7 @@
     <types>
         <members>PortfolioController</members>
         <members>PortfolioControllerTest</members>
+        <members>PortfolioLeadEmailAction</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -10,12 +11,16 @@
         <name>CustomApplication</name>
     </types>
     <types>
-        <members>Lead.Email_Error__c</members>
+        <members>Lead.Email_Log__c</members>
         <members>Lead.Email_Message__c</members>
         <members>Lead.Email_Status__c</members>
-        <members>Lead.Previous_Message__c</members>
+        <members>Lead.Previous_Email_Message__c</members>
         <members>Lead.External_Id__c</members>
         <name>CustomField</name>
+    </types>
+    <types>
+        <members>Portfolio_Lead_Notification</members>
+        <name>CustomNotificationType</name>
     </types>
     <types>
         <members>Job_Application__c</members>
@@ -65,6 +70,11 @@
         <name>PermissionSet</name>
     </types>
     <types>
+        <members>Portfolio_Leads</members>
+        <name>Queue</name>
+    </types>
+    <types>
+        <members>Lead</members>
         <members>Portfolio__c</members>
         <members>Portfolio_Setting__c</members>
         <members>Skill__c</members>
