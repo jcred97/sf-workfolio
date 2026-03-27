@@ -4,6 +4,7 @@
         <members>PortfolioController</members>
         <members>PortfolioControllerTest</members>
         <members>PortfolioLeadEmailAction</members>
+        <members>PortfolioLeadEmailActionTest</members>
         <name>ApexClass</name>
     </types>
     <types>

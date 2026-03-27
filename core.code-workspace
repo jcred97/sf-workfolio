@@ -1,0 +1,19 @@
+{
+  "folders": [
+    {
+      "path": "f:/Salesforce/Personal/sf-workfolio"
+    }
+  ],
+  "settings": {
+    "eslint.workingDirectories": [
+      "f:/Salesforce/Personal/sf-workfolio"
+    ],
+    "eslint.validate": [
+      "javascript",
+      "typescript"
+    ],
+    "eslint.options": {
+      "overrideConfigFile": "f:\\Salesforce\\Personal\\sf-workfolio\\.eslintrc.json"
+    }
+  }
+}
