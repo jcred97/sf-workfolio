@@ -32,21 +32,40 @@
         <div class="experience-detail">
             <template for:each={workExperienceList} for:item="work">
                 <div key={work.id} class={work.rightClass}>
-                    
-                    <!-- Tech Stack -->
-                    <template if:true={work.TechStack}>
-                        <div class="tag-group">
-                            <template for:each={work.TechStack} for:item="tech">
-                                <span key={tech} class="skill-tag">{tech}</span>
+
+                    <!-- General Bullets (not linked to a project) -->
+                    <template if:true={work.hasGeneralBullets}>
+                        <ul class="bullet-list">
+                            <template for:each={work.GeneralBullets} for:item="bullet">
+                                <li key={bullet.Id}>{bullet.Text}</li>
                             </template>
-                        </div>
+                        </ul>
                     </template>
 
-                    <!-- Description -->
-                    <div class="description">
-                        <lightning-formatted-rich-text value={work.Description}>
-                        </lightning-formatted-rich-text>
-                    </div>
+                    <!-- Projects with their Bullets -->
+                    <template if:true={work.hasProjects}>
+                        <template for:each={work.Projects} for:item="proj">
+                            <div key={proj.Id} class="inline-project">
+                                <div class="project-name">{proj.Name}</div>
+
+                                <template if:true={proj.TechStack}>
+                                    <div class="tag-group">
+                                        <template for:each={proj.TechStack} for:item="tech">
+                                            <span key={tech} class="skill-tag">{tech}</span>
+                                        </template>
+                                    </div>
+                                </template>
+
+                                <template if:true={proj.hasBullets}>
+                                    <ul class="bullet-list">
+                                        <template for:each={proj.Bullets} for:item="bullet">
+                                            <li key={bullet.Id}>{bullet.Text}</li>
+                                        </template>
+                                    </ul>
+                                </template>
+                            </div>
+                        </template>
+                    </template>
 
                 </div>
             </template>
@@ -80,18 +99,39 @@
                     <!-- Body -->
                     <div class={work.bodyClass}>
 
-                        <template if:true={work.TechStack}>
-                            <div class="tag-group">
-                                <template for:each={work.TechStack} for:item="tech">
-                                    <span key={tech} class="skill-tag">{tech}</span>
+                        <!-- General Bullets (not linked to a project) -->
+                        <template if:true={work.hasGeneralBullets}>
+                            <ul class="bullet-list">
+                                <template for:each={work.GeneralBullets} for:item="bullet">
+                                    <li key={bullet.Id}>{bullet.Text}</li>
                                 </template>
-                            </div>
+                            </ul>
                         </template>
 
-                        <div class="description">
-                            <lightning-formatted-rich-text value={work.Description}>
-                            </lightning-formatted-rich-text>
-                        </div>
+                        <!-- Projects with their Bullets -->
+                        <template if:true={work.hasProjects}>
+                            <template for:each={work.Projects} for:item="proj">
+                                <div key={proj.Id} class="inline-project">
+                                    <div class="project-name">{proj.Name}</div>
+
+                                    <template if:true={proj.TechStack}>
+                                        <div class="tag-group">
+                                            <template for:each={proj.TechStack} for:item="tech">
+                                                <span key={tech} class="skill-tag">{tech}</span>
+                                            </template>
+                                        </div>
+                                    </template>
+
+                                    <template if:true={proj.hasBullets}>
+                                        <ul class="bullet-list">
+                                            <template for:each={proj.Bullets} for:item="bullet">
+                                                <li key={bullet.Id}>{bullet.Text}</li>
+                                            </template>
+                                        </ul>
+                                    </template>
+                                </div>
+                            </template>
+                        </template>
 
                     </div>
                 </div>

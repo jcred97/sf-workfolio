@@ -1,28 +1,14 @@
 import { LightningElement, api, wire } from 'lwc';
-import { getRelatedListRecords } from 'lightning/uiRelatedListApi';
+import getWorkExperiences from '@salesforce/apex/PortfolioController.getWorkExperiences';
 
 export default class PortfolioExperience extends LightningElement {
     @api recordId;
     workExperienceList = [];
 
     /* =====================================
-       🔌 DATA
+       🔌 WIRE — WORK EXPERIENCE
     ===================================== */
-    @wire(getRelatedListRecords, {
-        parentRecordId: '$recordId',
-        relatedListId: 'WorkExperience__r',
-        sortBy: ['-WorkExperience__c.JobStartDate__c'],
-        fields: [
-            'WorkExperience__c.JobStartDate__c',
-            'WorkExperience__c.JobEndDate__c',
-            'WorkExperience__c.Role__c',
-            'WorkExperience__c.CompanyName__c',
-            'WorkExperience__c.WorkLocation__c',
-            'WorkExperience__c.Description__c',
-            'WorkExperience__c.IsCurrent__c',
-            'WorkExperience__c.Tech_Stack__c'
-        ]
-    })
+    @wire(getWorkExperiences, { portfolioId: '$recordId' })
     workExperienceHandler({ data, error }) {
         if (data) {
             this.formatExperience(data);
@@ -40,27 +26,48 @@ export default class PortfolioExperience extends LightningElement {
        🧠 FORMAT
     ===================================== */
     formatExperience(data) {
-        this.workExperienceList = data.records.map((item, index) => {
-            const f = item.fields;
-
-            const isCurrent = this.getValue(f.IsCurrent__c);
-            const endDate = this.getValue(f.JobEndDate__c);
+        this.workExperienceList = data.map((item, index) => {
+            const isCurrent = item.IsCurrent__c;
+            const endDate = this.formatDate(item.JobEndDate__c);
             const isActive = index === 0;
 
-            return {
-                id: item.id,
+            const allBullets = item.Experience_Bullets__r || [];
 
-                JobStartDate: this.getValue(f.JobStartDate__c),
+            // Group bullets under their parent project
+            const projects = (item.Projects__r || []).map(proj => {
+                const projBullets = allBullets
+                    .filter(b => b.Project__c === proj.Id)
+                    .map(b => ({ Id: b.Id, Text: b.Bullet_Text__c }));
+
+                return {
+                    Id: proj.Id,
+                    Name: proj.Name,
+                    TechStack: this.splitTechStack(proj.Tech_Stack__c),
+                    Bullets: projBullets,
+                    hasBullets: projBullets.length > 0
+                };
+            });
+
+            // Bullets not linked to any project
+            const generalBullets = allBullets
+                .filter(b => !b.Project__c)
+                .map(b => ({ Id: b.Id, Text: b.Bullet_Text__c }));
+
+            return {
+                id: item.Id,
+
+                JobStartDate: this.formatDate(item.JobStartDate__c),
                 displayEnd: isCurrent ? 'Current' : endDate,
 
-                Role: this.getValue(f.Role__c),
-                CompanyName: this.getValue(f.CompanyName__c),
-                WorkLocation: this.getValue(f.WorkLocation__c),
-                Description: this.getValue(f.Description__c),
+                Role: item.Role__c,
+                CompanyName: item.CompanyName__c,
+                WorkLocation: item.WorkLocation__c,
 
-                TechStack: this.getValue(f.Tech_Stack__c)
-                    ?.split(',')
-                    .map(t => t.trim()),
+                GeneralBullets: generalBullets,
+                hasGeneralBullets: generalBullets.length > 0,
+
+                Projects: projects,
+                hasProjects: projects.length > 0,
 
                 /* MOBILE */
                 isOpen: isActive,
@@ -98,7 +105,7 @@ export default class PortfolioExperience extends LightningElement {
     }
 
     /* =====================================
-       🖥️ DESKTOP (FIXED ANIMATION)
+       🖥️ DESKTOP
     ===================================== */
     selectExperience(event) {
         const id = event.currentTarget.dataset.id;
@@ -155,7 +162,15 @@ export default class PortfolioExperience extends LightningElement {
     /* =====================================
        🧩 HELPERS
     ===================================== */
-    getValue(field) {
-        return field && (field.displayValue || field.value);
+    splitTechStack(value) {
+        if (!value) return null;
+        const result = value.split(',').map(t => t.trim()).filter(Boolean);
+        return result.length ? result : null;
+    }
+
+    formatDate(dateStr) {
+        if (!dateStr) return null;
+        const date = new Date(dateStr + 'T00:00:00');
+        return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
     }
 }

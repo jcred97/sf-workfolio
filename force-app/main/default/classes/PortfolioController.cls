@@ -57,7 +57,7 @@ public with sharing class PortfolioController {
     @AuraEnabled(cacheable=true)
     public static Portfolio_Setting__c getPortfolioSettings() {
         return [
-            SELECT 
+            SELECT
                 Primary_Color__c,
                 Background_Color__c,
                 Card_Background__c,
@@ -67,6 +67,35 @@ public with sharing class PortfolioController {
                 Muted_Text_Color__c
             FROM Portfolio_Setting__c
             LIMIT 1
+        ];
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static List<WorkExperience__c> getWorkExperiences(Id portfolioId) {
+        return [
+            SELECT Id, CompanyName__c, Role__c, JobStartDate__c, JobEndDate__c,
+                   WorkLocation__c, IsCurrent__c,
+                   (SELECT Id, Bullet_Text__c, Display_Order__c, Project__c
+                    FROM Experience_Bullets__r
+                    WHERE Include_In_Portfolio__c = true
+                    ORDER BY Display_Order__c ASC NULLS LAST),
+                   (SELECT Id, Name, Tech_Stack__c, Display_Order__c
+                    FROM Projects__r
+                    ORDER BY Display_Order__c ASC NULLS LAST)
+            FROM WorkExperience__c
+            WHERE Portfolio__c = :portfolioId
+            ORDER BY JobStartDate__c DESC NULLS LAST
+        ];
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static List<Project__c> getProjects(Id portfolioId) {
+        return [
+            SELECT Id, Name, Description__c, Tech_Stack__c, Display_Order__c,
+                   Work_Experience__c, Work_Experience__r.CompanyName__c
+            FROM Project__c
+            WHERE Work_Experience__r.Portfolio__c = :portfolioId
+            ORDER BY Display_Order__c ASC NULLS LAST
         ];
     }
 }

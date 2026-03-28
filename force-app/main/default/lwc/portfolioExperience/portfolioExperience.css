@@ -112,7 +112,7 @@
 
 
 /* =====================================
-   📄 DETAIL PANEL (FIXED ANIMATION)
+   📄 DETAIL PANEL
 ===================================== */
 .experience-detail {
     position: relative;
@@ -203,27 +203,55 @@
 .skill-tag:hover {
     transform: translateY(-4px);
     border-color: var(--primary-color);
-
     box-shadow: 0 6px 14px var(--card-shadow);
 }
 
 
 /* =====================================
-   📖 DESCRIPTION
+   📋 EXPERIENCE BULLETS
 ===================================== */
-.description {
+.bullet-list {
+    margin: 8px 0 0 0;
+    padding-left: 18px;
+    list-style: disc;
+}
+
+.bullet-list li {
     font-size: 0.85rem;
     color: var(--text-secondary);
     line-height: 1.6;
+    margin-bottom: 6px;
 }
 
-.description li {
-    margin-bottom: 6px;
+.bullet-list li:last-child {
+    margin-bottom: 0;
 }
 
 
 /* =====================================
-   📱 MOBILE
+   🔗 INLINE PROJECTS (within detail)
+===================================== */
+.inline-project {
+    padding: 12px 0;
+    margin-bottom: 4px;
+    border-bottom: 1px solid var(--border);
+}
+
+.inline-project:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.project-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+
+/* =====================================
+   📱 MOBILE ACCORDION
 ===================================== */
 .experience-card {
     background: var(--card-bg-color);
