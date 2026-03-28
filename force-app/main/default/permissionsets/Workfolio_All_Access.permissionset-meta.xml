@@ -248,7 +248,7 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Project__c.Include_In_Cv__c</field>
+        <field>Project__c.Include_In_CV__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

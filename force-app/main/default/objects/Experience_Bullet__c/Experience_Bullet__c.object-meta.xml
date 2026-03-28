@@ -155,8 +155,9 @@
     <externalSharingModel>Private</externalSharingModel>
     <label>Experience Bullet</label>
     <nameField>
-        <label>Experience Bullet Name</label>
-        <type>Text</type>
+        <displayFormat>EB-{0000}</displayFormat>
+        <label>Experience Bullet</label>
+        <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Experience Bullets</pluralLabel>
     <searchLayouts></searchLayouts>
