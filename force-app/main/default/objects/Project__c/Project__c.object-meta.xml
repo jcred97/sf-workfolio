@@ -149,16 +149,16 @@
     <enableHistory>false</enableHistory>
     <enableLicensing>false</enableLicensing>
     <enableReports>false</enableReports>
-    <enableSearch>true</enableSearch>
+    <enableSearch>false</enableSearch>
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
     <externalSharingModel>Private</externalSharingModel>
-    <label>Work Experience</label>
+    <label>Project</label>
     <nameField>
-        <label>Work Experience Name</label>
+        <label>Project Name</label>
         <type>Text</type>
     </nameField>
-    <pluralLabel>Work Experiences</pluralLabel>
+    <pluralLabel>Projects</pluralLabel>
     <searchLayouts></searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>

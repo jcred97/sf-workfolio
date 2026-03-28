@@ -29,11 +29,13 @@
         <name>CustomNotificationType</name>
     </types>
     <types>
+        <members>Experience_Bullet__c</members>
         <members>Job_Application__c</members>
         <members>Lead_Submission__e</members>
-        <members>Skill__c</members>
+        <members>Project__c</members>
         <members>Portfolio__c</members>
         <members>Portfolio_Setting__c</members>
+        <members>Skill__c</members>
         <members>WorkExperience__c</members>
         <name>CustomObject</name>
     </types>
@@ -80,9 +82,11 @@
         <name>Queue</name>
     </types>
     <types>
+        <members>Experience_Bullet__c</members>
         <members>Lead</members>
         <members>Portfolio__c</members>
         <members>Portfolio_Setting__c</members>
+        <members>Project__c</members>
         <members>Skill__c</members>
         <members>WorkExperience__c</members>
         <name>SharingRules</name>
