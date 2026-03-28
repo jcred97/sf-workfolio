@@ -20,6 +20,11 @@
         <name>CustomField</name>
     </types>
     <types>
+        <members>Notification_Config.Lead_Create</members>
+        <members>Notification_Config.Lead_Update</members>
+        <name>CustomMetadata</name>
+    </types>
+    <types>
         <members>Portfolio_Lead_Notification</members>
         <name>CustomNotificationType</name>
     </types>

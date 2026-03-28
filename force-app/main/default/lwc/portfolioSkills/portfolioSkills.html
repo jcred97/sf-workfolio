@@ -10,42 +10,43 @@
 
                     <h3>{category.Name}</h3>
 
-                    <template if:true={category.children.length}>
+                    <!-- Use precomputed boolean flag — avoids .length access on potentially undefined array -->
+                    <template if:true={category.hasChildren}>
                         <span class="toggle">{category.icon}</span>
                     </template>
                 </div>
 
-                <!-- BODY -->
-                <template if:true={category.isOpen}>
-                    <div class="card-body">
+                <!-- BODY
+                     Always in DOM — animated via card-body open/closed class.
+                     Never use if:true here or the close animation has nothing to run on.
+                -->
+                <div class={category.bodyClass}>
 
-                        <!-- TAG MODE -->
-                        <template if:true={category.allChildrenAreLeaf}>
-                            <div class="node-children">
-                                <div class="tag-group">
-                                    <template for:each={category.children} for:item="child">
-                                        <span key={child.Id} class="skill-tag">
-                                            {child.Name}
-                                        </span>
-                                    </template>
-                                </div>
+                    <!-- TAG MODE: all children are leaf nodes -->
+                    <template if:true={category.allChildrenAreLeaf}>
+                        <div class="node-children">
+                            <div class="tag-group">
+                                <template for:each={category.children} for:item="child">
+                                    <span key={child.Id} class="skill-tag">
+                                        {child.Name}
+                                    </span>
+                                </template>
                             </div>
-                        </template>
+                        </div>
+                    </template>
 
-                        <!-- TREE MODE -->
-                        <template if:false={category.allChildrenAreLeaf}>
-                            <template for:each={category.children} for:item="child">
-                                <c-skill-node 
-                                    key={child.Id} 
-                                    node={child}
-                                    ontoggle={handleToggle}
-                                    ontagclick={handleTagClick}>
-                                </c-skill-node>
-                            </template>
+                    <!-- TREE MODE: children have their own children -->
+                    <template if:false={category.allChildrenAreLeaf}>
+                        <template for:each={category.children} for:item="child">
+                            <c-skill-node
+                                key={child.Id}
+                                node={child}
+                                ontoggle={handleToggle}>
+                            </c-skill-node>
                         </template>
+                    </template>
 
-                    </div>
-                </template>
+                </div>
 
             </div>
         </template>

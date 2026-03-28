@@ -77,6 +77,15 @@
 
 .card-body {
     margin-top: 12px;
+    overflow: hidden;
+    height: 0;
+    transition: height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* overflow: visible is applied by JS via transitionend — NOT here.
+   Keeping it hidden throughout the animation prevents content bleed. */
+.card-body.open {
+    overflow: hidden;
 }
 
 /* TREE + TAGS */

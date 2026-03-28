@@ -67,12 +67,6 @@
                 <elementReference>targetId</elementReference>
             </value>
         </inputParameters>
-        <inputParameters>
-            <name>recipientEmail</name>
-            <value>
-                <stringValue>john.carlo.d.red@outlook.com</stringValue>
-            </value>
-        </inputParameters>
         <nameSegment>PortfolioLeadEmailAction</nameSegment>
         <offset>0</offset>
         <outputParameters>

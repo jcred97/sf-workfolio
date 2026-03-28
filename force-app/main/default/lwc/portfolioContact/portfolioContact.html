@@ -1,169 +1,125 @@
 <template>
-    <!-- ========================================
-         MAIN WRAPPER (2-COLUMN GRID LAYOUT)
-         Left: Contact Form
-         Right: Contact Information
-    ========================================= -->
     <div class="container">
 
-        <!-- ========================================
+        <!-- ================================================
              LEFT PANEL — CONTACT FORM
-             Handles user input + email submission
-        ========================================= -->
+        ================================================= -->
         <div class="content">
-            <h1>Send me a message</h1>
-            <hr>
+            <div class="panel-title">Send me a message</div>
+            <div class="panel-subtitle">I'll get back to you within 24 hours.</div>
+            <div class="divider"></div>
 
-            <!-- Success Message (Rendered after successful submission) -->
+            <!-- Banners -->
             <template if:true={showSuccess}>
-                <div class={successClass}>
-                    ✅ Message sent successfully!
-                </div>
+                <div class={successClass}>✅ Message sent successfully!</div>
             </template>
-
-            <!-- Error Message (Rendered if Apex/email fails) -->
             <template if:true={showError}>
-                <div class={errorClass}>
-                    {errorMessage}
-                </div>
+                <div class={errorClass}>{errorMessage}</div>
             </template>
 
-            <!-- Full Name Input -->
+            <!-- Name Row -->
             <div class="name-row">
-                <lightning-input
-                    type="text"
-                    name="firstName"
-                    label="First Name"
-                    variant="label-hidden"
-                    placeholder="First Name"
-                    value={firstName}
-                    onchange={inputHandler}>
-                </lightning-input>
-
-                <lightning-input
-                    type="text"
-                    name="lastName"
-                    label="Last Name"
-                    variant="label-hidden"
-                    placeholder="Last Name"
-                    value={lastName}
-                    onchange={inputHandler}>
-                </lightning-input>
+                <div class="field-group">
+                    <input
+                        type="text"
+                        name="firstName"
+                        placeholder=" "
+                        value={firstName}
+                        onchange={inputHandler} />
+                    <label>First Name</label>
+                </div>
+                <div class="field-group">
+                    <input
+                        type="text"
+                        name="lastName"
+                        placeholder=" "
+                        value={lastName}
+                        onchange={inputHandler} />
+                    <label>Last Name</label>
+                </div>
             </div>
 
-            <!-- Email Address Input -->
-            <lightning-input
-                type="email"
-                name="emailAddress"
-                label="Email Address"
-                variant="label-hidden"
-                placeholder="Email Address"
-                value={emailAddress}
-                onchange={inputHandler}>
-            </lightning-input>
+            <!-- Email -->
+            <div class="field-group">
+                <input
+                    type="email"
+                    name="emailAddress"
+                    placeholder=" "
+                    value={emailAddress}
+                    onchange={inputHandler} />
+                <label>Email Address</label>
+            </div>
 
-            <!-- Message Text Area -->
-            <lightning-textarea
-                name="message"
-                label="Message"
-                variant="label-hidden"
-                placeholder="Type your message here"
-                value={message}
-                onchange={inputHandler}>
-            </lightning-textarea>
+            <!-- Message
+                 value= binding is required for LWC to reactively clear
+                 the textarea on resetForm(). Inner content ({message})
+                 only renders once and does not update on state change.
+            -->
+            <div class="field-group">
+                <textarea
+                    name="message"
+                    placeholder=" "
+                    value={message}
+                    onchange={inputHandler}></textarea>
+                <label>Your Message</label>
+            </div>
 
-            <!-- Submit Button
-                 Disabled while request is processing
-                 Shows loading state dynamically -->
-            <button
-                class="btn"
-                onclick={sendDataAndEmail}
-                disabled={isLoading}>
-
-                <!-- Loading State -->
-                <template if:true={isLoading}>
-                    Sending...
-                </template>
-
-                <!-- Default State -->
-                <template if:false={isLoading}>
-                    Send Message
-                </template>
+            <!-- Submit -->
+            <button class="btn" onclick={sendDataAndEmail} disabled={isLoading}>
+                <template if:true={isLoading}>Sending...</template>
+                <template if:false={isLoading}>Send Message →</template>
             </button>
         </div>
 
 
-        <!-- ========================================
-             RIGHT PANEL — STATIC CONTACT DETAILS
-             Direct links to email + social profiles
-        ========================================= -->
+        <!-- ================================================
+             RIGHT PANEL — CONTACT DETAILS
+        ================================================= -->
         <div class="content-contact">
-            <h1>Contact Details</h1>
-            <hr>
+            <div class="panel-title">Contact Details</div>
+            <div class="panel-subtitle">Prefer to reach out directly?</div>
+            <div class="divider"></div>
 
-            <!-- Email Section -->
-            <div class="content-email">
-                <div class="slds-grid slds-align_absolute-center slds-grid_vertical-align-center">
+            <!-- Availability indicator -->
+            <div class="availability">
+                <span class="availability-dot"></span>
+                <span>Available for <strong>new opportunities</strong></span>
+            </div>
 
-                    <!-- Salesforce Utility Email Icon -->
-                    <div class="email-icon">
-                        <lightning-icon
-                            icon-name="utility:email"
-                            alternative-text="email"
-                            title="email">
-                        </lightning-icon>
-                    </div>
-
-                    <!-- Email Display + Copy Functionality -->
-                    <div class="email-wrapper">
-                        <h2>Email Me</h2>
-
-                        <div class="email-row">
-
-                            <!-- Mailto Link -->
-                            <a href={mailtoLink} class="email-link">
-                                {email}
-                            </a>
-
-                            <!-- Copy to Clipboard Icon -->
-                            <lightning-icon
-                                icon-name="utility:copy"
-                                alternative-text="Copy"
-                                title="Copy email"
-                                size="x-small"
-                                class="copy-icon"
-                                onclick={copyEmail}>
-                            </lightning-icon>
-                        </div>
-
-                    </div>
-
+            <!-- Email block -->
+            <div class="email-block">
+                <div class="email-label">Direct Email</div>
+                <div class="email-address-row">
+                    <a href={mailtoLink} class="email-link">{email}</a>
+                    <button class="copy-btn" onclick={copyEmail}>Copy</button>
                 </div>
             </div>
 
-            <!-- Social Media Links -->
-            <div class="social-links">
-                <!-- LinkedIn Profile -->
-                <template if:true={linkedinUrl}>
-                    <a href={linkedinUrl} target="_blank">
-                        <img src={linkedin} alt="LinkedIn" class="social-icon">
-                    </a>
-                </template>
-
-                <!-- Github Profile -->
-                <template if:true={githubUrl}>
-                    <a href={githubUrl} target="_blank">
-                        <img src={github} alt="Github" class="social-icon">
-                    </a>
-                </template>
-
-                <!-- Trailhead / Trailblazer Profile -->
-                <template if:true={trailblazerUrl}>
-                    <a href={trailblazerUrl} target="_blank">
-                        <img src={trailblazer} alt="Trailhead" class="social-icon">
-                    </a>
-                </template>
+            <!-- Social links -->
+            <div class="social-section">
+                <div class="social-label">Find me on</div>
+                <div class="social-links">
+                    <template if:true={linkedinUrl}>
+                        <a href={linkedinUrl} target="_blank" class="social-pill">
+                            <img src={linkedin} alt="LinkedIn" />
+                            LinkedIn
+                        </a>
+                    </template>
+                    <template if:true={githubUrl}>
+                        <a href={githubUrl} target="_blank" class="social-pill">
+                            <img src={github} alt="GitHub" />
+                            GitHub
+                        </a>
+                    </template>
+                    <template if:true={trailblazerUrl}>
+                        <a href={trailblazerUrl} target="_blank" class="social-pill">
+                            <img src={trailblazer} alt="Trailhead" />
+                            Trailhead
+                        </a>
+                    </template>
+                </div>
             </div>
         </div>
+
     </div>
 </template>

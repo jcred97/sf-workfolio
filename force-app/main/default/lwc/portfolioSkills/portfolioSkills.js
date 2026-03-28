@@ -5,16 +5,32 @@ export default class PortfolioSkills extends LightningElement {
     @api recordId;
     treeData = [];
 
+    /* =========================================================
+       WIRE
+    ========================================================= */
     @wire(getSkills, { portfolioId: '$recordId' })
     wiredSkills({ data, error }) {
         if (data) {
             const tree = this.buildTree(data);
             this.treeData = this.initializeTree(tree);
+
+            // Set initial open heights — no animation on first load, just snap open
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    this.template.querySelectorAll('.card-body.open').forEach(el => {
+                        el.style.height   = 'auto';
+                        el.style.overflow = 'visible';
+                    });
+                });
+            });
         } else if (error) {
             console.error(error);
         }
     }
 
+    /* =========================================================
+       TOP-LEVEL TOGGLE (card open/close)
+    ========================================================= */
     toggleCard(event) {
         const id = event?.currentTarget?.dataset?.id;
         if (!id) return;
@@ -26,64 +42,155 @@ export default class PortfolioSkills extends LightningElement {
                 ...item,
                 isOpen,
                 icon: isOpen ? '−' : '+',
+                bodyClass: isOpen ? 'card-body open' : 'card-body',
                 cssClass: item.Name === 'CRM' && isOpen
                     ? 'skill-card full-width'
                     : 'skill-card'
             };
         });
+
+        // Run scrollHeight animation after LWC re-renders
+        requestAnimationFrame(() => {
+            this.animateCards();
+        });
     }
 
-    // 🔥 FULL INIT (OPEN BY DEFAULT + CRM WIDTH LOGIC)
+    /* =========================================================
+       SCROLL HEIGHT ANIMATION
+       - Opening: set pixel height so transition has a to-value
+       - Closing: pin current height first (from-value), then
+         animate to 0 in the next frame
+       - overflow stays hidden throughout; only flips to visible
+         after transitionend so content never bleeds during expand
+    ========================================================= */
+    animateCards() {
+        this.template.querySelectorAll('.card-body').forEach(el => {
+            // Remove any leftover transitionend listener before re-attaching
+            el._onTransitionEnd && el.removeEventListener('transitionend', el._onTransitionEnd);
+
+            if (el.classList.contains('open')) {
+                el.style.overflow = 'hidden';
+                el.style.height   = el.scrollHeight + 'px';
+
+                // Only unlock overflow once the expand animation is fully done
+                el._onTransitionEnd = () => {
+                    el.style.overflow = 'visible';
+                    el.style.height   = 'auto';
+                    el.removeEventListener('transitionend', el._onTransitionEnd);
+                };
+                el.addEventListener('transitionend', el._onTransitionEnd);
+
+            } else {
+                // Lock overflow before collapsing so nothing bleeds during close
+                el.style.overflow = 'hidden';
+                // Pin to current pixel height so CSS has a from-value
+                el.style.height   = el.scrollHeight + 'px';
+
+                requestAnimationFrame(() => {
+                    el.style.height = '0px';
+                });
+            }
+        });
+    }
+
+    /* =========================================================
+       DEEP TOGGLE (child node open/close via event bubble)
+       bodyClass is passed down so c-skill-node can drive its
+       own scrollHeight animation with the same pattern
+    ========================================================= */
+    handleToggle(event) {
+        const id = event.detail?.id;
+        if (!id) return;
+
+        this.treeData = this.toggleNode(this.treeData, id);
+    }
+
+    toggleNode(nodes, id) {
+        return nodes.map(node => {
+            if (node.Id === id) {
+                const isOpen = !node.isOpen;
+                return {
+                    ...node,
+                    isOpen,
+                    icon    : isOpen ? '−' : '+',
+                    bodyClass: isOpen ? 'card-body open' : 'card-body'
+                };
+            }
+
+            if (node.children && node.children.length > 0) {
+                return { ...node, children: this.toggleNode(node.children, id) };
+            }
+
+            return node;
+        });
+    }
+
+    /* =========================================================
+       TREE INIT
+       - Opens all nodes by default
+       - Sets CRM full-width class
+       - Pre-computes hasChildren + allChildrenAreLeaf flags
+       - Fixes bad data (camelCase concat OR comma-separated strings)
+         using else-if so only one split strategy runs per node
+    ========================================================= */
     initializeTree(nodes) {
         return nodes.map(node => {
             let children = node.children
                 ? this.initializeTree(node.children)
                 : [];
 
-            // Handle bad data (combined strings)
+            // Bad data fix — only one branch runs per node
             if (children.length === 1 && !children[0].children?.length) {
                 const raw = children[0].Name;
+                const originalId = children[0].Id;
 
                 if (raw && raw.length > 10 && !raw.includes(' ')) {
+                    // CamelCase concatenated string e.g. "ApexVisualforce"
                     const split = raw.match(/[A-Z][a-z]+/g);
-
                     if (split && split.length > 1) {
                         children = split.map((name, i) => ({
-                            Id: `${children[0].Id}-${i}`,
+                            Id: `${originalId}-${i}`,
                             Name: name,
                             children: []
                         }));
                     }
-                }
-
-                if (raw && raw.includes(',')) {
+                } else if (raw && raw.includes(',')) {
+                    // Comma-separated string e.g. "Apex, LWC, Flows"
                     children = raw.split(',').map((name, i) => ({
-                        Id: `${children[0].Id}-${i}`,
+                        Id: `${originalId}-${i}`,
                         Name: name.trim(),
                         children: []
                     }));
                 }
             }
 
-            const isOpen = true;
+            const isOpen       = true;
+            const hasChildren  = children.length > 0;
+            const allChildrenAreLeaf = children.every(
+                child => !child.children || child.children.length === 0
+            );
 
             return {
                 ...node,
                 isOpen,
-                icon: isOpen ? '−' : '+',
+                icon: '−',
                 children,
+                hasChildren,
+                allChildrenAreLeaf,
+                bodyClass: 'card-body open',
                 cssClass: node.Name === 'CRM' && isOpen
                     ? 'skill-card full-width'
-                    : 'skill-card',
-                allChildrenAreLeaf: children.every(
-                    child => !child.children || child.children.length === 0
-                )
+                    : 'skill-card'
             };
         });
     }
 
+    /* =========================================================
+       BUILD TREE
+       O(n) parent-child linking via Map
+    ========================================================= */
     buildTree(data) {
-        const map = new Map();
+        const map   = new Map();
         const roots = [];
 
         data.forEach(skill => {
@@ -99,42 +206,5 @@ export default class PortfolioSkills extends LightningElement {
         });
 
         return roots;
-    }
-
-    handleToggle(event) {
-        const id = event.detail?.id;
-        if (!id) return;
-
-        this.treeData = this.toggleNode(this.treeData, id);
-    }
-
-    toggleNode(nodes, id) {
-        return nodes.map(node => {
-            if (node.Id === id) {
-                const isOpen = !node.isOpen;
-
-                return {
-                    ...node,
-                    isOpen,
-                    icon: isOpen ? '−' : '+'
-                };
-            }
-
-            if (node.children && node.children.length > 0) {
-                return {
-                    ...node,
-                    children: this.toggleNode(node.children, id)
-                };
-            }
-
-            return node;
-        });
-    }
-
-    handleTagClick(event) {
-        const skillName = event.detail?.name;
-        if (!skillName) return;
-
-        console.log('Clicked skill:', skillName);
     }
 }

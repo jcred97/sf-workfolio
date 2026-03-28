@@ -18,53 +18,70 @@ export default class PortfolioHome extends LightningElement {
     @api profilePicture;
     @api certifications = [];
 
+    /* =========================================================
+       PRIVATE STATE
+    ========================================================= */
+    portfolioData = {};
+    _lastSentName = '';
+
+    /* =========================================================
+       WIRE — fires once when data arrives, not on every render
+    ========================================================= */
     @wire(getRecord, {
-        recordId: '$recordId', 
-        fields:[FULLNAME, 
-            DESIGNATION, 
-            CAREER_START_DATE, 
+        recordId: '$recordId',
+        fields: [
+            FULLNAME,
+            DESIGNATION,
+            CAREER_START_DATE,
             INTRODUCTION,
             SUB_INTRODUCTION,
             LINKEDIN_URL,
             GITHUB_URL,
             TRAILBLAZER_URL
-        ]})portfolioData
-    
-    renderedCallback() {
-        if (this.fullName && this._lastSentName !== this.fullName) {
-            this._lastSentName = this.fullName;
+        ]
+    })
+    wiredPortfolio(result) {
+        this.portfolioData = result;
 
-            this.dispatchEvent(new CustomEvent('namechange', {
-                detail: this.fullName
-            }));
+        if (result.data) {
+            const name = getFieldValue(result.data, FULLNAME);
+
+            // Only dispatch when name is available and hasn't been sent yet
+            if (name && name !== this._lastSentName) {
+                this._lastSentName = name;
+                this.dispatchEvent(new CustomEvent('namechange', { detail: name }));
+            }
         }
     }
 
-    get fullName(){
+    /* =========================================================
+       GETTERS
+    ========================================================= */
+    get fullName() {
         return getFieldValue(this.portfolioData.data, FULLNAME);
     }
 
-    get designation(){
+    get designation() {
         return getFieldValue(this.portfolioData.data, DESIGNATION);
     }
 
-    get introduction(){
+    get introduction() {
         return getFieldValue(this.portfolioData.data, INTRODUCTION);
     }
 
-    get subIntroduction(){
+    get subIntroduction() {
         return getFieldValue(this.portfolioData.data, SUB_INTRODUCTION);
     }
 
-    get linkedinUrl(){
+    get linkedinUrl() {
         return getFieldValue(this.portfolioData.data, LINKEDIN_URL);
     }
 
-    get githubUrl(){
+    get githubUrl() {
         return getFieldValue(this.portfolioData.data, GITHUB_URL);
     }
 
-    get trailblazerUrl(){
+    get trailblazerUrl() {
         return getFieldValue(this.portfolioData.data, TRAILBLAZER_URL);
     }
 
@@ -78,7 +95,7 @@ export default class PortfolioHome extends LightningElement {
         let years = today.getFullYear() - start.getFullYear();
         const monthDiff = today.getMonth() - start.getMonth();
 
-        // Adjust if current month is before start month
+        // Adjust if current month is before the anniversary month
         if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < start.getDate())) {
             years--;
         }

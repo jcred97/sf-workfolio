@@ -9,18 +9,17 @@ import EMAIL from '@salesforce/schema/Portfolio__c.Email__c';
  * Public-facing contact component.
  *
  * Responsibilities:
- * - Collect user input
+ * - Collect user input (native inputs with floating labels)
  * - Validate client-side
- * - Call Apex to send email
- * - Display async state feedback
+ * - Call Apex to submit lead
+ * - Display async state feedback with auto-fade
  * - Render dynamic portfolio email from record
  */
 export default class PortfolioContact extends LightningElement {
 
     /* =========================================================
-       PUBLIC API PROPERTIES (Configured via Experience Builder)
+       PUBLIC API
     ========================================================= */
-
     @api recordId;
     @api linkedin;
     @api linkedinUrl;
@@ -29,64 +28,44 @@ export default class PortfolioContact extends LightningElement {
     @api github;
     @api githubUrl;
 
-
     /* =========================================================
-       FORM STATE (Two-way bound via onchange handler)
+       FORM STATE
     ========================================================= */
-
-    firstName = '';
-    lastName = '';
+    firstName    = '';
+    lastName     = '';
     emailAddress = '';
-    message = '';
-
+    message      = '';
 
     /* =========================================================
-       UI STATE MANAGEMENT
+       UI STATE
     ========================================================= */
-
-    isLoading = false;
-    showSuccess = false;
-    showError = false;
+    isLoading    = false;
+    showSuccess  = false;
+    showError    = false;
     errorMessage = '';
-
-    fadeSuccess = false;
-    fadeError = false;
-
+    fadeSuccess  = false;
+    fadeError    = false;
 
     /* =========================================================
-       DATA WIRING — Fetch Portfolio Email from Record
+       WIRE — Portfolio email from record
     ========================================================= */
-
-    @wire(getRecord, {
-        recordId: '$recordId',
-        fields: [EMAIL]
-    })
+    @wire(getRecord, { recordId: '$recordId', fields: [EMAIL] })
     portfolioData;
 
-
     /* =========================================================
-       GENERIC INPUT HANDLER
-       Dynamically updates property based on input name
+       INPUT HANDLER
+       Works for both input and textarea via name attribute
     ========================================================= */
-
     inputHandler(event) {
         const { name, value } = event.target;
         this[name] = value;
     }
 
-
     /* =========================================================
-       MAIN SUBMIT FLOW
-       - Prevent duplicate submission
-       - Validate inputs
-       - Call Apex
-       - Handle success/error
-       - Reset UI state
+       SUBMIT FLOW
     ========================================================= */
-
     async sendDataAndEmail() {
-
-        if (this.isLoading) return; // Prevent double-click submission
+        if (this.isLoading) return;
         if (!this.validateInputs()) return;
 
         this.isLoading = true;
@@ -94,21 +73,20 @@ export default class PortfolioContact extends LightningElement {
 
         try {
             await submitLead({
-                firstName: this.firstName,
-                lastName: this.lastName,
+                firstName:    this.firstName,
+                lastName:     this.lastName,
                 emailAddress: this.emailAddress,
-                message: this.message
+                message:      this.message
             });
 
             this.showBanner('success');
             this.resetForm();
 
         } catch (error) {
-
             this.errorMessage =
                 error?.body?.message ||
                 error?.message ||
-                'Something went wrong.';
+                'Something went wrong. Please try again.';
 
             this.showBanner('error');
 
@@ -117,68 +95,69 @@ export default class PortfolioContact extends LightningElement {
         }
     }
 
-
     /* =========================================================
-       CLIENT-SIDE VALIDATION
-       Uses SLDS validity reporting
+       VALIDATION
+       Native inputs use the Constraint Validation API.
+       reportValidity() shows browser tooltips on invalid fields.
     ========================================================= */
-
     validateInputs() {
-        return [...this.template.querySelectorAll('lightning-input, lightning-textarea')]
-            .reduce((validSoFar, field) => {
-                field.reportValidity();
-                return validSoFar && field.checkValidity();
-            }, true);
+        const fields = [...this.template.querySelectorAll('input, textarea')];
+
+        // Run all reportValidity calls so all errors show at once
+        const results = fields.map(field => {
+            field.reportValidity();
+            return field.checkValidity();
+        });
+
+        return results.every(Boolean);
     }
 
-
     /* =========================================================
-       BANNER DISPLAY + AUTO FADE LOGIC
+       BANNER LOGIC
     ========================================================= */
-
     showBanner(type) {
-
         if (type === 'success') {
-            this.showSuccess = true;
-            this.fadeSuccess = false;
-
-            setTimeout(() => this.fadeSuccess = true, 2500);
-            setTimeout(() => this.showSuccess = false, 3000);
+            this.showSuccess  = true;
+            this.fadeSuccess  = false;
+            setTimeout(() => { this.fadeSuccess = true;  }, 2500);
+            setTimeout(() => { this.showSuccess = false; }, 3000);
         }
 
         if (type === 'error') {
-            this.showError = true;
-            this.fadeError = false;
-
-            setTimeout(() => this.fadeError = true, 2500);
-            setTimeout(() => this.showError = false, 3000);
+            this.showError  = true;
+            this.fadeError  = false;
+            setTimeout(() => { this.fadeError = true;  }, 2500);
+            setTimeout(() => { this.showError = false; }, 3000);
         }
     }
 
     resetBanners() {
         this.showSuccess = false;
-        this.showError = false;
+        this.showError   = false;
         this.fadeSuccess = false;
-        this.fadeError = false;
+        this.fadeError   = false;
     }
-
 
     /* =========================================================
-       RESET FORM STATE
+       FORM RESET
+       value= binding handles inputs reactively.
+       The textarea also gets a direct DOM clear as a safety net
+       since some browsers don't reflect value= updates on textarea.
     ========================================================= */
-
     resetForm() {
-        this.firstName = '';
-        this.lastName = '';
+        this.firstName    = '';
+        this.lastName     = '';
         this.emailAddress = '';
-        this.message = '';
-    }
+        this.message      = '';
 
+        // Belt-and-suspenders: directly wipe the textarea DOM value
+        const textarea = this.template.querySelector('textarea');
+        if (textarea) textarea.value = '';
+    }
 
     /* =========================================================
        EMAIL UTILITIES
     ========================================================= */
-
     copyEmail() {
         if (!this.email) return;
         navigator.clipboard.writeText(this.email);
@@ -191,24 +170,17 @@ export default class PortfolioContact extends LightningElement {
     }
 
     get mailtoLink() {
-        return this.email ? `mailto:${this.email}` : '';
+        return this.email ? `mailto:${this.email}` : '#';
     }
 
-
     /* =========================================================
-       DYNAMIC CSS CLASS GETTERS
-       Used to apply fade animation conditionally
+       CSS CLASS GETTERS
     ========================================================= */
-
     get successClass() {
-        return this.fadeSuccess
-            ? 'success-banner fade-out'
-            : 'success-banner';
+        return this.fadeSuccess ? 'success-banner fade-out' : 'success-banner';
     }
 
     get errorClass() {
-        return this.fadeError
-            ? 'error-banner fade-out'
-            : 'error-banner';
+        return this.fadeError ? 'error-banner fade-out' : 'error-banner';
     }
 }

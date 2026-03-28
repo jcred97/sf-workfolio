@@ -1,17 +1,15 @@
 public without sharing class PortfolioLeadEmailAction {
 
     // ─── Test Seams ──────────────────────────────────────────────────────────
-    @TestVisible private static String  TEST_OWEA_ADDRESS;
-    @TestVisible private static Id      TEST_OWEA_ID;
-    @TestVisible private static Boolean TEST_SKIP_SET_OWEA       = false;
-    @TestVisible private static Boolean TEST_USE_DEFAULT_EMAIL   = false;
-    @TestVisible private static Boolean TEST_FORCE_PREP_EXCEPTION = false;
-    @TestVisible private static Boolean TEST_FORCE_SEND_EXCEPTION = false;
-    @TestVisible private static Boolean TEST_FORCE_SEND_FAILURE  = false;
-    @TestVisible private static List<String> TEST_ERROR_MESSAGES;
+    @TestVisible private static Boolean                    TEST_SKIP_SET_OWEA        = false;
+    @TestVisible private static Boolean                    TEST_FORCE_PREP_EXCEPTION = false;
+    @TestVisible private static Boolean                    TEST_FORCE_SEND_EXCEPTION = false;
+    @TestVisible private static Boolean                    TEST_FORCE_SEND_FAILURE   = false;
+    @TestVisible private static List<String>               TEST_ERROR_MESSAGES;
+    @TestVisible private static Id                         TEST_OWEA_ID;
 
-    // ─── Sender Address ───────────────────────────────────────────────────────
-    private static final String DEFAULT_OWEA_ADDRESS = 'john.carlo.d.red@gmail.com';
+    // Inject a full config override in tests so no real CMT/OWEA query is needed
+    @TestVisible private static Notification_Config__mdt   TEST_CONFIG_OVERRIDE;
 
     // =========================================================================
     // Inner Classes
@@ -19,8 +17,8 @@ public without sharing class PortfolioLeadEmailAction {
 
     public class Request {
         @InvocableVariable(required=true) public Id     leadId;
-        @InvocableVariable(required=true) public String recipientEmail;
         @InvocableVariable(required=true) public String emailType; // 'create' or 'update'
+        // recipientEmail removed — sourced from Notification_Config__mdt
     }
 
     public class Response {
@@ -50,7 +48,7 @@ public without sharing class PortfolioLeadEmailAction {
 
     @InvocableMethod(
         label='Send Portfolio Lead Email'
-        description='Sends a portfolio lead notification email for a create or update event'
+        description='Sends a portfolio lead notification email for a create or update event. Recipient, sender, subject, and display name are all sourced from Notification_Config__mdt.'
     )
     public static List<Response> sendEmails(List<Request> requests) {
         List<Response> responses = new List<Response>();
@@ -59,11 +57,9 @@ public without sharing class PortfolioLeadEmailAction {
             return responses;
         }
 
-        Map<Id, Lead> leadMap     = queryLeads(requests);
-        Id            senderOweaId = resolveSenderOweaId();
-
-        List<Messaging.SingleEmailMessage> emailsToSend        = new List<Messaging.SingleEmailMessage>();
-        List<Integer>                      emailResponseIndexes = new List<Integer>();
+        Map<Id, Lead>                      leadMap      = queryLeads(requests);
+        List<Messaging.SingleEmailMessage> emailsToSend = new List<Messaging.SingleEmailMessage>();
+        List<Integer>                      emailIndexes = new List<Integer>();
 
         for (Request req : requests) {
             Response res = initFailureResponse();
@@ -75,17 +71,20 @@ public without sharing class PortfolioLeadEmailAction {
                     throw new EmailSendTestException('Forced test prep exception');
                 }
 
-                if (!validateRequest(req, leadMap, res)) {
+                // Resolve config first — fail fast if missing
+                Notification_Config__mdt config = resolveConfig(req.emailType);
+
+                if (!validateRequest(req, leadMap, config, res)) {
                     continue;
                 }
 
                 Lead   ld   = leadMap.get(req.leadId);
                 String body = buildEmailBody(req.emailType, ld);
 
-                Messaging.SingleEmailMessage mail = buildEmailMessage(req, ld, body, senderOweaId);
+                Messaging.SingleEmailMessage mail = buildEmailMessage(req, ld, body, config);
 
                 emailsToSend.add(mail);
-                emailResponseIndexes.add(responseIndex);
+                emailIndexes.add(responseIndex);
                 res.message = 'Email prepared successfully.';
 
             } catch (Exception e) {
@@ -95,10 +94,46 @@ public without sharing class PortfolioLeadEmailAction {
         }
 
         if (!emailsToSend.isEmpty()) {
-            dispatchEmails(emailsToSend, emailResponseIndexes, responses);
+            dispatchEmails(emailsToSend, emailIndexes, responses);
         }
 
         return responses;
+    }
+
+    // =========================================================================
+    // Config Resolution
+    // =========================================================================
+
+    /**
+     * Returns the Notification_Config__mdt record matching the given emailType.
+     * In tests, returns TEST_CONFIG_OVERRIDE if set so no real CMT query fires.
+     * DeveloperName convention: Lead_Create → emailType 'create'
+     *                           Lead_Update → emailType 'update'
+     */
+    @TestVisible
+    private static Notification_Config__mdt resolveConfig(String emailType) {
+        if (Test.isRunningTest() && TEST_CONFIG_OVERRIDE != null) {
+            return TEST_CONFIG_OVERRIDE;
+        }
+
+        // DeveloperName format: Lead_Create, Lead_Update
+        String developerName = 'Lead_' + emailType.substring(0, 1).toUpperCase()
+                             + emailType.substring(1).toLowerCase();
+
+        List<Notification_Config__mdt> configs = [
+            SELECT Sender_Display_Name__c,
+                   Sender_Email__c,
+                   Recipient_Email__c,
+                   Reply_To__c,
+                   Email_Subject__c,
+                   Is_Active__c
+            FROM   Notification_Config__mdt
+            WHERE  DeveloperName = :developerName
+            AND    Is_Active__c  = true
+            LIMIT  1
+        ];
+
+        return configs.isEmpty() ? null : configs[0];
     }
 
     // =========================================================================
@@ -126,22 +161,6 @@ public without sharing class PortfolioLeadEmailAction {
         ]);
     }
 
-    /**
-     * Returns the Org-Wide Email Address Id used as the sender.
-     * In tests, uses TEST_OWEA_ADDRESS unless TEST_USE_DEFAULT_EMAIL is set.
-     */
-    private static Id resolveSenderOweaId() {
-        String address = (Test.isRunningTest() && !TEST_USE_DEFAULT_EMAIL)
-            ? TEST_OWEA_ADDRESS
-            : DEFAULT_OWEA_ADDRESS;
-
-        if (String.isBlank(address)) {
-            address = DEFAULT_OWEA_ADDRESS;
-        }
-
-        return getOrgWideEmailAddressId(address);
-    }
-
     /** Returns a response pre-set to failure so guards only need to set the message. */
     private static Response initFailureResponse() {
         Response res = new Response();
@@ -151,10 +170,15 @@ public without sharing class PortfolioLeadEmailAction {
     }
 
     /**
-     * Validates the request fields. Populates res.message on failure and returns false.
-     * Returns true when the request is ready to send.
+     * Validates the request. Populates res.message on failure and returns false.
+     * Config null check replaces the old recipientEmail blank check.
      */
-    private static Boolean validateRequest(Request req, Map<Id, Lead> leadMap, Response res) {
+    private static Boolean validateRequest(
+        Request                  req,
+        Map<Id, Lead>            leadMap,
+        Notification_Config__mdt config,
+        Response                 res
+    ) {
         if (req == null) {
             res.message = 'Request is null.';
             return false;
@@ -163,8 +187,12 @@ public without sharing class PortfolioLeadEmailAction {
             res.message = 'Missing Lead Id.';
             return false;
         }
-        if (String.isBlank(req.recipientEmail)) {
-            res.message = 'Missing recipient email.';
+        if (config == null) {
+            res.message = 'No active Notification_Config__mdt found for emailType: ' + req.emailType;
+            return false;
+        }
+        if (String.isBlank(config.Recipient_Email__c)) {
+            res.message = 'Notification config is missing Recipient_Email__c for emailType: ' + req.emailType;
             return false;
         }
         if (!leadMap.containsKey(req.leadId)) {
@@ -176,15 +204,15 @@ public without sharing class PortfolioLeadEmailAction {
 
     /** Assembles the plain-text email body based on whether this is a create or update. */
     private static String buildEmailBody(String emailType, Lead ld) {
-        String fullName   = buildFullName(ld.FirstName, ld.LastName);
-        String recordUrl  = getLeadRecordUrl(ld.Id);
+        String fullName  = buildFullName(ld.FirstName, ld.LastName);
+        String recordUrl = getLeadRecordUrl(ld.Id);
 
         String leadInfoBlock =
-            'Lead Information:\n'                   +
-            '- Name: '    + safe(fullName,    'N/A') + '\n' +
-            '- Email: '   + safe(ld.Email,    'N/A') + '\n' +
-            '- Company: ' + safe(ld.Company,  'N/A') + '\n' +
-            '- Source: '  + safe(ld.LeadSource, 'N/A');
+            'Lead Information:\n'                      +
+            '- Name: '    + safe(fullName,       'N/A') + '\n' +
+            '- Email: '   + safe(ld.Email,       'N/A') + '\n' +
+            '- Company: ' + safe(ld.Company,     'N/A') + '\n' +
+            '- Source: '  + safe(ld.LeadSource,  'N/A');
 
         if ('update'.equalsIgnoreCase(emailType)) {
             return String.join(new List<String>{
@@ -204,41 +232,50 @@ public without sharing class PortfolioLeadEmailAction {
             'Hi,',
             'You have received a new lead from your portfolio website.',
             leadInfoBlock,
-            'Message:\n' + safe(ld.Email_Message__c, 'N/A'),
-            'Lead Record:\n' + recordUrl,
+            'Message:\n'      + safe(ld.Email_Message__c, 'N/A'),
+            'Lead Record:\n'  + recordUrl,
             'Recommended Action:\nPlease follow up with this lead within 24 hours to maximize engagement.',
             '- Portfolio Lead System'
         }, '\n\n');
     }
 
-    /** Returns the email subject line for the given email type. */
-    private static String buildEmailSubject(String emailType) {
-        return 'update'.equalsIgnoreCase(emailType)
-            ? 'Lead Update Received - Action Required'
-            : 'New Portfolio Lead - Action Recommended';
-    }
-
-    /** Constructs the SingleEmailMessage, attaching the OWEA Id when available. */
+    /**
+     * Constructs the SingleEmailMessage.
+     * Recipient, subject, sender OWEA, display name, and reply-to
+     * all sourced from Notification_Config__mdt — nothing hardcoded.
+     */
     private static Messaging.SingleEmailMessage buildEmailMessage(
-        Request req,
-        Lead    ld,
-        String  body,
-        Id      senderOweaId
+        Request                  req,
+        Lead                     ld,
+        String                   body,
+        Notification_Config__mdt config
     ) {
         Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
-        mail.setToAddresses(new List<String>{ req.recipientEmail });
-        mail.setSubject(buildEmailSubject(req.emailType));
+
+        mail.setToAddresses(new List<String>{ config.Recipient_Email__c });
+        mail.setSubject(safe(config.Email_Subject__c, 'Portfolio Lead Notification'));
         mail.setPlainTextBody(body);
         mail.setTargetObjectId(ld.Id);
         mail.setTreatTargetObjectAsRecipient(false);
         mail.setSaveAsActivity(true);
 
+        // Reply-To — optional field on CMT
+        if (String.isNotBlank(config.Reply_To__c)) {
+            mail.setReplyTo(config.Reply_To__c);
+        }
+
+        // Resolve OWEA — test seam allows injecting a fake Id
         Id oweaId = (Test.isRunningTest() && TEST_OWEA_ID != null)
             ? TEST_OWEA_ID
-            : senderOweaId;
+            : getOrgWideEmailAddressId(config.Sender_Email__c);
 
         if (oweaId != null && !(Test.isRunningTest() && TEST_SKIP_SET_OWEA)) {
             mail.setOrgWideEmailAddressId(oweaId);
+        }
+
+        // Display name — applied when no OWEA is set (OWEA overrides display name)
+        if (oweaId == null && String.isNotBlank(config.Sender_Display_Name__c)) {
+            mail.setSenderDisplayName(config.Sender_Display_Name__c);
         }
 
         return mail;
@@ -251,14 +288,14 @@ public without sharing class PortfolioLeadEmailAction {
     /** Sends prepared emails and writes success/failure back into the responses list. */
     private static void dispatchEmails(
         List<Messaging.SingleEmailMessage> emailsToSend,
-        List<Integer>                      emailResponseIndexes,
+        List<Integer>                      emailIndexes,
         List<Response>                     responses
     ) {
         try {
             List<EmailSendOutcome> outcomes = sendEmailsInternal(emailsToSend);
 
             for (Integer i = 0; i < outcomes.size(); i++) {
-                Response         res     = responses[emailResponseIndexes[i]];
+                Response         res     = responses[emailIndexes[i]];
                 EmailSendOutcome outcome = outcomes[i];
 
                 if (outcome.success) {
@@ -270,7 +307,7 @@ public without sharing class PortfolioLeadEmailAction {
                 }
             }
         } catch (Exception e) {
-            for (Integer idx : emailResponseIndexes) {
+            for (Integer idx : emailIndexes) {
                 responses[idx].success = false;
                 responses[idx].message = 'Exception while sending email: ' + e.getMessage();
             }
