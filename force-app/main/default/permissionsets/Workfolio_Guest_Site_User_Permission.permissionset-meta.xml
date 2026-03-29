@@ -65,6 +65,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>Lead.Follow_Up_Log__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>Lead.Follow_Up_Sent__c</field>
         <readable>true</readable>
     </fieldPermissions>

@@ -2,6 +2,36 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>66.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <actionCalls>
+        <name>Send_Follow_Up_Email</name>
+        <label>Send Follow Up Email</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>PortfolioLeadEmailAction</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Add_Lead_To_Update_Collection</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailType</name>
+            <value>
+                <stringValue>follow_up</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>leadId</name>
+            <value>
+                <elementReference>Loop_Through_Leads.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>PortfolioLeadEmailAction</nameSegment>
+        <offset>0</offset>
+        <outputParameters>
+            <assignToReference>emailResult</assignToReference>
+            <name>message</name>
+        </outputParameters>
+    </actionCalls>
     <assignments>
         <name>Add_Lead_To_Update_Collection</name>
         <label>Add Lead To Update Collection</label>
@@ -19,6 +49,13 @@
             <operator>Assign</operator>
             <value>
                 <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>leadToUpdate.Follow_Up_Log__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>followUpLogEntry</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -69,7 +106,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Add_Lead_To_Update_Collection</targetReference>
+            <targetReference>Send_Follow_Up_Email</targetReference>
         </connector>
         <inputAssignments>
             <field>ActivityDate</field>
@@ -175,6 +212,12 @@
     </start>
     <status>Active</status>
     <textTemplates>
+        <name>followUpLogEntry</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>{!Loop_Through_Leads.Follow_Up_Log__c}
+[{!$Flow.CurrentDateTime}] Follow-up reminder sent. Task created for lead owner. Email: {!emailResult}</text>
+    </textTemplates>
+    <textTemplates>
         <name>followUpTaskDescription</name>
         <isViewedAsPlainText>true</isViewedAsPlainText>
         <text>This is an automated follow-up reminder for lead {!Loop_Through_Leads.FirstName} {!Loop_Through_Leads.LastName} ({!Loop_Through_Leads.Email}). The follow-up date was {!Loop_Through_Leads.Follow_Up_Date__c}. Please reach out and update the lead status accordingly.</text>
@@ -184,6 +227,13 @@
         <isViewedAsPlainText>true</isViewedAsPlainText>
         <text>Follow Up - {!Loop_Through_Leads.FirstName} {!Loop_Through_Leads.LastName}</text>
     </textTemplates>
+    <variables>
+        <name>emailResult</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
     <variables>
         <name>leadsToUpdate</name>
         <dataType>SObject</dataType>

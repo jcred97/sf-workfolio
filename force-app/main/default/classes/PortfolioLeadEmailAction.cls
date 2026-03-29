@@ -17,7 +17,7 @@ public without sharing class PortfolioLeadEmailAction {
 
     public class Request {
         @InvocableVariable(required=true) public Id     leadId;
-        @InvocableVariable(required=true) public String emailType; // 'create' or 'update'
+        @InvocableVariable(required=true) public String emailType; // 'create', 'update', or 'follow_up'
         // recipientEmail removed — sourced from Notification_Config__mdt
     }
 
@@ -116,9 +116,14 @@ public without sharing class PortfolioLeadEmailAction {
             return TEST_CONFIG_OVERRIDE;
         }
 
-        // DeveloperName format: Lead_Create, Lead_Update
-        String developerName = 'Lead_' + emailType.substring(0, 1).toUpperCase()
-                             + emailType.substring(1).toLowerCase();
+        // DeveloperName format: Lead_Create, Lead_Update, Lead_Follow_Up
+        String developerName;
+        if ('follow_up'.equalsIgnoreCase(emailType)) {
+            developerName = 'Lead_Follow_Up';
+        } else {
+            developerName = 'Lead_' + emailType.substring(0, 1).toUpperCase()
+                          + emailType.substring(1).toLowerCase();
+        }
 
         List<Notification_Config__mdt> configs = [
             SELECT Sender_Display_Name__c,
@@ -213,6 +218,18 @@ public without sharing class PortfolioLeadEmailAction {
             '- Email: '   + safe(ld.Email,       'N/A') + '\n' +
             '- Company: ' + safe(ld.Company,     'N/A') + '\n' +
             '- Source: '  + safe(ld.LeadSource,  'N/A');
+
+        if ('follow_up'.equalsIgnoreCase(emailType)) {
+            return String.join(new List<String>{
+                'Hi,',
+                'This is a follow-up reminder for an uncontacted lead from your portfolio website.',
+                leadInfoBlock,
+                'Original Message:\n' + safe(ld.Email_Message__c, 'N/A'),
+                'Lead Record:\n'      + recordUrl,
+                'Recommended Action:\nThis lead has not been contacted yet. Please follow up as soon as possible.',
+                '- Portfolio Lead System'
+            }, '\n\n');
+        }
 
         if ('update'.equalsIgnoreCase(emailType)) {
             return String.join(new List<String>{

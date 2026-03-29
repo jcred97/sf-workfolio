@@ -18,11 +18,13 @@
         <members>Lead.Previous_Email_Message__c</members>
         <members>Lead.External_Id__c</members>
         <members>Lead.Follow_Up_Date__c</members>
+        <members>Lead.Follow_Up_Log__c</members>
         <members>Lead.Follow_Up_Sent__c</members>
         <name>CustomField</name>
     </types>
     <types>
         <members>Notification_Config.Lead_Create</members>
+        <members>Notification_Config.Lead_Follow_Up</members>
         <members>Notification_Config.Lead_Update</members>
         <name>CustomMetadata</name>
     </types>
