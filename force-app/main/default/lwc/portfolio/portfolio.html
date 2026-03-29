@@ -19,6 +19,9 @@
                     <a class={experienceClass} data-section="experience" onclick={handleNavigation}>Experience</a>
                 </li>
                 <li class="link">
+                    <a class={projectsClass} data-section="projects" onclick={handleNavigation}>Projects</a>
+                </li>
+                <li class="link">
                     <a class={skillsClass} data-section="skills" onclick={handleNavigation}>Skills</a>
                 </li>
             </ul>
@@ -46,6 +49,13 @@
                 <c-portfolio-experience
                     record-id={recordId}>
                 </c-portfolio-experience>
+            </template>
+
+            <!-- PROJECTS -->
+            <template if:true={showProjects}>
+                <c-portfolio-projects
+                    record-id={recordId}>
+                </c-portfolio-projects>
             </template>
 
             <!-- SKILLS -->

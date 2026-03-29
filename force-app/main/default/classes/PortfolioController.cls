@@ -97,6 +97,17 @@ public with sharing class PortfolioController {
     }
 
     @AuraEnabled(cacheable=true)
+    public static List<Personal_Project__c> getPersonalProjects(Id portfolioId) {
+        return [
+            SELECT Id, Name, Description__c, Tech_Stack__c,
+                   YouTube_URL__c, GitHub_URL__c, Live_URL__c, Display_Order__c
+            FROM Personal_Project__c
+            WHERE Portfolio__c = :portfolioId
+            ORDER BY Display_Order__c ASC NULLS LAST
+        ];
+    }
+
+    @AuraEnabled(cacheable=true)
     public static List<Certification__c> getCertifications(Id portfolioId) {
         return [
             SELECT Id, Name, Image_URL__c, Display_Order__c

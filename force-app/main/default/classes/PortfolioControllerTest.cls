@@ -56,6 +56,18 @@ private class PortfolioControllerTest {
         );
         insert bullet;
 
+        // Create Personal Project
+        Personal_Project__c personalProj = new Personal_Project__c(
+            Name = 'My Side Project',
+            Description__c = 'A cool side project with a demo',
+            Tech_Stack__c = 'LWC, Node.js',
+            YouTube_URL__c = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+            GitHub_URL__c = 'https://github.com/example/project',
+            Display_Order__c = 1,
+            Portfolio__c = portfolio.Id
+        );
+        insert personalProj;
+
         // Create Certification
         Certification__c cert = new Certification__c(
             Name = 'Platform Developer 1',
@@ -191,6 +203,21 @@ private class PortfolioControllerTest {
         System.assertEquals('Built a cool feature', result[0].Experience_Bullets__r[0].Bullet_Text__c);
         System.assertEquals(1, result[0].Projects__r.size(), 'Should return 1 project');
         System.assertEquals('Test Project', result[0].Projects__r[0].Name);
+    }
+
+    @IsTest
+    static void testGetPersonalProjects() {
+        Portfolio__c portfolio = [SELECT Id FROM Portfolio__c LIMIT 1];
+
+        Test.startTest();
+        List<Personal_Project__c> result = PortfolioController.getPersonalProjects(portfolio.Id);
+        Test.stopTest();
+
+        System.assertEquals(1, result.size(), 'Should return 1 personal project');
+        System.assertEquals('My Side Project', result[0].Name);
+        System.assertEquals('LWC, Node.js', result[0].Tech_Stack__c);
+        System.assertNotEquals(null, result[0].YouTube_URL__c);
+        System.assertNotEquals(null, result[0].GitHub_URL__c);
     }
 
     @IsTest

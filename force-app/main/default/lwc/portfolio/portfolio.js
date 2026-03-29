@@ -11,6 +11,7 @@ const BASE_PATH = `${PortfolioAssets}/PortfolioAssets`;
 const SECTION = {
     HOME: 'home',
     EXPERIENCE: 'experience',
+    PROJECTS: 'projects',
     SKILLS: 'skills'
 };
 
@@ -122,6 +123,10 @@ export default class Portfolio extends LightningElement {
         return this.isActive(SECTION.EXPERIENCE);
     }
 
+    get showProjects() {
+        return this.isActive(SECTION.PROJECTS);
+    }
+
     get showSkills() {
         return this.isActive(SECTION.SKILLS);
     }
@@ -132,6 +137,10 @@ export default class Portfolio extends LightningElement {
 
     get experienceClass() {
         return this.showExperience ? 'active' : '';
+    }
+
+    get projectsClass() {
+        return this.showProjects ? 'active' : '';
     }
 
     get skillsClass() {

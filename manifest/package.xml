@@ -17,6 +17,8 @@
         <members>Lead.Email_Status__c</members>
         <members>Lead.Previous_Email_Message__c</members>
         <members>Lead.External_Id__c</members>
+        <members>Lead.Follow_Up_Date__c</members>
+        <members>Lead.Follow_Up_Sent__c</members>
         <name>CustomField</name>
     </types>
     <types>
@@ -33,6 +35,7 @@
         <members>Experience_Bullet__c</members>
         <members>Job_Application__c</members>
         <members>Lead_Submission__e</members>
+        <members>Personal_Project__c</members>
         <members>Project__c</members>
         <members>Portfolio__c</members>
         <members>Portfolio_Setting__c</members>
@@ -53,11 +56,13 @@
     </types>
     <types>
         <members>PE_Lead_Upsert_Portfolio_Submission</members>
+        <members>Schedule_Lead_Follow_Up</members>
         <name>Flow</name>
     </types>
     <types>
         <members>Certification__c-Certification Layout</members>
         <members>Lead-Lead Layout</members>
+        <members>Personal_Project__c-Personal Project Layout</members>
         <members>Job_Application__c-Job Application Layout</members>
         <members>Portfolio__c-Portfolio Layout</members>
         <members>Portfolio_Setting__c-Portfolio Setting Layout</members>
@@ -70,6 +75,7 @@
         <members>portfolioContact</members>
         <members>portfolioExperience</members>
         <members>portfolioHome</members>
+        <members>portfolioProjects</members>
         <members>portfolioSkills</members>
         <members>skillNode</members>
         <name>LightningComponentBundle</name>
@@ -87,6 +93,7 @@
         <members>Certification__c</members>
         <members>Experience_Bullet__c</members>
         <members>Lead</members>
+        <members>Personal_Project__c</members>
         <members>Portfolio__c</members>
         <members>Portfolio_Setting__c</members>
         <members>Project__c</members>

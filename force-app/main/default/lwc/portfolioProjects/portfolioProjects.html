@@ -1,0 +1,82 @@
+<template>
+    <!-- ERROR STATE -->
+    <template if:true={hasError}>
+        <div class="error-container">
+            <div class="error-card">
+                <span class="error-icon">!</span>
+                <p class="error-message">{errorMessage}</p>
+            </div>
+        </div>
+    </template>
+
+    <!-- CONTENT -->
+    <template if:false={hasError}>
+    <div class="container">
+
+        <!-- EMPTY STATE -->
+        <template if:false={hasProjects}>
+            <div class="empty-state">
+                <p class="empty-text">No projects to display yet.</p>
+            </div>
+        </template>
+
+        <!-- PROJECT CARDS -->
+        <template if:true={hasProjects}>
+            <div class="project-grid">
+                <template for:each={projects} for:item="proj">
+                    <div key={proj.Id} class="project-card">
+
+                        <!-- VIDEO EMBED -->
+                        <template if:true={proj.hasVideo}>
+                            <div class="video-wrapper">
+                                <iframe
+                                    src={proj.embedUrl}
+                                    title={proj.Name}
+                                    frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen">
+                                </iframe>
+                            </div>
+                        </template>
+
+                        <!-- CARD BODY -->
+                        <div class="card-body">
+                            <h3 class="project-name">{proj.Name}</h3>
+
+                            <template if:true={proj.Description}>
+                                <p class="project-desc">{proj.Description}</p>
+                            </template>
+
+                            <!-- TECH TAGS -->
+                            <template if:true={proj.TechStack}>
+                                <div class="tag-group">
+                                    <template for:each={proj.TechStack} for:item="tech">
+                                        <span key={tech} class="skill-tag">{tech}</span>
+                                    </template>
+                                </div>
+                            </template>
+
+                            <!-- LINKS -->
+                            <template if:true={proj.hasLinks}>
+                                <div class="link-group">
+                                    <template if:true={proj.hasGitHub}>
+                                        <a href={proj.GitHubUrl} target="_blank" class="project-link">
+                                            <span class="link-icon">&#60;/&#62;</span> Source Code
+                                        </a>
+                                    </template>
+                                    <template if:true={proj.hasLive}>
+                                        <a href={proj.LiveUrl} target="_blank" class="project-link live">
+                                            <span class="link-icon">&#8599;</span> Live Demo
+                                        </a>
+                                    </template>
+                                </div>
+                            </template>
+                        </div>
+
+                    </div>
+                </template>
+            </div>
+        </template>
+
+    </div>
+    </template>
+</template>
