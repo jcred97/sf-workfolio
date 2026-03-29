@@ -25,6 +25,46 @@ private class PortfolioControllerTest {
         };
         insert skills;
 
+        // Create Work Experience
+        WorkExperience__c workExp = new WorkExperience__c(
+            CompanyName__c = 'Test Company',
+            Role__c = 'Software Engineer',
+            JobStartDate__c = Date.today().addYears(-2),
+            JobEndDate__c = Date.today(),
+            WorkLocation__c = 'Remote',
+            IsCurrent__c = false,
+            Portfolio__c = portfolio.Id
+        );
+        insert workExp;
+
+        // Create Project
+        Project__c project = new Project__c(
+            Name = 'Test Project',
+            Tech_Stack__c = 'Apex;LWC',
+            Display_Order__c = 1,
+            Work_Experience__c = workExp.Id
+        );
+        insert project;
+
+        // Create Experience Bullet
+        Experience_Bullet__c bullet = new Experience_Bullet__c(
+            Bullet_Text__c = 'Built a cool feature',
+            Display_Order__c = 1,
+            Include_In_Portfolio__c = true,
+            Project__c = project.Id,
+            Work_Experience__c = workExp.Id
+        );
+        insert bullet;
+
+        // Create Certification
+        Certification__c cert = new Certification__c(
+            Name = 'Platform Developer 1',
+            Image_URL__c = 'https://example.com/pd1.png',
+            Display_Order__c = 1,
+            Portfolio__c = portfolio.Id
+        );
+        insert cert;
+
         // Create Portfolio Settings
         Portfolio_Setting__c setting = new Portfolio_Setting__c(
             Primary_Color__c = '#000000',
@@ -135,5 +175,47 @@ private class PortfolioControllerTest {
         }
 
         PortfolioController.forcePublishFailure = false;
+    }
+
+    @IsTest
+    static void testGetWorkExperiences() {
+        Portfolio__c portfolio = [SELECT Id FROM Portfolio__c LIMIT 1];
+
+        Test.startTest();
+        List<WorkExperience__c> result = PortfolioController.getWorkExperiences(portfolio.Id);
+        Test.stopTest();
+
+        System.assertEquals(1, result.size(), 'Should return 1 work experience');
+        System.assertEquals('Test Company', result[0].CompanyName__c);
+        System.assertEquals(1, result[0].Experience_Bullets__r.size(), 'Should return 1 experience bullet');
+        System.assertEquals('Built a cool feature', result[0].Experience_Bullets__r[0].Bullet_Text__c);
+        System.assertEquals(1, result[0].Projects__r.size(), 'Should return 1 project');
+        System.assertEquals('Test Project', result[0].Projects__r[0].Name);
+    }
+
+    @IsTest
+    static void testGetCertifications() {
+        Portfolio__c portfolio = [SELECT Id FROM Portfolio__c LIMIT 1];
+
+        Test.startTest();
+        List<Certification__c> result = PortfolioController.getCertifications(portfolio.Id);
+        Test.stopTest();
+
+        System.assertEquals(1, result.size(), 'Should return 1 certification');
+        System.assertEquals('Platform Developer 1', result[0].Name);
+        System.assertEquals('https://example.com/pd1.png', result[0].Image_URL__c);
+    }
+
+    @IsTest
+    static void testGetProjects() {
+        Portfolio__c portfolio = [SELECT Id FROM Portfolio__c LIMIT 1];
+
+        Test.startTest();
+        List<Project__c> result = PortfolioController.getProjects(portfolio.Id);
+        Test.stopTest();
+
+        System.assertEquals(1, result.size(), 'Should return 1 project');
+        System.assertEquals('Test Project', result[0].Name);
+        System.assertEquals('Test Company', result[0].Work_Experience__r.CompanyName__c);
     }
 }

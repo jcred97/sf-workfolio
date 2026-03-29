@@ -31,6 +31,7 @@ export default class PortfolioContact extends LightningElement {
     /* =========================================================
        FORM STATE
     ========================================================= */
+    portfolioData = {};
     firstName    = '';
     lastName     = '';
     emailAddress = '';
@@ -46,11 +47,24 @@ export default class PortfolioContact extends LightningElement {
     fadeSuccess  = false;
     fadeError    = false;
 
+    hasWireError = false;
+    wireErrorMessage = '';
+
     /* =========================================================
        WIRE — Portfolio email from record
     ========================================================= */
     @wire(getRecord, { recordId: '$recordId', fields: [EMAIL] })
-    portfolioData;
+    wiredPortfolioData(result) {
+        this.portfolioData = result;
+
+        if (result.data) {
+            this.hasWireError = false;
+            this.wireErrorMessage = '';
+        } else if (result.error) {
+            this.hasWireError = true;
+            this.wireErrorMessage = result.error?.body?.message || result.error?.message || 'Unable to load contact details. Please try again later.';
+        }
+    }
 
     /* =========================================================
        INPUT HANDLER

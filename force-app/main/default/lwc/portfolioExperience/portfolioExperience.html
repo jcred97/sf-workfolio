@@ -1,21 +1,45 @@
 <template>
+    <!-- ERROR STATE -->
+    <template if:true={hasError}>
+        <div class="error-container">
+            <div class="error-card">
+                <span class="error-icon">!</span>
+                <p class="error-message">{errorMessage}</p>
+            </div>
+        </div>
+    </template>
+
+    <!-- CONTENT -->
+    <template if:false={hasError}>
     <div class="experience-container">
 
         <!-- =========================
-             🖥️ DESKTOP: LEFT (TIMELINE)
+             DESKTOP: LEFT (TIMELINE)
         ========================== -->
         <div class="experience-list">
             <template for:each={workExperienceList} for:item="work">
                 <div key={work.id}
                      class={work.leftClass}
                      data-id={work.id}
-                     onclick={selectExperience}>
+                     onclick={selectExperience}
+                     role="button"
+                     tabindex="0"
+                     onkeydown={selectExperience}>
 
-                    <div class="company">{work.CompanyName}</div>
+                    <div class="exp-top-row">
+                        <div class="company">{work.CompanyName}</div>
+                        <template if:true={work.isCurrent}>
+                            <span class="current-badge">Current</span>
+                        </template>
+                    </div>
+
                     <div class="role">{work.Role}</div>
 
                     <div class="meta-header">
                         {work.JobStartDate} – {work.displayEnd}
+                        <template if:true={work.duration}>
+                            <span class="duration-badge">{work.duration}</span>
+                        </template>
                     </div>
 
                     <div class="meta">
@@ -27,24 +51,31 @@
 
 
         <!-- =========================
-             🖥️ DESKTOP: RIGHT (DETAIL)
+             DESKTOP: RIGHT (DETAIL) — single active panel
         ========================== -->
-        <div class="experience-detail">
-            <template for:each={workExperienceList} for:item="work">
-                <div key={work.id} class={work.rightClass}>
+        <div class="experience-detail" aria-live="polite">
+            <template if:true={activeDetail}>
+                <div class="detail-content active">
+
+                    <!-- Empty state -->
+                    <template if:false={activeDetail.hasContent}>
+                        <div class="empty-state">
+                            <p class="empty-text">No details available for this role.</p>
+                        </div>
+                    </template>
 
                     <!-- General Bullets (not linked to a project) -->
-                    <template if:true={work.hasGeneralBullets}>
+                    <template if:true={activeDetail.hasGeneralBullets}>
                         <ul class="bullet-list">
-                            <template for:each={work.GeneralBullets} for:item="bullet">
+                            <template for:each={activeDetail.GeneralBullets} for:item="bullet">
                                 <li key={bullet.Id}>{bullet.Text}</li>
                             </template>
                         </ul>
                     </template>
 
                     <!-- Projects with their Bullets -->
-                    <template if:true={work.hasProjects}>
-                        <template for:each={work.Projects} for:item="proj">
+                    <template if:true={activeDetail.hasProjects}>
+                        <template for:each={activeDetail.Projects} for:item="proj">
                             <div key={proj.Id} class="inline-project">
                                 <div class="project-name">{proj.Name}</div>
 
@@ -73,31 +104,53 @@
 
 
         <!-- =========================
-             📱 MOBILE: ACCORDION
+             MOBILE: ACCORDION
         ========================== -->
         <div class="experience-mobile">
             <template for:each={workExperienceList} for:item="work">
-                <div key={work.id} class="experience-card node">
+                <div key={work.id} class="experience-card">
 
                     <!-- Header -->
                     <div class="node-header"
                          onclick={toggleCard}
-                         data-id={work.id}>
+                         data-id={work.id}
+                         role="button"
+                         tabindex="0"
+                         aria-expanded={work.isOpen}
+                         onkeydown={toggleCard}>
 
                         <div>
-                            <div class="company">{work.CompanyName}</div>
+                            <div class="exp-top-row">
+                                <div class="company">{work.CompanyName}</div>
+                                <template if:true={work.isCurrent}>
+                                    <span class="current-badge">Current</span>
+                                </template>
+                            </div>
+
                             <div class="role">{work.Role}</div>
 
                             <div class="meta-header">
-                                {work.JobStartDate} – {work.displayEnd} • {work.WorkLocation}
+                                {work.JobStartDate} – {work.displayEnd}
+                                <template if:true={work.duration}>
+                                    <span class="duration-badge">{work.duration}</span>
+                                </template>
                             </div>
+
+                            <div class="meta-header">{work.WorkLocation}</div>
                         </div>
 
-                        <span class="toggle">{work.icon}</span>
+                        <span class="toggle" aria-hidden="true">{work.icon}</span>
                     </div>
 
                     <!-- Body -->
                     <div class={work.bodyClass}>
+
+                        <!-- Empty state -->
+                        <template if:false={work.hasContent}>
+                            <div class="empty-state">
+                                <p class="empty-text">No details available for this role.</p>
+                            </div>
+                        </template>
 
                         <!-- General Bullets (not linked to a project) -->
                         <template if:true={work.hasGeneralBullets}>
@@ -139,4 +192,5 @@
         </div>
 
     </div>
+    </template>
 </template>

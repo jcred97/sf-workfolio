@@ -1,18 +1,108 @@
-# Salesforce DX Project: Next Steps
+# sf-workfolio
 
-Now that you’ve created a Salesforce DX project, what’s next? Here are some documentation resources to get you started.
+A personal developer portfolio built entirely on Salesforce, showcasing work experience, projects, skills, and certifications through Lightning Web Components. Includes a lead capture contact form and a job application tracker.
 
-## How Do You Plan to Deploy Your Changes?
+## Tech Stack
 
-Do you want to deploy a set of changes, or create a self-contained application? Choose a [development model](https://developer.salesforce.com/tools/vscode/en/user-guide/development-models).
+- Salesforce DX (API v65.0)
+- Lightning Web Components (LWC)
+- Apex
+- Platform Events
+- Custom Metadata Types
+- Flows
+- Jest (LWC unit testing)
+- ESLint + Prettier + Husky (code quality)
 
-## Configure Your Salesforce DX Project
+## Project Structure
 
-The `sfdx-project.json` file contains useful configuration information for your project. See [Salesforce DX Project Configuration](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_config.htm) in the _Salesforce DX Developer Guide_ for details about this file.
+```
+force-app/main/default/
+  classes/          Apex controllers + tests
+  lwc/              6 LWC components
+  objects/          7 custom objects + modified standard objects
+  flows/            Lead submission automation
+  staticresources/  Portfolio assets (images, icons)
+  customMetadata/   Email notification config
+  permissionsets/   Access control
+```
 
-## Read All About It
+## Custom Objects
 
-- [Salesforce Extensions Documentation](https://developer.salesforce.com/tools/vscode/)
-- [Salesforce CLI Setup Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
-- [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm)
-- [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference.htm)
+| Object | Purpose |
+|--------|---------|
+| Portfolio\_\_c | Main portfolio record (name, designation, intro, social URLs) |
+| Portfolio\_Setting\_\_c | Theme configuration (colors, borders, shadows) |
+| WorkExperience\_\_c | Job history entries |
+| Experience\_Bullet\_\_c | Bullet points under work experience / projects |
+| Project\_\_c | Projects linked to work experiences |
+| Skill\_\_c | Hierarchical skill tree (self-referential via Parent\_Skill\_\_c) |
+| Job\_Application\_\_c | Job application tracker with stage pipeline |
+
+## LWC Components
+
+| Component | Description |
+|-----------|-------------|
+| portfolio | Root shell -- navigation, theme loading, section routing |
+| portfolioHome | Hero section with profile, social links, certifications, contact form |
+| portfolioContact | Contact form (publishes Lead\_Submission\_\_e platform event) + contact details |
+| portfolioExperience | Work experience timeline with nested projects and experience bullets |
+| portfolioSkills | Hierarchical skill tree with collapsible categories |
+| skillNode | Recursive child component for nested skill rendering |
+
+## Setup
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/your-username/sf-workfolio.git
+   cd sf-workfolio
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Authorize a Salesforce org:
+
+   ```bash
+   sf org login web -a my-org
+   ```
+
+4. Deploy source:
+
+   ```bash
+   sf project deploy start
+   ```
+
+5. Create required data:
+   - 1 **Portfolio\_\_c** record (your name, designation, intro text, social URLs)
+   - 1 **Portfolio\_Setting\_\_c** record (theme colors, or leave blank for defaults)
+   - **WorkExperience\_\_c** records with related **Project\_\_c** and **Experience\_Bullet\_\_c** records
+   - **Skill\_\_c** records (use Parent\_Skill\_\_c for hierarchy)
+
+6. Upload static resources:
+   - **PortfolioAssets** -- profile picture, social icons, certification logos
+
+7. Configure lead notifications:
+   - Create a **Portfolio\_Leads** queue
+   - Create **Notification\_Config\_\_mdt** custom metadata records (email templates, recipients)
+
+## Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm test` | Run LWC Jest tests |
+| `npm run test:unit:watch` | Jest watch mode |
+| `npm run test:unit:coverage` | Jest with coverage report |
+| `npm run prettier` | Format all code |
+| `npm run prettier:verify` | Check formatting without writing |
+
+## License
+
+MIT
+
+## Author
+
+John Carlo Red

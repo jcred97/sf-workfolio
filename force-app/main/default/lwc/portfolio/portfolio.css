@@ -157,3 +157,17 @@ nav {
         font-size: 0.9rem;
     }
 }
+
+
+/* =====================================
+   📜 COPYRIGHT FOOTER
+===================================== */
+.copyright {
+    text-align: center;
+    padding: 2rem 1rem;
+    margin-top: 3rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    letter-spacing: 0.03em;
+}

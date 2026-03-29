@@ -3,9 +3,14 @@
         
         <div class="node">
 
-            <div class="node-header" onclick={toggle}>
+            <div class="node-header"
+                 onclick={toggle}
+                 role="button"
+                 tabindex="0"
+                 aria-expanded={node.isOpen}
+                 onkeydown={toggle}>
                 <span class="node-label">{node.Name}</span>
-                <span class="toggle">{icon}</span>
+                <span class="toggle" aria-hidden="true">{icon}</span>
             </div>
 
             <template if:true={node.isOpen}>

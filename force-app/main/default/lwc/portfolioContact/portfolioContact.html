@@ -1,4 +1,16 @@
 <template>
+    <!-- ERROR STATE -->
+    <template if:true={hasWireError}>
+        <div class="error-container">
+            <div class="error-card">
+                <span class="error-icon">!</span>
+                <p class="error-message">{wireErrorMessage}</p>
+            </div>
+        </div>
+    </template>
+
+    <!-- CONTENT -->
+    <template if:false={hasWireError}>
     <div class="container">
 
         <!-- ================================================
@@ -122,4 +134,5 @@
         </div>
 
     </div>
+    </template>
 </template>

@@ -11,7 +11,12 @@ export default class SkillNode extends LightningElement {
         return this.node.isOpen ? '−' : '+';
     }
 
-    toggle() {
+    toggle(event) {
+        if (event.type === 'keydown') {
+            if (event.key !== 'Enter' && event.key !== ' ') return;
+            if (event.key === ' ') event.preventDefault();
+        }
+
         if (!this.hasChildren) return;
 
         this.dispatchEvent(

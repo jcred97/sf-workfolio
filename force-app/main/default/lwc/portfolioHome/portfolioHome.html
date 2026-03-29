@@ -1,4 +1,16 @@
 <template>
+    <!-- ERROR STATE -->
+    <template if:true={hasError}>
+        <div class="error-container">
+            <div class="error-card">
+                <span class="error-icon">!</span>
+                <p class="error-message">{errorMessage}</p>
+            </div>
+        </div>
+    </template>
+
+    <!-- CONTENT -->
+    <template if:false={hasError}>
     <div class="container">
         <div class="content">
 
@@ -41,7 +53,7 @@
         <!-- RIGHT SIDE IMAGE -->
         <div class="cert-grid">
             <template for:each={certifications} for:item="cert">
-                <img key={cert.name} src={cert.image} class="cert-badge"/>
+                <img key={cert.Id} src={cert.image} alt={cert.name} class="cert-badge"/>
             </template>
         </div>
     </div>
@@ -59,4 +71,5 @@
             trailblazer-url={trailblazerUrl}>
         </c-portfolio-contact>
     </div>
+    </template>
 </template>

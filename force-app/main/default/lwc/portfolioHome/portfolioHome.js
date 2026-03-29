@@ -1,5 +1,6 @@
 import { LightningElement, api, wire } from 'lwc';
 import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
+import getCertifications from '@salesforce/apex/PortfolioController.getCertifications';
 
 import FULLNAME from '@salesforce/schema/Portfolio__c.FullName__c';
 import DESIGNATION from '@salesforce/schema/Portfolio__c.Designation__c';
@@ -16,16 +17,18 @@ export default class PortfolioHome extends LightningElement {
     @api trailblazer;
     @api github;
     @api profilePicture;
-    @api certifications = [];
 
     /* =========================================================
        PRIVATE STATE
     ========================================================= */
     portfolioData = {};
+    certifications = [];
     _lastSentName = '';
+    hasError = false;
+    errorMessage = '';
 
     /* =========================================================
-       WIRE — fires once when data arrives, not on every render
+       WIRE — Portfolio record
     ========================================================= */
     @wire(getRecord, {
         recordId: '$recordId',
@@ -44,6 +47,9 @@ export default class PortfolioHome extends LightningElement {
         this.portfolioData = result;
 
         if (result.data) {
+            this.hasError = false;
+            this.errorMessage = '';
+
             const name = getFieldValue(result.data, FULLNAME);
 
             // Only dispatch when name is available and hasn't been sent yet
@@ -51,6 +57,26 @@ export default class PortfolioHome extends LightningElement {
                 this._lastSentName = name;
                 this.dispatchEvent(new CustomEvent('namechange', { detail: name }));
             }
+        } else if (result.error) {
+            this.hasError = true;
+            this.errorMessage = result.error?.body?.message || result.error?.message || 'Unable to load profile. Please try again later.';
+        }
+    }
+
+    /* =========================================================
+       WIRE — Certifications from Certification__c
+    ========================================================= */
+    @wire(getCertifications, { portfolioId: '$recordId' })
+    wiredCertifications({ data, error }) {
+        if (data) {
+            this.certifications = data.map(cert => ({
+                Id: cert.Id,
+                name: cert.Name,
+                image: cert.Image_URL__c
+            }));
+        } else if (error) {
+            console.error('Certifications load error', error);
+            this.certifications = [];
         }
     }
 

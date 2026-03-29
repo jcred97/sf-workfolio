@@ -4,13 +4,18 @@ import getWorkExperiences from '@salesforce/apex/PortfolioController.getWorkExpe
 export default class PortfolioExperience extends LightningElement {
     @api recordId;
     workExperienceList = [];
+    hasError = false;
+    errorMessage = '';
+    _activeId = null;
 
     /* =====================================
-       🔌 WIRE — WORK EXPERIENCE
+       WIRE — WORK EXPERIENCE
     ===================================== */
     @wire(getWorkExperiences, { portfolioId: '$recordId' })
     workExperienceHandler({ data, error }) {
         if (data) {
+            this.hasError = false;
+            this.errorMessage = '';
             this.formatExperience(data);
 
             requestAnimationFrame(() => {
@@ -18,18 +23,22 @@ export default class PortfolioExperience extends LightningElement {
             });
 
         } else if (error) {
+            this.hasError = true;
+            this.errorMessage = error?.body?.message || error?.message || 'Unable to load experience. Please try again later.';
+            this.workExperienceList = [];
             console.error(error);
         }
     }
 
     /* =====================================
-       🧠 FORMAT
+       FORMAT
     ===================================== */
     formatExperience(data) {
         this.workExperienceList = data.map((item, index) => {
             const isCurrent = item.IsCurrent__c;
             const endDate = this.formatDate(item.JobEndDate__c);
             const isActive = index === 0;
+            const duration = this.calcDuration(item.JobStartDate__c, item.JobEndDate__c, isCurrent);
 
             const allBullets = item.Experience_Bullets__r || [];
 
@@ -53,11 +62,19 @@ export default class PortfolioExperience extends LightningElement {
                 .filter(b => !b.Project__c)
                 .map(b => ({ Id: b.Id, Text: b.Bullet_Text__c }));
 
+            const hasContent = generalBullets.length > 0 || projects.length > 0;
+
+            if (isActive) {
+                this._activeId = item.Id;
+            }
+
             return {
                 id: item.Id,
 
                 JobStartDate: this.formatDate(item.JobStartDate__c),
                 displayEnd: isCurrent ? 'Current' : endDate,
+                duration,
+                isCurrent,
 
                 Role: item.Role__c,
                 CompanyName: item.CompanyName__c,
@@ -68,6 +85,7 @@ export default class PortfolioExperience extends LightningElement {
 
                 Projects: projects,
                 hasProjects: projects.length > 0,
+                hasContent,
 
                 /* MOBILE */
                 isOpen: isActive,
@@ -76,16 +94,28 @@ export default class PortfolioExperience extends LightningElement {
 
                 /* DESKTOP */
                 isActive,
-                leftClass: isActive ? 'exp-item active' : 'exp-item',
+                leftClass: `exp-item${isActive ? ' active' : ''}${isCurrent ? ' current' : ''}`,
                 rightClass: isActive ? 'detail-content active' : 'detail-content'
             };
         });
     }
 
     /* =====================================
-       📱 MOBILE
+       DESKTOP — Active detail (single panel)
+    ===================================== */
+    get activeDetail() {
+        return this.workExperienceList.find(w => w.isActive) || null;
+    }
+
+    /* =====================================
+       MOBILE
     ===================================== */
     toggleCard(event) {
+        if (event.type === 'keydown') {
+            if (event.key !== 'Enter' && event.key !== ' ') return;
+            if (event.key === ' ') event.preventDefault();
+        }
+
         const id = event.currentTarget.dataset.id;
 
         this.workExperienceList = this.workExperienceList.map(item => {
@@ -105,16 +135,23 @@ export default class PortfolioExperience extends LightningElement {
     }
 
     /* =====================================
-       🖥️ DESKTOP
+       DESKTOP
     ===================================== */
     selectExperience(event) {
+        if (event.type === 'keydown') {
+            if (event.key !== 'Enter' && event.key !== ' ') return;
+            if (event.key === ' ') event.preventDefault();
+        }
+
         const id = event.currentTarget.dataset.id;
+        if (id === this._activeId) return;
+        this._activeId = id;
 
         // Step 1: remove active
         this.workExperienceList = this.workExperienceList.map(item => ({
             ...item,
             isActive: false,
-            leftClass: 'exp-item',
+            leftClass: `exp-item${item.isCurrent ? ' current' : ''}`,
             rightClass: 'detail-content'
         }));
 
@@ -126,7 +163,7 @@ export default class PortfolioExperience extends LightningElement {
                 return {
                     ...item,
                     isActive,
-                    leftClass: isActive ? 'exp-item active' : 'exp-item',
+                    leftClass: `exp-item${isActive ? ' active' : ''}${item.isCurrent ? ' current' : ''}`,
                     rightClass: isActive ? 'detail-content active' : 'detail-content'
                 };
             });
@@ -134,7 +171,7 @@ export default class PortfolioExperience extends LightningElement {
     }
 
     /* =====================================
-       🎬 MOBILE ANIMATION
+       MOBILE ANIMATION
     ===================================== */
     animateHeight() {
         const sections = this.template.querySelectorAll('.node-children');
@@ -160,7 +197,7 @@ export default class PortfolioExperience extends LightningElement {
     }
 
     /* =====================================
-       🧩 HELPERS
+       HELPERS
     ===================================== */
     splitTechStack(value) {
         if (!value) return null;
@@ -172,5 +209,23 @@ export default class PortfolioExperience extends LightningElement {
         if (!dateStr) return null;
         const date = new Date(dateStr + 'T00:00:00');
         return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+    }
+
+    calcDuration(startStr, endStr, isCurrent) {
+        if (!startStr) return '';
+
+        const start = new Date(startStr + 'T00:00:00');
+        const end = isCurrent ? new Date() : (endStr ? new Date(endStr + 'T00:00:00') : new Date());
+
+        let months = (end.getFullYear() - start.getFullYear()) * 12
+                   + (end.getMonth() - start.getMonth());
+        if (months < 0) months = 0;
+
+        const yrs = Math.floor(months / 12);
+        const mos = months % 12;
+
+        if (yrs === 0) return `${mos} mo${mos !== 1 ? 's' : ''}`;
+        if (mos === 0) return `${yrs} yr${yrs !== 1 ? 's' : ''}`;
+        return `${yrs} yr${yrs !== 1 ? 's' : ''} ${mos} mo${mos !== 1 ? 's' : ''}`;
     }
 }

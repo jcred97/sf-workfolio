@@ -33,6 +33,7 @@ export default class Portfolio extends LightningElement {
     activeSection = SECTION.HOME;
     isTransitioning = false;
     fullName = '';
+    currentYear = new Date().getFullYear();
 
     // Guard — ensures theme is only loaded once, after template is ready
     _themeApplied = false;
@@ -48,13 +49,6 @@ export default class Portfolio extends LightningElement {
         github: `${BASE_PATH}/Social/github-white.svg`
     };
 
-    certifications = [
-        { name: 'Platform Developer 1', image: `${BASE_PATH}/CertificateLogo/platformdeveloper1.png` },
-        { name: 'Platform App Builder', image: `${BASE_PATH}/CertificateLogo/platformappbuilder.png` },
-        { name: 'Platform Administrator', image: `${BASE_PATH}/CertificateLogo/platformadministrator.png` },
-        { name: 'Agentforce Specialist', image: `${BASE_PATH}/CertificateLogo/agentforcespecialist.png` },
-        { name: 'Platform Foundations', image: `${BASE_PATH}/CertificateLogo/platformfoundations.png` }
-    ];
 
     /* =========================================================
        LIFECYCLE

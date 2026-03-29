@@ -1,4 +1,16 @@
 <template>
+    <!-- ERROR STATE -->
+    <template if:true={hasError}>
+        <div class="error-container">
+            <div class="error-card">
+                <span class="error-icon">!</span>
+                <p class="error-message">{errorMessage}</p>
+            </div>
+        </div>
+    </template>
+
+    <!-- CONTENT -->
+    <template if:false={hasError}>
     <div class="container">
         <template for:each={treeData} for:item="category">
             <div key={category.Id} class={category.cssClass}>
@@ -6,7 +18,11 @@
                 <!-- HEADER -->
                 <div class="card-header"
                      onclick={toggleCard}
-                     data-id={category.Id}>
+                     data-id={category.Id}
+                     role="button"
+                     tabindex="0"
+                     aria-expanded={category.isOpen}
+                     onkeydown={toggleCard}>
 
                     <h3>{category.Name}</h3>
 
@@ -51,4 +67,5 @@
             </div>
         </template>
     </div>
+    </template>
 </template>

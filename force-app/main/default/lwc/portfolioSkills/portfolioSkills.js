@@ -8,9 +8,15 @@ export default class PortfolioSkills extends LightningElement {
     /* =========================================================
        WIRE
     ========================================================= */
+    hasError = false;
+    errorMessage = '';
+
     @wire(getSkills, { portfolioId: '$recordId' })
     wiredSkills({ data, error }) {
         if (data) {
+            this.hasError = false;
+            this.errorMessage = '';
+
             const tree = this.buildTree(data);
             this.treeData = this.initializeTree(tree);
 
@@ -24,6 +30,9 @@ export default class PortfolioSkills extends LightningElement {
                 });
             });
         } else if (error) {
+            this.hasError = true;
+            this.errorMessage = error?.body?.message || error?.message || 'Unable to load skills. Please try again later.';
+            this.treeData = [];
             console.error(error);
         }
     }
@@ -32,6 +41,11 @@ export default class PortfolioSkills extends LightningElement {
        TOP-LEVEL TOGGLE (card open/close)
     ========================================================= */
     toggleCard(event) {
+        if (event.type === 'keydown') {
+            if (event.key !== 'Enter' && event.key !== ' ') return;
+            if (event.key === ' ') event.preventDefault();
+        }
+
         const id = event?.currentTarget?.dataset?.id;
         if (!id) return;
 
@@ -43,7 +57,7 @@ export default class PortfolioSkills extends LightningElement {
                 isOpen,
                 icon: isOpen ? '−' : '+',
                 bodyClass: isOpen ? 'card-body open' : 'card-body',
-                cssClass: item.Name === 'CRM' && isOpen
+                cssClass: item.Is_Full_Width__c && isOpen
                     ? 'skill-card full-width'
                     : 'skill-card'
             };
@@ -128,7 +142,7 @@ export default class PortfolioSkills extends LightningElement {
     /* =========================================================
        TREE INIT
        - Opens all nodes by default
-       - Sets CRM full-width class
+       - Sets full-width class via Is_Full_Width__c field
        - Pre-computes hasChildren + allChildrenAreLeaf flags
        - Fixes bad data (camelCase concat OR comma-separated strings)
          using else-if so only one split strategy runs per node
@@ -178,7 +192,7 @@ export default class PortfolioSkills extends LightningElement {
                 hasChildren,
                 allChildrenAreLeaf,
                 bodyClass: 'card-body open',
-                cssClass: node.Name === 'CRM' && isOpen
+                cssClass: node.Is_Full_Width__c && isOpen
                     ? 'skill-card full-width'
                     : 'skill-card'
             };

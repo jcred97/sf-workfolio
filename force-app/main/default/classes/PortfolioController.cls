@@ -47,7 +47,7 @@ public with sharing class PortfolioController {
     @AuraEnabled(cacheable=true)
     public static List<Skill__c> getSkills(Id portfolioId) {
         return [
-            SELECT Id, Name, Priority__c, Parent_Skill__c
+            SELECT Id, Name, Priority__c, Parent_Skill__c, Is_Full_Width__c
             FROM Skill__c
             WHERE Portfolio__c = :portfolioId
             ORDER BY Priority__c ASC NULLS LAST
@@ -59,12 +59,20 @@ public with sharing class PortfolioController {
         return [
             SELECT
                 Primary_Color__c,
+                Secondary_Color__c,
+                Accent_Color__c,
                 Background_Color__c,
                 Card_Background__c,
                 Border_Color__c,
                 Primary_Text_Color__c,
                 Secondary_Text_Color__c,
-                Muted_Text_Color__c
+                Muted_Text_Color__c,
+                Button_Gradient_Start__c,
+                Button_Gradient_End__c,
+                Button_Text_Color__c,
+                Card_Border_Radius__c,
+                Card_Shadow__c,
+                Hover_Border_Color__c
             FROM Portfolio_Setting__c
             LIMIT 1
         ];
@@ -85,6 +93,16 @@ public with sharing class PortfolioController {
             FROM WorkExperience__c
             WHERE Portfolio__c = :portfolioId
             ORDER BY JobStartDate__c DESC NULLS LAST
+        ];
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static List<Certification__c> getCertifications(Id portfolioId) {
+        return [
+            SELECT Id, Name, Image_URL__c, Display_Order__c
+            FROM Certification__c
+            WHERE Portfolio__c = :portfolioId
+            ORDER BY Display_Order__c ASC NULLS LAST
         ];
     }
 
