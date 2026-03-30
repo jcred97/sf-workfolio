@@ -38,6 +38,17 @@
                             </div>
                         </template>
 
+                        <!-- IMAGE GALLERY (thumbnails below video) -->
+                        <template if:true={proj.hasImages}>
+                            <div class="image-gallery">
+                                <template for:each={proj.images} for:item="img">
+                                    <div key={img.Id} class="gallery-thumb" data-url={img.url} data-caption={img.caption} onclick={openLightbox}>
+                                        <img src={img.url} alt={img.caption} loading="lazy">
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+
                         <!-- CARD BODY -->
                         <div class="card-body">
                             <h3 class="project-name">{proj.Name}</h3>
@@ -78,5 +89,19 @@
         </template>
 
     </div>
+
+    <!-- LIGHTBOX OVERLAY -->
+    <template if:true={lightboxOpen}>
+        <div class="lightbox-backdrop" onclick={handleLightboxBackdrop}>
+            <button class="lightbox-close" onclick={closeLightbox}>&times;</button>
+            <div class="lightbox-content">
+                <img src={lightboxUrl} alt={lightboxCaption} class="lightbox-img">
+                <template if:true={lightboxCaption}>
+                    <p class="lightbox-caption">{lightboxCaption}</p>
+                </template>
+            </div>
+        </div>
+    </template>
+
     </template>
 </template>

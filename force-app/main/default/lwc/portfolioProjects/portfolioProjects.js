@@ -15,24 +15,69 @@ export default class PortfolioProjects extends LightningElement {
         if (data) {
             this.hasError = false;
             this.errorMessage = '';
-            this.projects = data.map(proj => ({
-                Id: proj.Id,
-                Name: proj.Name,
-                Description: proj.Description__c,
-                TechStack: this.splitTechStack(proj.Tech_Stack__c),
-                embedUrl: this.toEmbedUrl(proj.YouTube_URL__c),
-                hasVideo: !!this.toEmbedUrl(proj.YouTube_URL__c),
-                GitHubUrl: proj.GitHub_URL__c,
-                LiveUrl: proj.Live_URL__c,
-                hasGitHub: !!proj.GitHub_URL__c,
-                hasLive: !!proj.Live_URL__c,
-                hasLinks: !!proj.GitHub_URL__c || !!proj.Live_URL__c
-            }));
+            this.projects = data.map(proj => {
+                const images = (proj.Project_Images__r || []).map(img => ({
+                    Id: img.Id,
+                    url: img.Image_URL__c,
+                    caption: img.Caption__c || img.Name,
+                    isActive: false
+                }));
+                // Set first image as active for lightbox default
+                if (images.length) images[0].isActive = true;
+
+                return {
+                    Id: proj.Id,
+                    Name: proj.Name,
+                    Description: proj.Description__c,
+                    TechStack: this.splitTechStack(proj.Tech_Stack__c),
+                    embedUrl: this.toEmbedUrl(proj.YouTube_URL__c),
+                    hasVideo: !!this.toEmbedUrl(proj.YouTube_URL__c),
+                    GitHubUrl: proj.GitHub_URL__c,
+                    LiveUrl: proj.Live_URL__c,
+                    hasGitHub: !!proj.GitHub_URL__c,
+                    hasLive: !!proj.Live_URL__c,
+                    hasLinks: !!proj.GitHub_URL__c || !!proj.Live_URL__c,
+                    images,
+                    hasImages: images.length > 0
+                };
+            });
         } else if (error) {
             this.hasError = true;
             this.errorMessage = error?.body?.message || error?.message || 'Unable to load projects. Please try again later.';
             this.projects = [];
             console.error(error);
+        }
+    }
+
+    /* =========================================================
+       LIGHTBOX STATE
+    ========================================================= */
+    _lightboxOpen = false;
+    _lightboxUrl = '';
+    _lightboxCaption = '';
+
+    get lightboxOpen() { return this._lightboxOpen; }
+    get lightboxUrl() { return this._lightboxUrl; }
+    get lightboxCaption() { return this._lightboxCaption; }
+
+    openLightbox(event) {
+        const url = event.currentTarget.dataset.url;
+        const caption = event.currentTarget.dataset.caption || '';
+        this._lightboxUrl = url;
+        this._lightboxCaption = caption;
+        this._lightboxOpen = true;
+    }
+
+    closeLightbox() {
+        this._lightboxOpen = false;
+        this._lightboxUrl = '';
+        this._lightboxCaption = '';
+    }
+
+    handleLightboxBackdrop(event) {
+        // Only close if clicking the backdrop itself, not the image
+        if (event.target === event.currentTarget) {
+            this.closeLightbox();
         }
     }
 

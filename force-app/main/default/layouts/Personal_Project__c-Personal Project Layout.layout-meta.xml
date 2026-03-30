@@ -75,6 +75,13 @@
         <layoutColumns/>
         <style>CustomLinks</style>
     </layoutSections>
+    <relatedLists>
+        <fields>NAME</fields>
+        <fields>Image_URL__c</fields>
+        <fields>Caption__c</fields>
+        <fields>Display_Order__c</fields>
+        <relatedList>Project_Image__c.Personal_Project__c</relatedList>
+    </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>
     <showInteractionLogPanel>false</showInteractionLogPanel>

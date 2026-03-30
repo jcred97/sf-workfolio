@@ -68,6 +68,16 @@ private class PortfolioControllerTest {
         );
         insert personalProj;
 
+        // Create Project Image
+        Project_Image__c img = new Project_Image__c(
+            Name = 'Test Image',
+            Personal_Project__c = personalProj.Id,
+            Image_URL__c = 'https://example.com/image.png',
+            Caption__c = 'Test Caption',
+            Display_Order__c = 1
+        );
+        insert img;
+
         // Create Certification
         Certification__c cert = new Certification__c(
             Name = 'Platform Developer 1',
@@ -218,6 +228,7 @@ private class PortfolioControllerTest {
         System.assertEquals('LWC, Node.js', result[0].Tech_Stack__c);
         System.assertNotEquals(null, result[0].YouTube_URL__c);
         System.assertNotEquals(null, result[0].GitHub_URL__c);
+        System.assert(!result[0].Project_Images__r.isEmpty(), 'Should have project images');
     }
 
     @IsTest
