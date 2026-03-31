@@ -10,8 +10,15 @@
                 <a href="#">{fullName}</a>
             </div>
 
+            <!-- HAMBURGER BUTTON (mobile only) -->
+            <button class={hamburgerClass} onclick={toggleMenu} aria-label="Toggle navigation">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+
             <!-- NAV LINKS -->
-            <ul class="nav-links">
+            <ul class={navLinksClass}>
                 <li class="link">
                     <a class={homeClass} data-section="home" onclick={handleNavigation}>Home</a>
                 </li>

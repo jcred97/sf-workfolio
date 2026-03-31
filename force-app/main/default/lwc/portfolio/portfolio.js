@@ -33,6 +33,7 @@ export default class Portfolio extends LightningElement {
     ========================================================= */
     activeSection = SECTION.HOME;
     isTransitioning = false;
+    menuOpen = false;
     fullName = '';
     currentYear = new Date().getFullYear();
 
@@ -151,6 +152,14 @@ export default class Portfolio extends LightningElement {
         return `content ${this.isTransitioning ? 'fade-out' : ''}`;
     }
 
+    get navLinksClass() {
+        return `nav-links${this.menuOpen ? ' open' : ''}`;
+    }
+
+    get hamburgerClass() {
+        return `hamburger${this.menuOpen ? ' active' : ''}`;
+    }
+
     /* =========================================================
        EVENTS
     ========================================================= */
@@ -166,11 +175,16 @@ export default class Portfolio extends LightningElement {
     /* =========================================================
        NAVIGATION (SMOOTH TRANSITION)
     ========================================================= */
+    toggleMenu() {
+        this.menuOpen = !this.menuOpen;
+    }
+
     handleNavigation(event) {
         const section = event.target.dataset.section;
 
         if (!section || section === this.activeSection) return;
 
+        this.menuOpen = false;
         this.isTransitioning = true;
 
         setTimeout(() => {
