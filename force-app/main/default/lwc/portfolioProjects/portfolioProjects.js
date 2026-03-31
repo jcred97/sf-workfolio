@@ -53,29 +53,60 @@ export default class PortfolioProjects extends LightningElement {
        LIGHTBOX STATE
     ========================================================= */
     _lightboxOpen = false;
-    _lightboxUrl = '';
-    _lightboxCaption = '';
+    _lightboxImages = [];
+    _lightboxIndex = 0;
 
     get lightboxOpen() { return this._lightboxOpen; }
-    get lightboxUrl() { return this._lightboxUrl; }
-    get lightboxCaption() { return this._lightboxCaption; }
+    get lightboxUrl() { return this._lightboxImages.length ? this._lightboxImages[this._lightboxIndex].url : ''; }
+    get lightboxCaption() { return this._lightboxImages.length ? this._lightboxImages[this._lightboxIndex].caption : ''; }
+    get lightboxCounter() { return `${this._lightboxIndex + 1} / ${this._lightboxImages.length}`; }
+    get hasPrev() { return this._lightboxIndex > 0; }
+    get hasNext() { return this._lightboxIndex < this._lightboxImages.length - 1; }
+    get hasMultipleImages() { return this._lightboxImages.length > 1; }
+
+    _keyHandler = null;
 
     openLightbox(event) {
-        const url = event.currentTarget.dataset.url;
-        const caption = event.currentTarget.dataset.caption || '';
-        this._lightboxUrl = url;
-        this._lightboxCaption = caption;
+        const imageId = event.currentTarget.dataset.id;
+        const projectId = event.currentTarget.dataset.projectid;
+        const proj = this.projects.find(p => p.Id === projectId);
+        if (!proj) return;
+
+        this._lightboxImages = proj.images;
+        this._lightboxIndex = proj.images.findIndex(img => img.Id === imageId);
+        if (this._lightboxIndex < 0) this._lightboxIndex = 0;
         this._lightboxOpen = true;
+
+        this._keyHandler = (e) => {
+            if (e.key === 'ArrowLeft') this.prevImage();
+            else if (e.key === 'ArrowRight') this.nextImage();
+            else if (e.key === 'Escape') this.closeLightbox();
+        };
+        // eslint-disable-next-line @lwc/lwc/no-document-query
+        document.addEventListener('keydown', this._keyHandler);
     }
 
     closeLightbox() {
         this._lightboxOpen = false;
-        this._lightboxUrl = '';
-        this._lightboxCaption = '';
+        this._lightboxImages = [];
+        this._lightboxIndex = 0;
+
+        if (this._keyHandler) {
+            // eslint-disable-next-line @lwc/lwc/no-document-query
+            document.removeEventListener('keydown', this._keyHandler);
+            this._keyHandler = null;
+        }
+    }
+
+    prevImage() {
+        if (this.hasPrev) this._lightboxIndex--;
+    }
+
+    nextImage() {
+        if (this.hasNext) this._lightboxIndex++;
     }
 
     handleLightboxBackdrop(event) {
-        // Only close if clicking the backdrop itself, not the image
         if (event.target === event.currentTarget) {
             this.closeLightbox();
         }

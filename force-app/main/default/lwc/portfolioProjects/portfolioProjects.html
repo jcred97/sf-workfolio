@@ -42,7 +42,7 @@
                         <template if:true={proj.hasImages}>
                             <div class="image-gallery">
                                 <template for:each={proj.images} for:item="img">
-                                    <div key={img.Id} class="gallery-thumb" data-url={img.url} data-caption={img.caption} onclick={openLightbox}>
+                                    <div key={img.Id} class="gallery-thumb" data-id={img.Id} data-projectid={proj.Id} onclick={openLightbox}>
                                         <img src={img.url} alt={img.caption} loading="lazy">
                                     </div>
                                 </template>
@@ -94,12 +94,26 @@
     <template if:true={lightboxOpen}>
         <div class="lightbox-backdrop" onclick={handleLightboxBackdrop}>
             <button class="lightbox-close" onclick={closeLightbox}>&times;</button>
+
+            <!-- PREV ARROW -->
+            <template if:true={hasPrev}>
+                <button class="lightbox-arrow lightbox-prev" onclick={prevImage}>&#8249;</button>
+            </template>
+
             <div class="lightbox-content">
                 <img src={lightboxUrl} alt={lightboxCaption} class="lightbox-img">
                 <template if:true={lightboxCaption}>
                     <p class="lightbox-caption">{lightboxCaption}</p>
                 </template>
+                <template if:true={hasMultipleImages}>
+                    <p class="lightbox-counter">{lightboxCounter}</p>
+                </template>
             </div>
+
+            <!-- NEXT ARROW -->
+            <template if:true={hasNext}>
+                <button class="lightbox-arrow lightbox-next" onclick={nextImage}>&#8250;</button>
+            </template>
         </div>
     </template>
 

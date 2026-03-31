@@ -159,10 +159,57 @@
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
 }
 
+.lightbox-backdrop {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lightbox-arrow {
+    position: fixed;
+    top: 50vh;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 2.5rem;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, border-color 0.2s ease;
+    z-index: 10000;
+    line-height: 1;
+    padding: 0;
+}
+
+.lightbox-arrow:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.lightbox-prev {
+    left: 1.5rem;
+}
+
+.lightbox-next {
+    right: 1.5rem;
+}
+
 .lightbox-caption {
     color: rgba(255, 255, 255, 0.8);
     font-size: 0.85rem;
     margin-top: 12px;
+    text-align: center;
+}
+
+.lightbox-counter {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.75rem;
+    margin-top: 6px;
     text-align: center;
 }
 
