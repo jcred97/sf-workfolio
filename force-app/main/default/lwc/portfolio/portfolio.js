@@ -60,7 +60,7 @@ export default class Portfolio extends LightningElement {
        on subsequent renders.
     ========================================================= */
     renderedCallback() {
-        if (!this._themeApplied) {
+        if (!this._themeApplied && this.recordId) {
             this._themeApplied = true;
             this.loadSettings();
         }
@@ -68,7 +68,7 @@ export default class Portfolio extends LightningElement {
 
     async loadSettings() {
         try {
-            const data = await getPortfolioSettings();
+            const data = await getPortfolioSettings({ portfolioId: this.recordId });
 
             if (data) {
                 this.applyTheme(data);

@@ -247,7 +247,7 @@
 }
 
 .skill-tag {
-    background: rgba(29, 78, 216, 0.15);
+    background: color-mix(in srgb, var(--primary-color) 15%, transparent);
     color: var(--accent-color);
     padding: 4px 10px;
     border-radius: 999px;
@@ -291,17 +291,17 @@
 .project-link:hover {
     color: var(--text-primary);
     border-color: var(--primary-color);
-    background: rgba(59, 130, 246, 0.1);
+    background: color-mix(in srgb, var(--primary-color) 10%, transparent);
     transform: translateY(-1px);
 }
 
 .project-link.live {
     color: var(--accent-color);
-    border-color: rgba(59, 130, 246, 0.3);
+    border-color: color-mix(in srgb, var(--primary-color) 30%, transparent);
 }
 
 .project-link.live:hover {
-    background: rgba(59, 130, 246, 0.15);
+    background: color-mix(in srgb, var(--primary-color) 15%, transparent);
     color: #fff;
 }
 

@@ -105,7 +105,7 @@
 }
 
 .skill-tag {
-    background: rgba(29, 78, 216, 0.15);
+    background: color-mix(in srgb, var(--primary-color) 15%, transparent);
     color: var(--accent-color);
     padding: 6px 12px;
     border-radius: 999px;

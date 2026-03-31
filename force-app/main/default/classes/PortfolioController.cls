@@ -55,27 +55,34 @@ public with sharing class PortfolioController {
     }
 
     @AuraEnabled(cacheable=true)
-    public static Portfolio_Setting__c getPortfolioSettings() {
-        return [
-            SELECT
-                Primary_Color__c,
-                Secondary_Color__c,
-                Accent_Color__c,
-                Background_Color__c,
-                Card_Background__c,
-                Border_Color__c,
-                Primary_Text_Color__c,
-                Secondary_Text_Color__c,
-                Muted_Text_Color__c,
-                Button_Gradient_Start__c,
-                Button_Gradient_End__c,
-                Button_Text_Color__c,
-                Card_Border_Radius__c,
-                Card_Shadow__c,
-                Hover_Border_Color__c
-            FROM Portfolio_Setting__c
+    public static Portfolio_Setting__c getPortfolioSettings(Id portfolioId) {
+        List<Portfolio__c> portfolios = [
+            SELECT Portfolio_Setting__r.Primary_Color__c,
+                   Portfolio_Setting__r.Secondary_Color__c,
+                   Portfolio_Setting__r.Accent_Color__c,
+                   Portfolio_Setting__r.Background_Color__c,
+                   Portfolio_Setting__r.Card_Background__c,
+                   Portfolio_Setting__r.Border_Color__c,
+                   Portfolio_Setting__r.Primary_Text_Color__c,
+                   Portfolio_Setting__r.Secondary_Text_Color__c,
+                   Portfolio_Setting__r.Muted_Text_Color__c,
+                   Portfolio_Setting__r.Button_Gradient_Start__c,
+                   Portfolio_Setting__r.Button_Gradient_End__c,
+                   Portfolio_Setting__r.Button_Text_Color__c,
+                   Portfolio_Setting__r.Card_Border_Radius__c,
+                   Portfolio_Setting__r.Card_Shadow__c,
+                   Portfolio_Setting__r.Hover_Border_Color__c
+            FROM Portfolio__c
+            WHERE Id = :portfolioId
+            AND Portfolio_Setting__c != null
             LIMIT 1
         ];
+
+        if (portfolios.isEmpty()) {
+            return null;
+        }
+
+        return portfolios[0].Portfolio_Setting__r;
     }
 
     @AuraEnabled(cacheable=true)

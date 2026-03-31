@@ -87,7 +87,7 @@ private class PortfolioControllerTest {
         );
         insert cert;
 
-        // Create Portfolio Settings
+        // Create Portfolio Settings and link to portfolio
         Portfolio_Setting__c setting = new Portfolio_Setting__c(
             Primary_Color__c = '#000000',
             Background_Color__c = '#FFFFFF',
@@ -98,6 +98,9 @@ private class PortfolioControllerTest {
             Muted_Text_Color__c = '#999999'
         );
         insert setting;
+
+        portfolio.Portfolio_Setting__c = setting.Id;
+        update portfolio;
     }
 
     @IsTest
@@ -147,8 +150,10 @@ private class PortfolioControllerTest {
 
     @IsTest
     static void testGetPortfolioSettings() {
+        Portfolio__c portfolio = [SELECT Id FROM Portfolio__c LIMIT 1];
+
         Test.startTest();
-        Portfolio_Setting__c setting = PortfolioController.getPortfolioSettings();
+        Portfolio_Setting__c setting = PortfolioController.getPortfolioSettings(portfolio.Id);
         Test.stopTest();
 
         System.assertNotEquals(null, setting);

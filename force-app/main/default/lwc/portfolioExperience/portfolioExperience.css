@@ -97,7 +97,7 @@
 
 .exp-item.active {
     opacity: 1;
-    background: rgba(29, 78, 216, 0.15);
+    background: color-mix(in srgb, var(--primary-color) 15%, transparent);
 }
 
 .exp-item.active::before {
@@ -199,13 +199,13 @@
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    background: rgba(34, 197, 94, 0.12);
-    color: #22c55e;
+    background: color-mix(in srgb, var(--primary-color) 12%, transparent);
+    color: var(--primary-color);
     font-size: 0.65rem;
     font-weight: 600;
     padding: 2px 8px;
     border-radius: 999px;
-    border: 1px solid rgba(34, 197, 94, 0.3);
+    border: 1px solid color-mix(in srgb, var(--primary-color) 30%, transparent);
     letter-spacing: 0.5px;
     text-transform: uppercase;
     flex-shrink: 0;
@@ -254,7 +254,7 @@
 }
 
 .skill-tag {
-    background: rgba(29, 78, 216, 0.15);
+    background: color-mix(in srgb, var(--primary-color) 15%, transparent);
     color: var(--accent-color);
     padding: 5px 10px;
     border-radius: 999px;
@@ -349,7 +349,7 @@
 }
 
 .toggle {
-    color: #60a5fa;
+    color: var(--accent-color);
     font-size: 18px;
     flex-shrink: 0;
     margin-left: 12px;

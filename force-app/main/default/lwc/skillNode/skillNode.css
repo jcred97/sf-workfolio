@@ -3,7 +3,7 @@
     position: relative;
 }
 
-/* 🔥 MAIN VERTICAL LINE */
+/* MAIN VERTICAL LINE */
 .node::before {
     content: '';
     position: absolute;
@@ -11,7 +11,7 @@
     top: 10px;
     bottom: 0;
     width: 1px;
-    background: rgba(96, 165, 250, 0.2);
+    background: color-mix(in srgb, var(--accent-color) 20%, transparent);
 }
 
 /* HEADER */
@@ -30,7 +30,7 @@
     position: relative;
 }
 
-/* 🔥 DOT */
+/* DOT */
 .node-header::before {
     content: '';
     position: absolute;
@@ -40,13 +40,13 @@
 
     width: 6px;
     height: 6px;
-    background: #60a5fa;
+    background: var(--accent-color);
     border-radius: 50%;
 
-    box-shadow: 0 0 6px rgba(96, 165, 250, 0.6);
+    box-shadow: 0 0 6px color-mix(in srgb, var(--accent-color) 60%, transparent);
 }
 
-/* 🔥 CONNECTOR */
+/* CONNECTOR */
 .node-header::after {
     content: '';
     position: absolute;
@@ -56,7 +56,7 @@
 
     width: 10px;
     height: 1px;
-    background: rgba(96, 165, 250, 0.3);
+    background: color-mix(in srgb, var(--accent-color) 30%, transparent);
 }
 
 /* LABEL (prevents layout shift) */
@@ -71,7 +71,7 @@
 
 .node-header:hover .node-label {
     transform: translateX(4px);
-    text-shadow: 0 0 6px rgba(96, 165, 250, 0.6);
+    text-shadow: 0 0 6px color-mix(in srgb, var(--accent-color) 60%, transparent);
 }
 
 /* CHILDREN */
@@ -96,8 +96,8 @@
 
 /* TAG */
 .skill-tag {
-    background: rgba(29, 78, 216, 0.15);
-    color: #60a5fa;
+    background: color-mix(in srgb, var(--primary-color) 15%, transparent);
+    color: var(--accent-color);
 
     padding: 6px 12px;
     border-radius: 999px;
@@ -105,17 +105,17 @@
     font-size: 12px;
     font-weight: 500;
 
-    border: 1px solid rgba(29, 78, 216, 0.3);
+    border: 1px solid color-mix(in srgb, var(--primary-color) 30%, transparent);
 
     transition: all 0.2s ease;
     cursor: pointer;
 }
 
 .skill-tag:hover {
-    background: #1d4ed8;
+    background: var(--secondary-color);
     color: #fff;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(29, 78, 216, 0.4);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--primary-color) 40%, transparent);
 }
 
 /* TOGGLE */
@@ -139,7 +139,7 @@
     }
 }
 
-/* 📱 MOBILE OPTIMIZATION */
+/* MOBILE OPTIMIZATION */
 @media (max-width: 600px) {
 
     .node-header {
