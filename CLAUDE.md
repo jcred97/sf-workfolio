@@ -27,8 +27,8 @@ manifest/
 
 ## Data Model
 
-- **Portfolio__c** — root record (profile info, social links, career start date)
-- **Portfolio_Setting__c** — theme/color configuration (CSS custom properties)
+- **Portfolio__c** — root record (profile info, social links, career start date); has Lookup to Portfolio_Setting__c for theme switching
+- **Portfolio_Setting__c** — theme/color configuration (15 CSS custom property fields: Primary_Color__c, Secondary_Color__c, Accent_Color__c, Background_Color__c, Card_Background__c, Border_Color__c, Hover_Border__c, Primary_Text_Color__c, Secondary_Text_Color__c, Muted_Text_Color__c, Card_Shadow__c, Card_Radius__c, Section_Spacing__c, Font_Heading__c, Font_Body__c); multiple records can exist, swap theme by changing Portfolio__c.Portfolio_Setting__c lookup
 - **WorkExperience__c** → **Project__c** → **Experience_Bullet__c** (3-level hierarchy)
 - **Skill__c** — self-referential hierarchy via Parent_Skill__c; Is_Full_Width__c controls card width
 - **Certification__c** — data-driven certifications (Image_URL__c, Display_Order__c)
@@ -40,13 +40,16 @@ manifest/
 ### LWC
 - All data fetched via `@wire` adapters calling `@AuraEnabled(cacheable=true)` Apex methods
 - Error states: `hasError`/`errorMessage` pattern across all components
-- Theme applied via `template.host.style.setProperty()` CSS custom properties
+- Theme applied via `template.host.style.setProperty()` CSS custom properties; loaded from Portfolio_Setting__c via Portfolio__c lookup using `getPortfolioSettings(portfolioId)`
+- All LWC CSS uses `color-mix(in srgb, var(--primary-color) X%, transparent)` for theme-aware opacity colors — no hardcoded color values except `:host` fallback defaults in portfolio.css
+- Image gallery: compact thumbnail strip (64x48px) with full lightbox overlay (prev/next arrows, keyboard navigation, image counter)
+- Hamburger menu for mobile navigation (slide-in drawer from right)
 - YouTube URL parsing supports watch, shortened, and embed formats
 - Iframes use `allow="fullscreen"` (bare `allowfullscreen` attribute doesn't work in LWC)
 - `aria-live="polite"` for accessibility on dynamic content panels
 
 ### Apex
-- PortfolioController: all methods take `portfolioId` parameter, return cached queries
+- PortfolioController: all methods take `portfolioId` parameter, return cached queries; `getPortfolioSettings` queries through Portfolio__c → Portfolio_Setting__r relationship; `getPersonalProjects` includes Project_Images__r subquery
 - PortfolioLeadEmailAction: invocable method with emailType ('create', 'update', 'follow_up'), config from Notification_Config__mdt, OrgWideEmailAddress resolution, setSaveAsActivity(true)
 - Test classes use @TestSetup for shared data; PortfolioLeadEmailAction has test seams (TEST_SKIP_SET_OWEA, TEST_FORCE_PREP_EXCEPTION, etc.)
 
@@ -80,3 +83,6 @@ npm run prettier
 - SharingRules section in package.xml should only list objects that have actual sharing rule metadata files; otherwise deployment fails
 - Lead fields are on the standard Lead object — no custom object needed
 - Guest users access portfolio data through the Experience Cloud site with the guest permission set
+- CSP Trusted Sites: Imgur and Imgur_Images (i.imgur.com) for external project images — deployable via cspTrustedSites metadata
+- Master-Detail relationships (e.g., Project_Image__c → Personal_Project__c) use ControlledByParent sharing and do not need FLS in permission sets or SharingRules entries
+- `renderedCallback` timing: `recordId` may not be available on first render — guard with `&& this.recordId` before calling Apex
