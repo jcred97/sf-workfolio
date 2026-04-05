@@ -22,8 +22,11 @@ export default class PortfolioProjects extends LightningElement {
                     caption: img.Caption__c || img.Name,
                     isActive: false
                 }));
-                // Set first image as active for lightbox default
-                if (images.length) images[0].isActive = true;
+
+                const THUMB_LIMIT = 6;
+                const visibleImages = images.slice(0, THUMB_LIMIT);
+                const extraCount = images.length > THUMB_LIMIT ? images.length - THUMB_LIMIT : 0;
+                const firstExtraId = extraCount > 0 ? images[THUMB_LIMIT].Id : null;
 
                 return {
                     Id: proj.Id,
@@ -38,6 +41,10 @@ export default class PortfolioProjects extends LightningElement {
                     hasLive: !!proj.Live_URL__c,
                     hasLinks: !!proj.GitHub_URL__c || !!proj.Live_URL__c,
                     images,
+                    visibleImages,
+                    extraCount,
+                    firstExtraId,
+                    hasExtra: extraCount > 0,
                     hasImages: images.length > 0
                 };
             });

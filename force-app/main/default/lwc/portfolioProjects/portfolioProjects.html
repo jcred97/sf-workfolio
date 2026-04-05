@@ -41,9 +41,14 @@
                         <!-- IMAGE GALLERY (thumbnails below video) -->
                         <template if:true={proj.hasImages}>
                             <div class="image-gallery">
-                                <template for:each={proj.images} for:item="img">
+                                <template for:each={proj.visibleImages} for:item="img">
                                     <div key={img.Id} class="gallery-thumb" data-id={img.Id} data-projectid={proj.Id} onclick={openLightbox}>
                                         <img src={img.url} alt={img.caption} loading="lazy">
+                                    </div>
+                                </template>
+                                <template if:true={proj.hasExtra}>
+                                    <div class="gallery-thumb gallery-more" data-id={proj.firstExtraId} data-projectid={proj.Id} onclick={openLightbox}>
+                                        +{proj.extraCount}
                                     </div>
                                 </template>
                             </div>
