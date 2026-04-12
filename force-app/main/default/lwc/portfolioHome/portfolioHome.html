@@ -9,8 +9,39 @@
         </div>
     </template>
 
+    <!-- LOADING SKELETON -->
+    <template if:true={isLoading}>
+        <div class="skel-container">
+            <div class="skel-col">
+                <div class="skel-profile-header">
+                    <div class="skel skel-avatar"></div>
+                    <div class="skel-profile-text">
+                        <div class="skel skel-name"></div>
+                        <div class="skel skel-role"></div>
+                    </div>
+                </div>
+                <div class="skel skel-line"></div>
+                <div class="skel skel-line skel-line-short"></div>
+                <div class="skel-cta-row">
+                    <div class="skel skel-btn"></div>
+                    <div class="skel skel-btn"></div>
+                </div>
+            </div>
+            <div class="skel-col skel-certs-col">
+                <div class="skel skel-cert-title"></div>
+                <div class="skel-cert-grid">
+                    <div class="skel skel-cert"></div>
+                    <div class="skel skel-cert"></div>
+                    <div class="skel skel-cert"></div>
+                    <div class="skel skel-cert"></div>
+                    <div class="skel skel-cert"></div>
+                </div>
+            </div>
+        </div>
+    </template>
+
     <!-- CONTENT -->
-    <template if:false={hasError}>
+    <template if:true={showContent}>
         <div class="container">
             <div class="content">
                 <!-- PROFILE HEADER -->

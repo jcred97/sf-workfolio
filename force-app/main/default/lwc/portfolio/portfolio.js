@@ -16,6 +16,10 @@ const SECTION = {
 };
 
 const TRANSITION_DURATION = 250;
+const BACKGROUND_PRELOAD_DELAY = {
+    EXPERIENCE: 600,
+    SKILLS: 1000
+};
 
 /* =========================================================
    COMPONENT
@@ -42,6 +46,7 @@ export default class Portfolio extends LightningElement {
 
     // Guard - ensures theme is only loaded once, after template is ready
     _themeApplied = false;
+    _backgroundPreloadScheduled = false;
 
     /* =========================================================
        ASSETS
@@ -62,10 +67,14 @@ export default class Portfolio extends LightningElement {
        on subsequent renders.
     ========================================================= */
     renderedCallback() {
-        if (!this._themeApplied && this.recordId) {
+        if (!this.recordId) return;
+
+        if (!this._themeApplied) {
             this._themeApplied = true;
             this.loadSettings();
         }
+
+        this.scheduleBackgroundPreload();
     }
 
     async loadSettings() {
@@ -166,6 +175,24 @@ export default class Portfolio extends LightningElement {
         if (section === SECTION.EXPERIENCE) this.hasLoadedExperience = true;
         if (section === SECTION.PROJECTS) this.hasLoadedProjects = true;
         if (section === SECTION.SKILLS) this.hasLoadedSkills = true;
+    }
+
+    scheduleBackgroundPreload() {
+        if (this._backgroundPreloadScheduled) return;
+
+        this._backgroundPreloadScheduled = true;
+
+        // Warm up data-only sections after the initial Home paint.
+        // Projects stays lazy because it can include images and YouTube iframes.
+        // eslint-disable-next-line @lwc/lwc/no-async-operation
+        setTimeout(() => {
+            this.hasLoadedExperience = true;
+        }, BACKGROUND_PRELOAD_DELAY.EXPERIENCE);
+
+        // eslint-disable-next-line @lwc/lwc/no-async-operation
+        setTimeout(() => {
+            this.hasLoadedSkills = true;
+        }, BACKGROUND_PRELOAD_DELAY.SKILLS);
     }
 
     getSectionClass(section) {

@@ -1,4 +1,57 @@
 /* =====================================
+   SKELETON LOADING
+===================================== */
+.skel-container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 2rem;
+}
+
+.skel {
+    background: linear-gradient(
+        90deg,
+        var(--card-bg-color) 25%,
+        color-mix(in srgb, var(--primary-color) 10%, var(--card-bg-color)) 50%,
+        var(--card-bg-color) 75%
+    );
+    background-size: 200% 100%;
+    border-radius: var(--card-radius);
+    animation: skel-shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes skel-shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.skel-proj-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+.skel-proj-card {
+    height: 380px;
+    border: 1px solid var(--border);
+}
+
+@media (max-width: 900px) {
+    .skel-proj-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .skel {
+        animation: none;
+    }
+}
+
+/* =====================================
    CONTAINER
 ===================================== */
 .container {

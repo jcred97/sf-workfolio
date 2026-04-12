@@ -8,11 +8,20 @@ export default class PortfolioSkills extends LightningElement {
     /* =========================================================
        WIRE
     ========================================================= */
+    isLoading = true;
     hasError = false;
     errorMessage = '';
 
+    get showContent() {
+        return !this.isLoading && !this.hasError;
+    }
+
     @wire(getSkills, { portfolioId: '$recordId' })
     wiredSkills({ data, error }) {
+        if (!this.recordId || (data === undefined && !error)) return;
+
+        this.isLoading = false;
+
         if (data) {
             this.hasError = false;
             this.errorMessage = '';

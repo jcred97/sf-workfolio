@@ -9,8 +9,18 @@
         </div>
     </template>
 
+    <!-- LOADING SKELETON -->
+    <template if:true={isLoading}>
+        <div class="skel-container">
+            <div class="skel-proj-grid">
+                <div class="skel skel-proj-card"></div>
+                <div class="skel skel-proj-card"></div>
+            </div>
+        </div>
+    </template>
+
     <!-- CONTENT -->
-    <template if:false={hasError}>
+    <template if:true={showContent}>
         <div class="container">
             <!-- EMPTY STATE -->
             <template if:false={hasProjects}>

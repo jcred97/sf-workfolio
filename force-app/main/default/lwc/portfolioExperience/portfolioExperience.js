@@ -4,6 +4,7 @@ import getWorkExperiences from '@salesforce/apex/PortfolioController.getWorkExpe
 export default class PortfolioExperience extends LightningElement {
     @api recordId;
     workExperienceList = [];
+    isLoading = true;
     hasError = false;
     errorMessage = '';
     _activeId = null;
@@ -11,8 +12,16 @@ export default class PortfolioExperience extends LightningElement {
     /* =====================================
        WIRE - WORK EXPERIENCE
     ===================================== */
+    get showContent() {
+        return !this.isLoading && !this.hasError;
+    }
+
     @wire(getWorkExperiences, { portfolioId: '$recordId' })
     workExperienceHandler({ data, error }) {
+        if (!this.recordId || (data === undefined && !error)) return;
+
+        this.isLoading = false;
+
         if (data) {
             this.hasError = false;
             this.errorMessage = '';

@@ -343,6 +343,94 @@
 }
 
 /* =====================================
+   SKELETON LOADING
+===================================== */
+.skel-container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 32px;
+}
+
+.skel {
+    background: linear-gradient(
+        90deg,
+        var(--card-bg-color) 25%,
+        color-mix(in srgb, var(--primary-color) 10%, var(--card-bg-color)) 50%,
+        var(--card-bg-color) 75%
+    );
+    background-size: 200% 100%;
+    border-radius: 6px;
+    animation: skel-shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes skel-shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.skel-exp-left {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-left: 20px;
+}
+
+.skel-exp-item {
+    height: 72px;
+    border-radius: 10px;
+}
+
+.skel-exp-right {
+    padding: 22px;
+    background: var(--card-bg-color);
+    border-radius: var(--card-radius);
+    border: 1px solid var(--border);
+}
+
+.skel-line {
+    height: 14px;
+    margin-bottom: 12px;
+    border-radius: 4px;
+}
+
+.skel-line-lg {
+    height: 22px;
+    margin-bottom: 16px;
+}
+
+.skel-line-med {
+    width: 75%;
+}
+
+.skel-line-short {
+    width: 55%;
+}
+
+@media (max-width: 767px) {
+    .skel-container {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+    }
+
+    .skel-exp-right {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .skel {
+        animation: none;
+    }
+}
+
+/* =====================================
    ERROR STATE
 ===================================== */
 .error-container {

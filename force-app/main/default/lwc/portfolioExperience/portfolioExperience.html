@@ -9,8 +9,28 @@
         </div>
     </template>
 
+    <!-- LOADING SKELETON -->
+    <template if:true={isLoading}>
+        <div class="skel-container">
+            <div class="skel-exp-left">
+                <div class="skel skel-exp-item"></div>
+                <div class="skel skel-exp-item"></div>
+                <div class="skel skel-exp-item"></div>
+                <div class="skel skel-exp-item"></div>
+            </div>
+            <div class="skel-exp-right">
+                <div class="skel skel-line skel-line-lg"></div>
+                <div class="skel skel-line"></div>
+                <div class="skel skel-line skel-line-short"></div>
+                <div class="skel skel-line"></div>
+                <div class="skel skel-line skel-line-med"></div>
+                <div class="skel skel-line skel-line-short"></div>
+            </div>
+        </div>
+    </template>
+
     <!-- CONTENT -->
-    <template if:false={hasError}>
+    <template if:true={showContent}>
         <div class="experience-container">
             <!-- =========================
              DESKTOP: LEFT (TIMELINE)

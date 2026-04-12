@@ -4,14 +4,23 @@ import getPersonalProjects from '@salesforce/apex/PortfolioController.getPersona
 export default class PortfolioProjects extends LightningElement {
     @api recordId;
     projects = [];
+    isLoading = true;
     hasError = false;
     errorMessage = '';
 
     /* =========================================================
        WIRE
     ========================================================= */
+    get showContent() {
+        return !this.isLoading && !this.hasError;
+    }
+
     @wire(getPersonalProjects, { portfolioId: '$recordId' })
     wiredProjects({ data, error }) {
+        if (!this.recordId || (data === undefined && !error)) return;
+
+        this.isLoading = false;
+
         if (data) {
             this.hasError = false;
             this.errorMessage = '';

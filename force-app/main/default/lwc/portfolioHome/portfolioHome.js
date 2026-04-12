@@ -15,14 +15,28 @@ export default class PortfolioHome extends LightningElement {
     portfolioData = {};
     certifications = [];
     _lastSentName = '';
+    isProfileLoading = true;
+    isCertificationsLoading = true;
     hasError = false;
     errorMessage = '';
 
     /* =========================================================
        WIRE - Portfolio record
     ========================================================= */
+    get isLoading() {
+        return this.isProfileLoading || this.isCertificationsLoading;
+    }
+
+    get showContent() {
+        return !this.isLoading && !this.hasError;
+    }
+
     @wire(getPortfolio, { portfolioId: '$recordId' })
     wiredPortfolio({ data, error }) {
+        if (!this.recordId || (data === undefined && !error)) return;
+
+        this.isProfileLoading = false;
+
         if (data) {
             this.portfolioData = data;
             this.hasError = false;
@@ -51,6 +65,10 @@ export default class PortfolioHome extends LightningElement {
     ========================================================= */
     @wire(getCertifications, { portfolioId: '$recordId' })
     wiredCertifications({ data, error }) {
+        if (!this.recordId || (data === undefined && !error)) return;
+
+        this.isCertificationsLoading = false;
+
         if (data) {
             this.certifications = data.map((cert) => ({
                 Id: cert.Id,

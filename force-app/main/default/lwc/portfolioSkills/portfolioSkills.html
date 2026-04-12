@@ -9,8 +9,18 @@
         </div>
     </template>
 
+    <!-- LOADING SKELETON -->
+    <template if:true={isLoading}>
+        <div class="skel-container">
+            <div class="skel skel-skill-card"></div>
+            <div class="skel skel-skill-card"></div>
+            <div class="skel skel-skill-card"></div>
+            <div class="skel skel-skill-card"></div>
+        </div>
+    </template>
+
     <!-- CONTENT -->
-    <template if:false={hasError}>
+    <template if:true={showContent}>
         <div class="container">
             <template for:each={treeData} for:item="category">
                 <div key={category.Id} class={category.cssClass}>

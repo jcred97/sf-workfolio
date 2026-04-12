@@ -257,6 +257,132 @@ a {
 }
 
 /* =========================================================
+   SKELETON LOADING
+========================================================= */
+.skel-container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 3rem 2rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    gap: 2rem;
+}
+
+.skel {
+    background: linear-gradient(
+        90deg,
+        var(--card-bg-color) 25%,
+        color-mix(in srgb, var(--primary-color) 10%, var(--card-bg-color)) 50%,
+        var(--card-bg-color) 75%
+    );
+    background-size: 200% 100%;
+    border-radius: 6px;
+    animation: skel-shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes skel-shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.skel-profile-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.skel-avatar {
+    width: 132px;
+    height: 132px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.skel-profile-text {
+    flex: 1;
+}
+
+.skel-name {
+    height: 44px;
+    margin-bottom: 10px;
+}
+
+.skel-role {
+    height: 24px;
+    width: 60%;
+}
+
+.skel-line {
+    height: 14px;
+    margin-bottom: 12px;
+    border-radius: 4px;
+}
+
+.skel-line-short {
+    width: 65%;
+}
+
+.skel-cta-row {
+    display: flex;
+    gap: 0.8rem;
+    margin-top: 1rem;
+}
+
+.skel-btn {
+    height: 38px;
+    width: 120px;
+    border-radius: 999px;
+}
+
+.skel-certs-col {
+    display: grid;
+    justify-items: center;
+    gap: 1.2rem;
+}
+
+.skel-cert-title {
+    height: 14px;
+    width: 100px;
+}
+
+.skel-cert-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 96px);
+    gap: 18px 22px;
+    justify-content: center;
+}
+
+.skel-cert {
+    width: 86px;
+    height: 86px;
+    border-radius: 50%;
+}
+
+@media (max-width: 768px) {
+    .skel-container {
+        grid-template-columns: 1fr;
+        padding: 2rem 1.2rem;
+    }
+
+    .skel-avatar {
+        width: 96px;
+        height: 96px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .skel {
+        animation: none;
+    }
+}
+
+/* =========================================================
    ERROR STATE
 ========================================================= */
 .error-container {
