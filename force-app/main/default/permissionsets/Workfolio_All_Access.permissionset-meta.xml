@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
     <classAccesses>
         <apexClass>PortfolioController</apexClass>
@@ -18,7 +18,17 @@
     </classAccesses>
     <fieldPermissions>
         <editable>true</editable>
+        <field>Certification__c.Source_Key__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>Certification__c.Display_Order__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Experience_Bullet__c.Source_Key__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -34,6 +44,11 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Personal_Project__c.Description__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Personal_Project__c.Source_Key__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -69,6 +84,11 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Project_Image__c.Caption__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Project_Image__c.Source_Key__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -198,6 +218,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>Portfolio_Setting__c.Source_Key__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>Portfolio_Setting__c.Background_Color__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -273,6 +298,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>Portfolio__c.Source_Key__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>Portfolio__c.Career_Start_Date__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -328,6 +358,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>Project__c.Source_Key__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>Project__c.Display_Order__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -353,6 +388,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>Skill__c.Source_Key__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>Skill__c.Parent_Skill__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -369,6 +409,11 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>WorkExperience__c.CompanyName__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>WorkExperience__c.Source_Key__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
