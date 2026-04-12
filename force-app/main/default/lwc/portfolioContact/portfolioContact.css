@@ -429,16 +429,17 @@ a {
 }
 
 .social-links {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0.75rem;
-    flex-wrap: wrap;
 }
 
 .social-pill {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0.8rem;
     border-radius: 999px;
     border: 1px solid var(--border);
     background: rgba(255, 255, 255, 0.03);
@@ -593,6 +594,9 @@ a {
 
     .social-pill {
         justify-content: center;
-        flex: 1 1 100%;
+    }
+
+    .social-links {
+        grid-template-columns: 1fr;
     }
 }
