@@ -54,6 +54,7 @@
         <members>Experience_Bullet__c</members>
         <members>Job_Application__c</members>
         <members>Lead_Submission__e</members>
+        <members>Notification_Config__mdt</members>
         <members>Personal_Project__c</members>
         <members>Project_Image__c</members>
         <members>Project__c</members>
@@ -72,6 +73,7 @@
     </types>
     <types>
         <members>Job_Application_Record_Page</members>
+        <members>Portfolio_and_Application_Tracker_UtilityBar</members>
         <name>FlexiPage</name>
     </types>
     <types>
@@ -109,18 +111,6 @@
     <types>
         <members>Portfolio_Leads</members>
         <name>Queue</name>
-    </types>
-    <types>
-        <members>Certification__c</members>
-        <members>Experience_Bullet__c</members>
-        <members>Lead</members>
-        <members>Personal_Project__c</members>
-        <members>Portfolio__c</members>
-        <members>Portfolio_Setting__c</members>
-        <members>Project__c</members>
-        <members>Skill__c</members>
-        <members>WorkExperience__c</members>
-        <name>SharingRules</name>
     </types>
     <types>
         <members>PortfolioAssets</members>

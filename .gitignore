@@ -8,6 +8,9 @@
 .localdevserver/
 deploy-options.json
 
+# Local data migration helpers
+scripts/import-portfolio-seed.ps1
+
 # Claude Code
 .claude/
 
