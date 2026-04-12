@@ -20,18 +20,25 @@ export default class PortfolioSkills extends LightningElement {
             const tree = this.buildTree(data);
             this.treeData = this.initializeTree(tree);
 
-            // Set initial open heights — no animation on first load, just snap open
+            // Set initial open heights - no animation on first load, just snap open
+            // eslint-disable-next-line @lwc/lwc/no-async-operation
             requestAnimationFrame(() => {
+                // eslint-disable-next-line @lwc/lwc/no-async-operation
                 requestAnimationFrame(() => {
-                    this.template.querySelectorAll('.card-body.open').forEach(el => {
-                        el.style.height   = 'auto';
-                        el.style.overflow = 'visible';
-                    });
+                    this.template
+                        .querySelectorAll('.card-body.open')
+                        .forEach((el) => {
+                            el.style.height = 'auto';
+                            el.style.overflow = 'visible';
+                        });
                 });
             });
         } else if (error) {
             this.hasError = true;
-            this.errorMessage = error?.body?.message || error?.message || 'Unable to load skills. Please try again later.';
+            this.errorMessage =
+                error?.body?.message ||
+                error?.message ||
+                'Unable to load skills. Please try again later.';
             this.treeData = [];
             console.error(error);
         }
@@ -49,23 +56,25 @@ export default class PortfolioSkills extends LightningElement {
         const id = event?.currentTarget?.dataset?.id;
         if (!id) return;
 
-        this.treeData = this.treeData.map(item => {
+        this.treeData = this.treeData.map((item) => {
             const isOpen = item.Id === id ? !item.isOpen : item.isOpen;
 
             return {
                 ...item,
                 isOpen,
-                icon: isOpen ? '−' : '+',
+                icon: isOpen ? '-' : '+',
                 bodyClass: isOpen ? 'card-body open' : 'card-body',
-                cssClass: item.Is_Full_Width__c && isOpen
-                    ? 'skill-card full-width'
-                    : 'skill-card'
+                cssClass:
+                    item.Is_Full_Width__c && isOpen
+                        ? 'skill-card full-width'
+                        : 'skill-card'
             };
         });
 
         // Run scrollHeight animation after LWC re-renders
+        // eslint-disable-next-line @lwc/lwc/no-async-operation
         requestAnimationFrame(() => {
-            this.animateCards();
+            this.animateCards([id]);
         });
     }
 
@@ -77,29 +86,42 @@ export default class PortfolioSkills extends LightningElement {
        - overflow stays hidden throughout; only flips to visible
          after transitionend so content never bleeds during expand
     ========================================================= */
-    animateCards() {
-        this.template.querySelectorAll('.card-body').forEach(el => {
+    animateCards(ids) {
+        const cards = ids?.length
+            ? ids
+                  .map((id) =>
+                      this.template.querySelector(`.card-body[data-id="${id}"]`)
+                  )
+                  .filter(Boolean)
+            : this.template.querySelectorAll('.card-body');
+
+        cards.forEach((el) => {
             // Remove any leftover transitionend listener before re-attaching
-            el._onTransitionEnd && el.removeEventListener('transitionend', el._onTransitionEnd);
+            if (el._onTransitionEnd) {
+                el.removeEventListener('transitionend', el._onTransitionEnd);
+            }
 
             if (el.classList.contains('open')) {
                 el.style.overflow = 'hidden';
-                el.style.height   = el.scrollHeight + 'px';
+                el.style.height = el.scrollHeight + 'px';
 
                 // Only unlock overflow once the expand animation is fully done
                 el._onTransitionEnd = () => {
                     el.style.overflow = 'visible';
-                    el.style.height   = 'auto';
-                    el.removeEventListener('transitionend', el._onTransitionEnd);
+                    el.style.height = 'auto';
+                    el.removeEventListener(
+                        'transitionend',
+                        el._onTransitionEnd
+                    );
                 };
                 el.addEventListener('transitionend', el._onTransitionEnd);
-
             } else {
                 // Lock overflow before collapsing so nothing bleeds during close
                 el.style.overflow = 'hidden';
                 // Pin to current pixel height so CSS has a from-value
-                el.style.height   = el.scrollHeight + 'px';
+                el.style.height = el.scrollHeight + 'px';
 
+                // eslint-disable-next-line @lwc/lwc/no-async-operation
                 requestAnimationFrame(() => {
                     el.style.height = '0px';
                 });
@@ -120,19 +142,22 @@ export default class PortfolioSkills extends LightningElement {
     }
 
     toggleNode(nodes, id) {
-        return nodes.map(node => {
+        return nodes.map((node) => {
             if (node.Id === id) {
                 const isOpen = !node.isOpen;
                 return {
                     ...node,
                     isOpen,
-                    icon    : isOpen ? '−' : '+',
+                    icon: isOpen ? '-' : '+',
                     bodyClass: isOpen ? 'card-body open' : 'card-body'
                 };
             }
 
             if (node.children && node.children.length > 0) {
-                return { ...node, children: this.toggleNode(node.children, id) };
+                return {
+                    ...node,
+                    children: this.toggleNode(node.children, id)
+                };
             }
 
             return node;
@@ -148,12 +173,12 @@ export default class PortfolioSkills extends LightningElement {
          using else-if so only one split strategy runs per node
     ========================================================= */
     initializeTree(nodes) {
-        return nodes.map(node => {
+        return nodes.map((node) => {
             let children = node.children
                 ? this.initializeTree(node.children)
                 : [];
 
-            // Bad data fix — only one branch runs per node
+            // Bad data fix - only one branch runs per node
             if (children.length === 1 && !children[0].children?.length) {
                 const raw = children[0].Name;
                 const originalId = children[0].Id;
@@ -178,23 +203,24 @@ export default class PortfolioSkills extends LightningElement {
                 }
             }
 
-            const isOpen       = true;
-            const hasChildren  = children.length > 0;
+            const isOpen = true;
+            const hasChildren = children.length > 0;
             const allChildrenAreLeaf = children.every(
-                child => !child.children || child.children.length === 0
+                (child) => !child.children || child.children.length === 0
             );
 
             return {
                 ...node,
                 isOpen,
-                icon: '−',
+                icon: '-',
                 children,
                 hasChildren,
                 allChildrenAreLeaf,
                 bodyClass: 'card-body open',
-                cssClass: node.Is_Full_Width__c && isOpen
-                    ? 'skill-card full-width'
-                    : 'skill-card'
+                cssClass:
+                    node.Is_Full_Width__c && isOpen
+                        ? 'skill-card full-width'
+                        : 'skill-card'
             };
         });
     }
@@ -204,16 +230,18 @@ export default class PortfolioSkills extends LightningElement {
        O(n) parent-child linking via Map
     ========================================================= */
     buildTree(data) {
-        const map   = new Map();
+        const map = new Map();
         const roots = [];
 
-        data.forEach(skill => {
+        data.forEach((skill) => {
             map.set(skill.Id, { ...skill, children: [] });
         });
 
-        data.forEach(skill => {
+        data.forEach((skill) => {
             if (skill.Parent_Skill__c) {
-                map.get(skill.Parent_Skill__c)?.children.push(map.get(skill.Id));
+                map.get(skill.Parent_Skill__c)?.children.push(
+                    map.get(skill.Id)
+                );
             } else {
                 roots.push(map.get(skill.Id));
             }

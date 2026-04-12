@@ -1,11 +1,15 @@
 /* =========================================================
    RESET
 ========================================================= */
-* { box-sizing: border-box; }
-a { text-decoration: none; }
+* {
+    box-sizing: border-box;
+}
+a {
+    text-decoration: none;
+}
 
 /* =========================================================
-   ROOT LAYOUT — Asymmetric 3:2 split
+   ROOT LAYOUT - Asymmetric 3:2 split
 ========================================================= */
 .container {
     max-width: 1100px;
@@ -24,11 +28,13 @@ a { text-decoration: none; }
 .content-contact {
     border-radius: 20px;
     padding: 2.5rem;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    transition:
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
 }
 
 /* =========================================================
-   LEFT PANEL — FORM CARD
+   LEFT PANEL - FORM CARD
    Clean, slightly elevated, subtle inner glow on hover
 ========================================================= */
 .content {
@@ -39,16 +45,21 @@ a { text-decoration: none; }
 
 .content:hover {
     border-color: color-mix(in srgb, var(--primary-color) 40%, transparent);
-    box-shadow: 0 8px 40px color-mix(in srgb, var(--primary-color) 8%, transparent);
+    box-shadow: 0 8px 40px
+        color-mix(in srgb, var(--primary-color) 8%, transparent);
 }
 
 /* =========================================================
-   RIGHT PANEL — CONTACT DETAILS
+   RIGHT PANEL - CONTACT DETAILS
    Darker, grid-texture background, accent border on left
 ========================================================= */
 .content-contact {
     background:
-        linear-gradient(135deg, color-mix(in srgb, var(--secondary-color) 6%, transparent) 0%, transparent 60%),
+        linear-gradient(
+            135deg,
+            color-mix(in srgb, var(--secondary-color) 6%, transparent) 0%,
+            transparent 60%
+        ),
         var(--card-bg-color);
     border: 1px solid var(--border);
     border-left: 3px solid var(--primary-color);
@@ -63,8 +74,15 @@ a { text-decoration: none; }
     position: absolute;
     inset: 0;
     background-image:
-        linear-gradient(color-mix(in srgb, var(--primary-color) 4%, transparent) 1px, transparent 1px),
-        linear-gradient(90deg, color-mix(in srgb, var(--primary-color) 4%, transparent) 1px, transparent 1px);
+        linear-gradient(
+            color-mix(in srgb, var(--primary-color) 4%, transparent) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            color-mix(in srgb, var(--primary-color) 4%, transparent) 1px,
+            transparent 1px
+        );
     background-size: 28px 28px;
     pointer-events: none;
     border-radius: inherit;
@@ -72,7 +90,8 @@ a { text-decoration: none; }
 
 .content-contact:hover {
     border-left-color: var(--accent-color);
-    box-shadow: 0 8px 40px color-mix(in srgb, var(--primary-color) 10%, transparent);
+    box-shadow: 0 8px 40px
+        color-mix(in srgb, var(--primary-color) 10%, transparent);
 }
 
 /* =========================================================
@@ -118,13 +137,16 @@ a { text-decoration: none; }
     font-size: 0.95rem;
     color: var(--text-primary);
     outline: none;
-    transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+    transition:
+        border-color 0.25s ease,
+        background 0.25s ease,
+        box-shadow 0.25s ease;
     font-family: inherit;
     resize: none;
 }
 
 .field-group textarea {
-    min-height: 120px;
+    min-height: 155px;
     padding-top: 1.2rem;
 }
 
@@ -132,7 +154,8 @@ a { text-decoration: none; }
 .field-group textarea:focus {
     border-color: var(--primary-color);
     background: color-mix(in srgb, var(--primary-color) 4%, transparent);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 10%, transparent);
+    box-shadow: 0 0 0 3px
+        color-mix(in srgb, var(--primary-color) 10%, transparent);
 }
 
 .field-group label {
@@ -183,7 +206,11 @@ a { text-decoration: none; }
     font-size: 0.95rem;
     font-weight: 600;
     color: var(--btn-text);
-    background: linear-gradient(135deg, var(--btn-gradient-start), var(--btn-gradient-end));
+    background: linear-gradient(
+        135deg,
+        var(--btn-gradient-start),
+        var(--btn-gradient-end)
+    );
     border: none;
     border-radius: 12px;
     cursor: pointer;
@@ -198,10 +225,16 @@ a { text-decoration: none; }
 .btn::after {
     content: '';
     position: absolute;
-    top: 0; left: -75%;
+    top: 0;
+    left: -75%;
     width: 50%;
     height: 100%;
-    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.15), transparent);
+    background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(255, 255, 255, 0.15),
+        transparent
+    );
     transform: skewX(-20deg);
     transition: left 0.5s ease;
 }
@@ -212,7 +245,8 @@ a { text-decoration: none; }
 
 .btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 28px color-mix(in srgb, var(--primary-color) 35%, transparent);
+    box-shadow: 0 10px 28px
+        color-mix(in srgb, var(--primary-color) 35%, transparent);
 }
 
 .btn:active {
@@ -265,7 +299,9 @@ a { text-decoration: none; }
     border-radius: 14px;
     padding: 1.4rem 1.2rem;
     margin-bottom: 1.8rem;
-    transition: border-color 0.25s ease, background 0.25s ease;
+    transition:
+        border-color 0.25s ease,
+        background 0.25s ease;
 }
 
 .email-block:hover {
@@ -360,8 +396,15 @@ a { text-decoration: none; }
 }
 
 @keyframes pulse {
-    0%, 100% { box-shadow: 0 0 6px var(--primary-color); }
-    50%       { box-shadow: 0 0 14px var(--primary-color), 0 0 20px var(--primary-color); }
+    0%,
+    100% {
+        box-shadow: 0 0 6px var(--primary-color);
+    }
+    50% {
+        box-shadow:
+            0 0 14px var(--primary-color),
+            0 0 20px var(--primary-color);
+    }
 }
 
 .availability strong {
@@ -465,20 +508,40 @@ a { text-decoration: none; }
    ANIMATIONS
 ========================================================= */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes fadeOut {
-    from { opacity: 1; transform: translateY(0); }
-    to   { opacity: 0; transform: translateY(-5px); }
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
 }
 
-.container  { animation: fadeIn 0.5s ease both; }
-.content    { animation: fadeIn 0.5s ease 0.05s both; }
-.content-contact { animation: fadeIn 0.5s ease 0.1s both; }
+.container {
+    animation: fadeIn 0.5s ease both;
+}
+.content {
+    animation: fadeIn 0.5s ease 0.05s both;
+}
+.content-contact {
+    animation: fadeIn 0.5s ease 0.1s both;
+}
 
-.fade-out { animation: fadeOut 0.5s ease forwards; }
+.fade-out {
+    animation: fadeOut 0.5s ease forwards;
+}
 
 /* =========================================================
    RESPONSIVE
@@ -511,5 +574,25 @@ a { text-decoration: none; }
 
     .panel-title {
         font-size: 1.15rem;
+    }
+
+    .field-group textarea {
+        min-height: 140px;
+    }
+}
+
+@media (max-width: 420px) {
+    .email-address-row {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .copy-btn {
+        width: 100%;
+    }
+
+    .social-pill {
+        justify-content: center;
+        flex: 1 1 100%;
     }
 }

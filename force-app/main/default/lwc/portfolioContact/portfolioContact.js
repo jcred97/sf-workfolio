@@ -16,6 +16,7 @@ import EMAIL from '@salesforce/schema/Portfolio__c.Email__c';
  * - Render dynamic portfolio email from record
  */
 export default class PortfolioContact extends LightningElement {
+    requiredFieldNames = new Set(['lastName', 'emailAddress', 'message']);
 
     /* =========================================================
        PUBLIC API
@@ -32,26 +33,26 @@ export default class PortfolioContact extends LightningElement {
        FORM STATE
     ========================================================= */
     portfolioData = {};
-    firstName    = '';
-    lastName     = '';
+    firstName = '';
+    lastName = '';
     emailAddress = '';
-    message      = '';
+    message = '';
 
     /* =========================================================
        UI STATE
     ========================================================= */
-    isLoading    = false;
-    showSuccess  = false;
-    showError    = false;
+    isLoading = false;
+    showSuccess = false;
+    showError = false;
     errorMessage = '';
-    fadeSuccess  = false;
-    fadeError    = false;
+    fadeSuccess = false;
+    fadeError = false;
 
     hasWireError = false;
     wireErrorMessage = '';
 
     /* =========================================================
-       WIRE — Portfolio email from record
+       WIRE - Portfolio email from record
     ========================================================= */
     @wire(getRecord, { recordId: '$recordId', fields: [EMAIL] })
     wiredPortfolioData(result) {
@@ -62,7 +63,10 @@ export default class PortfolioContact extends LightningElement {
             this.wireErrorMessage = '';
         } else if (result.error) {
             this.hasWireError = true;
-            this.wireErrorMessage = result.error?.body?.message || result.error?.message || 'Unable to load contact details. Please try again later.';
+            this.wireErrorMessage =
+                result.error?.body?.message ||
+                result.error?.message ||
+                'Unable to load contact details. Please try again later.';
         }
     }
 
@@ -82,20 +86,20 @@ export default class PortfolioContact extends LightningElement {
         if (this.isLoading) return;
         if (!this.validateInputs()) return;
 
+        this.trimFormValues();
         this.isLoading = true;
         this.resetBanners();
 
         try {
             await submitLead({
-                firstName:    this.firstName,
-                lastName:     this.lastName,
+                firstName: this.firstName,
+                lastName: this.lastName,
                 emailAddress: this.emailAddress,
-                message:      this.message
+                message: this.message
             });
 
             this.showBanner('success');
             this.resetForm();
-
         } catch (error) {
             this.errorMessage =
                 error?.body?.message ||
@@ -103,7 +107,6 @@ export default class PortfolioContact extends LightningElement {
                 'Something went wrong. Please try again.';
 
             this.showBanner('error');
-
         } finally {
             this.isLoading = false;
         }
@@ -118,7 +121,14 @@ export default class PortfolioContact extends LightningElement {
         const fields = [...this.template.querySelectorAll('input, textarea')];
 
         // Run all reportValidity calls so all errors show at once
-        const results = fields.map(field => {
+        const results = fields.map((field) => {
+            const trimmedValue = field.value?.trim() || '';
+            if (this.requiredFieldNames.has(field.name) && !trimmedValue) {
+                field.setCustomValidity('This field is required.');
+            } else {
+                field.setCustomValidity('');
+            }
+
             field.reportValidity();
             return field.checkValidity();
         });
@@ -126,30 +136,49 @@ export default class PortfolioContact extends LightningElement {
         return results.every(Boolean);
     }
 
+    trimFormValues() {
+        this.firstName = this.firstName.trim();
+        this.lastName = this.lastName.trim();
+        this.emailAddress = this.emailAddress.trim();
+        this.message = this.message.trim();
+    }
+
     /* =========================================================
        BANNER LOGIC
     ========================================================= */
     showBanner(type) {
         if (type === 'success') {
-            this.showSuccess  = true;
-            this.fadeSuccess  = false;
-            setTimeout(() => { this.fadeSuccess = true;  }, 2500);
-            setTimeout(() => { this.showSuccess = false; }, 3000);
+            this.showSuccess = true;
+            this.fadeSuccess = false;
+            // eslint-disable-next-line @lwc/lwc/no-async-operation
+            setTimeout(() => {
+                this.fadeSuccess = true;
+            }, 2500);
+            // eslint-disable-next-line @lwc/lwc/no-async-operation
+            setTimeout(() => {
+                this.showSuccess = false;
+            }, 3000);
         }
 
         if (type === 'error') {
-            this.showError  = true;
-            this.fadeError  = false;
-            setTimeout(() => { this.fadeError = true;  }, 2500);
-            setTimeout(() => { this.showError = false; }, 3000);
+            this.showError = true;
+            this.fadeError = false;
+            // eslint-disable-next-line @lwc/lwc/no-async-operation
+            setTimeout(() => {
+                this.fadeError = true;
+            }, 2500);
+            // eslint-disable-next-line @lwc/lwc/no-async-operation
+            setTimeout(() => {
+                this.showError = false;
+            }, 3000);
         }
     }
 
     resetBanners() {
         this.showSuccess = false;
-        this.showError   = false;
+        this.showError = false;
         this.fadeSuccess = false;
-        this.fadeError   = false;
+        this.fadeError = false;
     }
 
     /* =========================================================
@@ -159,10 +188,10 @@ export default class PortfolioContact extends LightningElement {
        since some browsers don't reflect value= updates on textarea.
     ========================================================= */
     resetForm() {
-        this.firstName    = '';
-        this.lastName     = '';
+        this.firstName = '';
+        this.lastName = '';
         this.emailAddress = '';
-        this.message      = '';
+        this.message = '';
 
         // Belt-and-suspenders: directly wipe the textarea DOM value
         const textarea = this.template.querySelector('textarea');

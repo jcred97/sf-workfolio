@@ -11,116 +11,178 @@
 
     <!-- CONTENT -->
     <template if:false={hasError}>
-    <div class="container">
-
-        <!-- EMPTY STATE -->
-        <template if:false={hasProjects}>
-            <div class="empty-state">
-                <p class="empty-text">No projects to display yet.</p>
-            </div>
-        </template>
-
-        <!-- PROJECT CARDS -->
-        <template if:true={hasProjects}>
-            <div class="project-grid">
-                <template for:each={projects} for:item="proj">
-                    <div key={proj.Id} class="project-card">
-
-                        <!-- VIDEO EMBED -->
-                        <template if:true={proj.hasVideo}>
-                            <div class="video-wrapper">
-                                <iframe
-                                    src={proj.embedUrl}
-                                    title={proj.Name}
-                                    frameborder="0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen">
-                                </iframe>
-                            </div>
-                        </template>
-
-                        <!-- IMAGE GALLERY (thumbnails below video) -->
-                        <template if:true={proj.hasImages}>
-                            <div class="image-gallery">
-                                <template for:each={proj.visibleImages} for:item="img">
-                                    <div key={img.Id} class="gallery-thumb" data-id={img.Id} data-projectid={proj.Id} onclick={openLightbox}>
-                                        <img src={img.url} alt={img.caption} loading="lazy">
-                                    </div>
-                                </template>
-                                <template if:true={proj.hasExtra}>
-                                    <div class="gallery-thumb gallery-more" data-id={proj.firstExtraId} data-projectid={proj.Id} onclick={openLightbox}>
-                                        +{proj.extraCount}
-                                    </div>
-                                </template>
-                            </div>
-                        </template>
-
-                        <!-- CARD BODY -->
-                        <div class="card-body">
-                            <h3 class="project-name">{proj.Name}</h3>
-
-                            <template if:true={proj.Description}>
-                                <p class="project-desc">{proj.Description}</p>
-                            </template>
-
-                            <!-- TECH TAGS -->
-                            <template if:true={proj.TechStack}>
-                                <div class="tag-group">
-                                    <template for:each={proj.TechStack} for:item="tech">
-                                        <span key={tech} class="skill-tag">{tech}</span>
-                                    </template>
-                                </div>
-                            </template>
-
-                            <!-- LINKS -->
-                            <template if:true={proj.hasLinks}>
-                                <div class="link-group">
-                                    <template if:true={proj.hasGitHub}>
-                                        <a href={proj.GitHubUrl} target="_blank" class="project-link">
-                                            <span class="link-icon">&#60;/&#62;</span> Source Code
-                                        </a>
-                                    </template>
-                                    <template if:true={proj.hasLive}>
-                                        <a href={proj.LiveUrl} target="_blank" class="project-link live">
-                                            <span class="link-icon">&#8599;</span> Live Demo
-                                        </a>
-                                    </template>
-                                </div>
-                            </template>
-                        </div>
-
-                    </div>
-                </template>
-            </div>
-        </template>
-
-    </div>
-
-    <!-- LIGHTBOX OVERLAY -->
-    <template if:true={lightboxOpen}>
-        <div class="lightbox-backdrop" onclick={handleLightboxBackdrop}>
-            <button class="lightbox-close" onclick={closeLightbox}>&times;</button>
-
-            <!-- PREV ARROW -->
-            <template if:true={hasPrev}>
-                <button class="lightbox-arrow lightbox-prev" onclick={prevImage}>&#8249;</button>
+        <div class="container">
+            <!-- EMPTY STATE -->
+            <template if:false={hasProjects}>
+                <div class="empty-state">
+                    <p class="empty-text">No projects to display yet.</p>
+                </div>
             </template>
 
-            <div class="lightbox-content">
-                <img src={lightboxUrl} alt={lightboxCaption} class="lightbox-img">
-                <template if:true={lightboxCaption}>
-                    <p class="lightbox-caption">{lightboxCaption}</p>
-                </template>
-                <template if:true={hasMultipleImages}>
-                    <p class="lightbox-counter">{lightboxCounter}</p>
-                </template>
-            </div>
+            <!-- PROJECT CARDS -->
+            <template if:true={hasProjects}>
+                <div class="project-grid">
+                    <template for:each={projects} for:item="proj">
+                        <div key={proj.Id} class="project-card">
+                            <!-- VIDEO EMBED -->
+                            <template if:true={proj.hasVideo}>
+                                <div class="video-wrapper">
+                                    <iframe
+                                        src={proj.embedUrl}
+                                        title={proj.Name}
+                                        frameborder="0"
+                                        loading="lazy"
+                                        allow="
+                                            accelerometer;
+                                            autoplay;
+                                            clipboard-write;
+                                            encrypted-media;
+                                            gyroscope;
+                                            picture-in-picture;
+                                            fullscreen;
+                                        "
+                                    >
+                                    </iframe>
+                                </div>
+                            </template>
 
-            <!-- NEXT ARROW -->
-            <template if:true={hasNext}>
-                <button class="lightbox-arrow lightbox-next" onclick={nextImage}>&#8250;</button>
+                            <!-- IMAGE GALLERY (thumbnails below video) -->
+                            <template if:true={proj.hasImages}>
+                                <div class="image-gallery">
+                                    <template
+                                        for:each={proj.visibleImages}
+                                        for:item="img"
+                                    >
+                                        <div
+                                            key={img.Id}
+                                            class="gallery-thumb"
+                                            data-id={img.Id}
+                                            data-projectid={proj.Id}
+                                            onclick={openLightbox}
+                                        >
+                                            <img
+                                                src={img.url}
+                                                alt={img.caption}
+                                                loading="lazy"
+                                            />
+                                        </div>
+                                    </template>
+                                    <template if:true={proj.hasExtra}>
+                                        <div
+                                            class="gallery-thumb gallery-more"
+                                            data-id={proj.firstExtraId}
+                                            data-projectid={proj.Id}
+                                            onclick={openLightbox}
+                                        >
+                                            +{proj.extraCount}
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
+
+                            <!-- CARD BODY -->
+                            <div class="card-body">
+                                <h3 class="project-name">{proj.Name}</h3>
+
+                                <template if:true={proj.Description}>
+                                    <p class="project-desc">
+                                        {proj.Description}
+                                    </p>
+                                </template>
+
+                                <!-- TECH TAGS -->
+                                <template if:true={proj.TechStack}>
+                                    <div class="tag-group">
+                                        <template
+                                            for:each={proj.TechStack}
+                                            for:item="tech"
+                                        >
+                                            <span key={tech} class="skill-tag"
+                                                >{tech}</span
+                                            >
+                                        </template>
+                                    </div>
+                                </template>
+
+                                <!-- LINKS -->
+                                <template if:true={proj.hasLinks}>
+                                    <div class="link-group">
+                                        <template if:true={proj.hasGitHub}>
+                                            <a
+                                                href={proj.GitHubUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                class="project-link"
+                                            >
+                                                <span class="link-icon"
+                                                    >&#60;/&#62;</span
+                                                >
+                                                Source Code
+                                            </a>
+                                        </template>
+                                        <template if:true={proj.hasLive}>
+                                            <a
+                                                href={proj.LiveUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                class="project-link live"
+                                            >
+                                                <span class="link-icon"
+                                                    >&#8599;</span
+                                                >
+                                                Live Demo
+                                            </a>
+                                        </template>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </template>
+                </div>
             </template>
         </div>
-    </template>
 
+        <!-- LIGHTBOX OVERLAY -->
+        <template if:true={lightboxOpen}>
+            <div class="lightbox-backdrop" onclick={handleLightboxBackdrop}>
+                <button class="lightbox-close" onclick={closeLightbox}>
+                    &times;
+                </button>
+
+                <!-- PREV ARROW -->
+                <template if:true={hasPrev}>
+                    <button
+                        class="lightbox-arrow lightbox-prev"
+                        onclick={prevImage}
+                    >
+                        &#8249;
+                    </button>
+                </template>
+
+                <div class="lightbox-content">
+                    <img
+                        src={lightboxUrl}
+                        alt={lightboxCaption}
+                        class="lightbox-img"
+                    />
+                    <template if:true={lightboxCaption}>
+                        <p class="lightbox-caption">{lightboxCaption}</p>
+                    </template>
+                    <template if:true={hasMultipleImages}>
+                        <p class="lightbox-counter">{lightboxCounter}</p>
+                    </template>
+                </div>
+
+                <!-- NEXT ARROW -->
+                <template if:true={hasNext}>
+                    <button
+                        class="lightbox-arrow lightbox-next"
+                        onclick={nextImage}
+                    >
+                        &#8250;
+                    </button>
+                </template>
+            </div>
+        </template>
     </template>
 </template>

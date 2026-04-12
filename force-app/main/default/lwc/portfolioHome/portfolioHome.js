@@ -28,7 +28,7 @@ export default class PortfolioHome extends LightningElement {
     errorMessage = '';
 
     /* =========================================================
-       WIRE — Portfolio record
+       WIRE - Portfolio record
     ========================================================= */
     @wire(getRecord, {
         recordId: '$recordId',
@@ -55,21 +55,26 @@ export default class PortfolioHome extends LightningElement {
             // Only dispatch when name is available and hasn't been sent yet
             if (name && name !== this._lastSentName) {
                 this._lastSentName = name;
-                this.dispatchEvent(new CustomEvent('namechange', { detail: name }));
+                this.dispatchEvent(
+                    new CustomEvent('namechange', { detail: name })
+                );
             }
         } else if (result.error) {
             this.hasError = true;
-            this.errorMessage = result.error?.body?.message || result.error?.message || 'Unable to load profile. Please try again later.';
+            this.errorMessage =
+                result.error?.body?.message ||
+                result.error?.message ||
+                'Unable to load profile. Please try again later.';
         }
     }
 
     /* =========================================================
-       WIRE — Certifications from Certification__c
+       WIRE - Certifications from Certification__c
     ========================================================= */
     @wire(getCertifications, { portfolioId: '$recordId' })
     wiredCertifications({ data, error }) {
         if (data) {
-            this.certifications = data.map(cert => ({
+            this.certifications = data.map((cert) => ({
                 Id: cert.Id,
                 name: cert.Name,
                 image: cert.Image_URL__c
@@ -112,7 +117,10 @@ export default class PortfolioHome extends LightningElement {
     }
 
     get experienceSummary() {
-        const startDate = getFieldValue(this.portfolioData.data, CAREER_START_DATE);
+        const startDate = getFieldValue(
+            this.portfolioData.data,
+            CAREER_START_DATE
+        );
         if (!startDate) return '';
 
         const start = new Date(startDate);
@@ -122,10 +130,29 @@ export default class PortfolioHome extends LightningElement {
         const monthDiff = today.getMonth() - start.getMonth();
 
         // Adjust if current month is before the anniversary month
-        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < start.getDate())) {
+        if (
+            monthDiff < 0 ||
+            (monthDiff === 0 && today.getDate() < start.getDate())
+        ) {
             years--;
         }
 
         return `${years}`;
+    }
+
+    handleViewWork() {
+        this.dispatchEvent(
+            new CustomEvent('sectionchange', {
+                detail: 'projects',
+                bubbles: true,
+                composed: true
+            })
+        );
+    }
+
+    handleContactJump() {
+        this.template
+            .querySelector('.contact-section')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 }

@@ -11,128 +11,163 @@
 
     <!-- CONTENT -->
     <template if:false={hasWireError}>
-    <div class="container">
-
-        <!-- ================================================
-             LEFT PANEL — CONTACT FORM
+        <div class="container">
+            <!-- ================================================
+             LEFT PANEL - CONTACT FORM
         ================================================= -->
-        <div class="content">
-            <div class="panel-title">Send me a message</div>
-            <div class="panel-subtitle">I'll get back to you within 24 hours.</div>
-            <div class="divider"></div>
+            <div class="content">
+                <div class="panel-title">Send me a message</div>
+                <div class="panel-subtitle">
+                    I'll get back to you within 24 hours.
+                </div>
+                <div class="divider"></div>
 
-            <!-- Banners -->
-            <template if:true={showSuccess}>
-                <div class={successClass}>✅ Message sent successfully!</div>
-            </template>
-            <template if:true={showError}>
-                <div class={errorClass}>{errorMessage}</div>
-            </template>
+                <!-- Banners -->
+                <template if:true={showSuccess}>
+                    <div class={successClass}>Message sent successfully!</div>
+                </template>
+                <template if:true={showError}>
+                    <div class={errorClass}>{errorMessage}</div>
+                </template>
 
-            <!-- Name Row -->
-            <div class="name-row">
+                <!-- Name Row -->
+                <div class="name-row">
+                    <div class="field-group">
+                        <input
+                            type="text"
+                            name="firstName"
+                            placeholder=" "
+                            value={firstName}
+                            onchange={inputHandler}
+                        />
+                        <label>First Name</label>
+                    </div>
+                    <div class="field-group">
+                        <input
+                            type="text"
+                            name="lastName"
+                            placeholder=" "
+                            required
+                            value={lastName}
+                            onchange={inputHandler}
+                        />
+                        <label>Last Name</label>
+                    </div>
+                </div>
+
+                <!-- Email -->
                 <div class="field-group">
                     <input
-                        type="text"
-                        name="firstName"
+                        type="email"
+                        name="emailAddress"
                         placeholder=" "
-                        value={firstName}
-                        onchange={inputHandler} />
-                    <label>First Name</label>
+                        required
+                        value={emailAddress}
+                        onchange={inputHandler}
+                    />
+                    <label>Email Address</label>
                 </div>
+
+                <!-- Message
+                 Native textarea does not support reactive value= binding in LWC;
+                 resetForm() clears the DOM value directly after submit.
+                -->
                 <div class="field-group">
-                    <input
-                        type="text"
-                        name="lastName"
+                    <textarea
+                        name="message"
                         placeholder=" "
-                        value={lastName}
-                        onchange={inputHandler} />
-                    <label>Last Name</label>
+                        required
+                        onchange={inputHandler}
+                    ></textarea>
+                    <label>Your Message</label>
                 </div>
+
+                <!-- Submit -->
+                <button
+                    class="btn"
+                    onclick={sendDataAndEmail}
+                    disabled={isLoading}
+                >
+                    <template if:true={isLoading}>Sending...</template>
+                    <template if:false={isLoading}>Send Message -></template>
+                </button>
             </div>
 
-            <!-- Email -->
-            <div class="field-group">
-                <input
-                    type="email"
-                    name="emailAddress"
-                    placeholder=" "
-                    value={emailAddress}
-                    onchange={inputHandler} />
-                <label>Email Address</label>
-            </div>
-
-            <!-- Message
-                 value= binding is required for LWC to reactively clear
-                 the textarea on resetForm(). Inner content ({message})
-                 only renders once and does not update on state change.
-            -->
-            <div class="field-group">
-                <textarea
-                    name="message"
-                    placeholder=" "
-                    value={message}
-                    onchange={inputHandler}></textarea>
-                <label>Your Message</label>
-            </div>
-
-            <!-- Submit -->
-            <button class="btn" onclick={sendDataAndEmail} disabled={isLoading}>
-                <template if:true={isLoading}>Sending...</template>
-                <template if:false={isLoading}>Send Message →</template>
-            </button>
-        </div>
-
-
-        <!-- ================================================
-             RIGHT PANEL — CONTACT DETAILS
+            <!-- ================================================
+             RIGHT PANEL - CONTACT DETAILS
         ================================================= -->
-        <div class="content-contact">
-            <div class="panel-title">Contact Details</div>
-            <div class="panel-subtitle">Prefer to reach out directly?</div>
-            <div class="divider"></div>
+            <div class="content-contact">
+                <div class="panel-title">Contact Details</div>
+                <div class="panel-subtitle">Prefer to reach out directly?</div>
+                <div class="divider"></div>
 
-            <!-- Availability indicator -->
-            <div class="availability">
-                <span class="availability-dot"></span>
-                <span>Available for <strong>new opportunities</strong></span>
-            </div>
-
-            <!-- Email block -->
-            <div class="email-block">
-                <div class="email-label">Direct Email</div>
-                <div class="email-address-row">
-                    <a href={mailtoLink} class="email-link">{email}</a>
-                    <button class="copy-btn" onclick={copyEmail}>Copy</button>
+                <!-- Availability indicator -->
+                <div class="availability">
+                    <span class="availability-dot"></span>
+                    <span
+                        >Available for <strong>new opportunities</strong></span
+                    >
                 </div>
-            </div>
 
-            <!-- Social links -->
-            <div class="social-section">
-                <div class="social-label">Find me on</div>
-                <div class="social-links">
-                    <template if:true={linkedinUrl}>
-                        <a href={linkedinUrl} target="_blank" class="social-pill">
-                            <img src={linkedin} alt="LinkedIn" />
-                            LinkedIn
-                        </a>
-                    </template>
-                    <template if:true={githubUrl}>
-                        <a href={githubUrl} target="_blank" class="social-pill">
-                            <img src={github} alt="GitHub" />
-                            GitHub
-                        </a>
-                    </template>
-                    <template if:true={trailblazerUrl}>
-                        <a href={trailblazerUrl} target="_blank" class="social-pill">
-                            <img src={trailblazer} alt="Trailhead" />
-                            Trailhead
-                        </a>
-                    </template>
+                <!-- Email block -->
+                <div class="email-block">
+                    <div class="email-label">Direct Email</div>
+                    <div class="email-address-row">
+                        <a href={mailtoLink} class="email-link">{email}</a>
+                        <button class="copy-btn" onclick={copyEmail}>
+                            Copy
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Social links -->
+                <div class="social-section">
+                    <div class="social-label">Find me on</div>
+                    <div class="social-links">
+                        <template if:true={linkedinUrl}>
+                            <a
+                                href={linkedinUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="social-pill"
+                            >
+                                <img
+                                    src={linkedin}
+                                    alt="LinkedIn"
+                                    loading="lazy"
+                                />
+                                LinkedIn
+                            </a>
+                        </template>
+                        <template if:true={githubUrl}>
+                            <a
+                                href={githubUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="social-pill"
+                            >
+                                <img src={github} alt="GitHub" loading="lazy" />
+                                GitHub
+                            </a>
+                        </template>
+                        <template if:true={trailblazerUrl}>
+                            <a
+                                href={trailblazerUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="social-pill"
+                            >
+                                <img
+                                    src={trailblazer}
+                                    alt="Trailhead"
+                                    loading="lazy"
+                                />
+                                Trailhead
+                            </a>
+                        </template>
+                    </div>
                 </div>
             </div>
         </div>
-
-    </div>
     </template>
 </template>

@@ -15,8 +15,8 @@ export default class PortfolioProjects extends LightningElement {
         if (data) {
             this.hasError = false;
             this.errorMessage = '';
-            this.projects = data.map(proj => {
-                const images = (proj.Project_Images__r || []).map(img => ({
+            this.projects = data.map((proj) => {
+                const images = (proj.Project_Images__r || []).map((img) => ({
                     Id: img.Id,
                     url: img.Image_URL__c,
                     caption: img.Caption__c || img.Name,
@@ -25,16 +25,21 @@ export default class PortfolioProjects extends LightningElement {
 
                 const THUMB_LIMIT = 6;
                 const visibleImages = images.slice(0, THUMB_LIMIT);
-                const extraCount = images.length > THUMB_LIMIT ? images.length - THUMB_LIMIT : 0;
-                const firstExtraId = extraCount > 0 ? images[THUMB_LIMIT].Id : null;
+                const extraCount =
+                    images.length > THUMB_LIMIT
+                        ? images.length - THUMB_LIMIT
+                        : 0;
+                const firstExtraId =
+                    extraCount > 0 ? images[THUMB_LIMIT].Id : null;
+                const embedUrl = this.toEmbedUrl(proj.YouTube_URL__c);
 
                 return {
                     Id: proj.Id,
                     Name: proj.Name,
                     Description: proj.Description__c,
                     TechStack: this.splitTechStack(proj.Tech_Stack__c),
-                    embedUrl: this.toEmbedUrl(proj.YouTube_URL__c),
-                    hasVideo: !!this.toEmbedUrl(proj.YouTube_URL__c),
+                    embedUrl,
+                    hasVideo: !!embedUrl,
                     GitHubUrl: proj.GitHub_URL__c,
                     LiveUrl: proj.Live_URL__c,
                     hasGitHub: !!proj.GitHub_URL__c,
@@ -50,7 +55,10 @@ export default class PortfolioProjects extends LightningElement {
             });
         } else if (error) {
             this.hasError = true;
-            this.errorMessage = error?.body?.message || error?.message || 'Unable to load projects. Please try again later.';
+            this.errorMessage =
+                error?.body?.message ||
+                error?.message ||
+                'Unable to load projects. Please try again later.';
             this.projects = [];
             console.error(error);
         }
@@ -63,24 +71,44 @@ export default class PortfolioProjects extends LightningElement {
     _lightboxImages = [];
     _lightboxIndex = 0;
 
-    get lightboxOpen() { return this._lightboxOpen; }
-    get lightboxUrl() { return this._lightboxImages.length ? this._lightboxImages[this._lightboxIndex].url : ''; }
-    get lightboxCaption() { return this._lightboxImages.length ? this._lightboxImages[this._lightboxIndex].caption : ''; }
-    get lightboxCounter() { return `${this._lightboxIndex + 1} / ${this._lightboxImages.length}`; }
-    get hasPrev() { return this._lightboxIndex > 0; }
-    get hasNext() { return this._lightboxIndex < this._lightboxImages.length - 1; }
-    get hasMultipleImages() { return this._lightboxImages.length > 1; }
+    get lightboxOpen() {
+        return this._lightboxOpen;
+    }
+    get lightboxUrl() {
+        return this._lightboxImages.length
+            ? this._lightboxImages[this._lightboxIndex].url
+            : '';
+    }
+    get lightboxCaption() {
+        return this._lightboxImages.length
+            ? this._lightboxImages[this._lightboxIndex].caption
+            : '';
+    }
+    get lightboxCounter() {
+        return `${this._lightboxIndex + 1} / ${this._lightboxImages.length}`;
+    }
+    get hasPrev() {
+        return this._lightboxIndex > 0;
+    }
+    get hasNext() {
+        return this._lightboxIndex < this._lightboxImages.length - 1;
+    }
+    get hasMultipleImages() {
+        return this._lightboxImages.length > 1;
+    }
 
     _keyHandler = null;
 
     openLightbox(event) {
         const imageId = event.currentTarget.dataset.id;
         const projectId = event.currentTarget.dataset.projectid;
-        const proj = this.projects.find(p => p.Id === projectId);
+        const proj = this.projects.find((p) => p.Id === projectId);
         if (!proj) return;
 
         this._lightboxImages = proj.images;
-        this._lightboxIndex = proj.images.findIndex(img => img.Id === imageId);
+        this._lightboxIndex = proj.images.findIndex(
+            (img) => img.Id === imageId
+        );
         if (this._lightboxIndex < 0) this._lightboxIndex = 0;
         this._lightboxOpen = true;
 
@@ -89,7 +117,6 @@ export default class PortfolioProjects extends LightningElement {
             else if (e.key === 'ArrowRight') this.nextImage();
             else if (e.key === 'Escape') this.closeLightbox();
         };
-        // eslint-disable-next-line @lwc/lwc/no-document-query
         document.addEventListener('keydown', this._keyHandler);
     }
 
@@ -99,7 +126,6 @@ export default class PortfolioProjects extends LightningElement {
         this._lightboxIndex = 0;
 
         if (this._keyHandler) {
-            // eslint-disable-next-line @lwc/lwc/no-document-query
             document.removeEventListener('keydown', this._keyHandler);
             this._keyHandler = null;
         }
@@ -131,7 +157,10 @@ export default class PortfolioProjects extends LightningElement {
     ========================================================= */
     splitTechStack(value) {
         if (!value) return null;
-        const result = value.split(',').map(t => t.trim()).filter(Boolean);
+        const result = value
+            .split(',')
+            .map((t) => t.trim())
+            .filter(Boolean);
         return result.length ? result : null;
     }
 

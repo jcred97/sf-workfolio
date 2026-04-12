@@ -11,186 +11,231 @@
 
     <!-- CONTENT -->
     <template if:false={hasError}>
-    <div class="experience-container">
-
-        <!-- =========================
+        <div class="experience-container">
+            <!-- =========================
              DESKTOP: LEFT (TIMELINE)
         ========================== -->
-        <div class="experience-list">
-            <template for:each={workExperienceList} for:item="work">
-                <div key={work.id}
-                     class={work.leftClass}
-                     data-id={work.id}
-                     onclick={selectExperience}
-                     role="button"
-                     tabindex="0"
-                     onkeydown={selectExperience}>
-
-                    <div class="exp-top-row">
-                        <div class="company">{work.CompanyName}</div>
-                        <template if:true={work.isCurrent}>
-                            <span class="current-badge">Current</span>
-                        </template>
-                    </div>
-
-                    <div class="role">{work.Role}</div>
-
-                    <div class="meta-header">
-                        {work.JobStartDate} – {work.displayEnd}
-                        <template if:true={work.duration}>
-                            <span class="duration-badge">{work.duration}</span>
-                        </template>
-                    </div>
-
-                    <div class="meta">
-                        {work.WorkLocation}
-                    </div>
-                </div>
-            </template>
-        </div>
-
-
-        <!-- =========================
-             DESKTOP: RIGHT (DETAIL) — single active panel
-        ========================== -->
-        <div class="experience-detail" aria-live="polite">
-            <template if:true={activeDetail}>
-                <div class="detail-content active">
-
-                    <!-- Empty state -->
-                    <template if:false={activeDetail.hasContent}>
-                        <div class="empty-state">
-                            <p class="empty-text">No details available for this role.</p>
-                        </div>
-                    </template>
-
-                    <!-- General Bullets (not linked to a project) -->
-                    <template if:true={activeDetail.hasGeneralBullets}>
-                        <ul class="bullet-list">
-                            <template for:each={activeDetail.GeneralBullets} for:item="bullet">
-                                <li key={bullet.Id}>{bullet.Text}</li>
+            <div class="experience-list">
+                <template for:each={workExperienceList} for:item="work">
+                    <div
+                        key={work.id}
+                        class={work.leftClass}
+                        data-id={work.id}
+                        onclick={selectExperience}
+                        role="button"
+                        tabindex="0"
+                        onkeydown={selectExperience}
+                    >
+                        <div class="exp-top-row">
+                            <div class="company">{work.CompanyName}</div>
+                            <template if:true={work.isCurrent}>
+                                <span class="current-badge">Current</span>
                             </template>
-                        </ul>
-                    </template>
-
-                    <!-- Projects with their Bullets -->
-                    <template if:true={activeDetail.hasProjects}>
-                        <template for:each={activeDetail.Projects} for:item="proj">
-                            <div key={proj.Id} class="inline-project">
-                                <div class="project-name">{proj.Name}</div>
-
-                                <template if:true={proj.TechStack}>
-                                    <div class="tag-group">
-                                        <template for:each={proj.TechStack} for:item="tech">
-                                            <span key={tech} class="skill-tag">{tech}</span>
-                                        </template>
-                                    </div>
-                                </template>
-
-                                <template if:true={proj.hasBullets}>
-                                    <ul class="bullet-list">
-                                        <template for:each={proj.Bullets} for:item="bullet">
-                                            <li key={bullet.Id}>{bullet.Text}</li>
-                                        </template>
-                                    </ul>
-                                </template>
-                            </div>
-                        </template>
-                    </template>
-
-                </div>
-            </template>
-        </div>
-
-
-        <!-- =========================
-             MOBILE: ACCORDION
-        ========================== -->
-        <div class="experience-mobile">
-            <template for:each={workExperienceList} for:item="work">
-                <div key={work.id} class="experience-card">
-
-                    <!-- Header -->
-                    <div class="node-header"
-                         onclick={toggleCard}
-                         data-id={work.id}
-                         role="button"
-                         tabindex="0"
-                         aria-expanded={work.isOpen}
-                         onkeydown={toggleCard}>
-
-                        <div>
-                            <div class="exp-top-row">
-                                <div class="company">{work.CompanyName}</div>
-                                <template if:true={work.isCurrent}>
-                                    <span class="current-badge">Current</span>
-                                </template>
-                            </div>
-
-                            <div class="role">{work.Role}</div>
-
-                            <div class="meta-header">
-                                {work.JobStartDate} – {work.displayEnd}
-                                <template if:true={work.duration}>
-                                    <span class="duration-badge">{work.duration}</span>
-                                </template>
-                            </div>
-
-                            <div class="meta-header">{work.WorkLocation}</div>
                         </div>
 
-                        <span class="toggle" aria-hidden="true">{work.icon}</span>
+                        <div class="role">{work.Role}</div>
+
+                        <div class="meta-header">
+                            {work.JobStartDate} - {work.displayEnd}
+                            <template if:true={work.duration}>
+                                <span class="duration-badge"
+                                    >{work.duration}</span
+                                >
+                            </template>
+                        </div>
+
+                        <div class="meta">{work.WorkLocation}</div>
                     </div>
+                </template>
+            </div>
 
-                    <!-- Body -->
-                    <div class={work.bodyClass}>
-
+            <!-- =========================
+             DESKTOP: RIGHT (DETAIL) - single active panel
+        ========================== -->
+            <div class="experience-detail" aria-live="polite">
+                <template if:true={activeDetail}>
+                    <div class="detail-content active">
                         <!-- Empty state -->
-                        <template if:false={work.hasContent}>
+                        <template if:false={activeDetail.hasContent}>
                             <div class="empty-state">
-                                <p class="empty-text">No details available for this role.</p>
+                                <p class="empty-text">
+                                    No details available for this role.
+                                </p>
                             </div>
                         </template>
 
                         <!-- General Bullets (not linked to a project) -->
-                        <template if:true={work.hasGeneralBullets}>
+                        <template if:true={activeDetail.hasGeneralBullets}>
                             <ul class="bullet-list">
-                                <template for:each={work.GeneralBullets} for:item="bullet">
+                                <template
+                                    for:each={activeDetail.GeneralBullets}
+                                    for:item="bullet"
+                                >
                                     <li key={bullet.Id}>{bullet.Text}</li>
                                 </template>
                             </ul>
                         </template>
 
                         <!-- Projects with their Bullets -->
-                        <template if:true={work.hasProjects}>
-                            <template for:each={work.Projects} for:item="proj">
+                        <template if:true={activeDetail.hasProjects}>
+                            <template
+                                for:each={activeDetail.Projects}
+                                for:item="proj"
+                            >
                                 <div key={proj.Id} class="inline-project">
                                     <div class="project-name">{proj.Name}</div>
 
                                     <template if:true={proj.TechStack}>
                                         <div class="tag-group">
-                                            <template for:each={proj.TechStack} for:item="tech">
-                                                <span key={tech} class="skill-tag">{tech}</span>
+                                            <template
+                                                for:each={proj.TechStack}
+                                                for:item="tech"
+                                            >
+                                                <span
+                                                    key={tech}
+                                                    class="skill-tag"
+                                                    >{tech}</span
+                                                >
                                             </template>
                                         </div>
                                     </template>
 
                                     <template if:true={proj.hasBullets}>
                                         <ul class="bullet-list">
-                                            <template for:each={proj.Bullets} for:item="bullet">
-                                                <li key={bullet.Id}>{bullet.Text}</li>
+                                            <template
+                                                for:each={proj.Bullets}
+                                                for:item="bullet"
+                                            >
+                                                <li key={bullet.Id}>
+                                                    {bullet.Text}
+                                                </li>
                                             </template>
                                         </ul>
                                     </template>
                                 </div>
                             </template>
                         </template>
-
                     </div>
-                </div>
-            </template>
-        </div>
+                </template>
+            </div>
 
-    </div>
+            <!-- =========================
+             MOBILE: ACCORDION
+        ========================== -->
+            <div class="experience-mobile">
+                <template for:each={workExperienceList} for:item="work">
+                    <div key={work.id} class="experience-card">
+                        <!-- Header -->
+                        <div
+                            class="node-header"
+                            onclick={toggleCard}
+                            data-id={work.id}
+                            role="button"
+                            tabindex="0"
+                            aria-expanded={work.isOpen}
+                            onkeydown={toggleCard}
+                        >
+                            <div>
+                                <div class="exp-top-row">
+                                    <div class="company">
+                                        {work.CompanyName}
+                                    </div>
+                                    <template if:true={work.isCurrent}>
+                                        <span class="current-badge"
+                                            >Current</span
+                                        >
+                                    </template>
+                                </div>
+
+                                <div class="role">{work.Role}</div>
+
+                                <div class="meta-header">
+                                    {work.JobStartDate} - {work.displayEnd}
+                                    <template if:true={work.duration}>
+                                        <span class="duration-badge"
+                                            >{work.duration}</span
+                                        >
+                                    </template>
+                                </div>
+
+                                <div class="meta-header">
+                                    {work.WorkLocation}
+                                </div>
+                            </div>
+
+                            <span class="toggle" aria-hidden="true"
+                                >{work.icon}</span
+                            >
+                        </div>
+
+                        <!-- Body -->
+                        <div class={work.bodyClass} data-id={work.id}>
+                            <!-- Empty state -->
+                            <template if:false={work.hasContent}>
+                                <div class="empty-state">
+                                    <p class="empty-text">
+                                        No details available for this role.
+                                    </p>
+                                </div>
+                            </template>
+
+                            <!-- General Bullets (not linked to a project) -->
+                            <template if:true={work.hasGeneralBullets}>
+                                <ul class="bullet-list">
+                                    <template
+                                        for:each={work.GeneralBullets}
+                                        for:item="bullet"
+                                    >
+                                        <li key={bullet.Id}>{bullet.Text}</li>
+                                    </template>
+                                </ul>
+                            </template>
+
+                            <!-- Projects with their Bullets -->
+                            <template if:true={work.hasProjects}>
+                                <template
+                                    for:each={work.Projects}
+                                    for:item="proj"
+                                >
+                                    <div key={proj.Id} class="inline-project">
+                                        <div class="project-name">
+                                            {proj.Name}
+                                        </div>
+
+                                        <template if:true={proj.TechStack}>
+                                            <div class="tag-group">
+                                                <template
+                                                    for:each={proj.TechStack}
+                                                    for:item="tech"
+                                                >
+                                                    <span
+                                                        key={tech}
+                                                        class="skill-tag"
+                                                        >{tech}</span
+                                                    >
+                                                </template>
+                                            </div>
+                                        </template>
+
+                                        <template if:true={proj.hasBullets}>
+                                            <ul class="bullet-list">
+                                                <template
+                                                    for:each={proj.Bullets}
+                                                    for:item="bullet"
+                                                >
+                                                    <li key={bullet.Id}>
+                                                        {bullet.Text}
+                                                    </li>
+                                                </template>
+                                            </ul>
+                                        </template>
+                                    </div>
+                                </template>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
     </template>
 </template>

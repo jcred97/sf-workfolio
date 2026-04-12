@@ -8,7 +8,7 @@
 
     --background-color: #020617;
     --card-bg-color: #111827;
-    --border: rgba(255,255,255,0.08);
+    --border: rgba(255, 255, 255, 0.08);
 
     --text-primary: #ffffff;
     --text-secondary: #cbd5f5;
@@ -19,7 +19,7 @@
     --btn-text: #ffffff;
 
     --card-radius: 14px;
-    --card-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
     --hover-border: #3b82f6;
 }
 
@@ -43,12 +43,50 @@ a {
    PAGE
 ========================================================= */
 .body {
-    font-family: "Segoe UI", Arial, sans-serif;
+    position: relative;
+    font-family: 'Segoe UI', Arial, sans-serif;
     min-height: 100vh;
     padding-top: 1rem;
-
-    background: var(--background-color);
+    background:
+        radial-gradient(
+            circle at 18% 12%,
+            color-mix(in srgb, var(--primary-color) 16%, transparent),
+            transparent 28rem
+        ),
+        radial-gradient(
+            circle at 82% 18%,
+            color-mix(in srgb, var(--accent-color) 10%, transparent),
+            transparent 24rem
+        ),
+        var(--background-color);
     animation: fadeIn 0.8s ease;
+}
+
+.body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+        radial-gradient(
+            circle,
+            color-mix(in srgb, var(--text-primary) 34%, transparent) 1px,
+            transparent 1.4px
+        ),
+        radial-gradient(
+            circle,
+            color-mix(in srgb, var(--primary-color) 24%, transparent) 1px,
+            transparent 1.3px
+        );
+    background-position:
+        0 0,
+        34px 42px;
+    background-size:
+        140px 140px,
+        210px 210px;
+    opacity: 0.32;
+    z-index: 0;
+    animation: starDrift 24s linear infinite;
 }
 
 /* =========================================================
@@ -101,7 +139,7 @@ nav {
 
 /* Hover underline */
 .link a::after {
-    content: "";
+    content: '';
     position: absolute;
     left: 0;
     bottom: -6px;
@@ -141,7 +179,9 @@ nav {
     height: 2px;
     background: var(--text-primary);
     border-radius: 2px;
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    transition:
+        transform 0.3s ease,
+        opacity 0.3s ease;
 }
 
 .hamburger.active .bar:nth-child(1) {
@@ -160,7 +200,11 @@ nav {
    TRANSITIONS
 ========================================================= */
 .content {
-    transition: opacity 0.25s ease, transform 0.25s ease;
+    position: relative;
+    z-index: 1;
+    transition:
+        opacity 0.25s ease,
+        transform 0.25s ease;
 }
 
 .fade-out {
@@ -168,12 +212,40 @@ nav {
     transform: translateY(10px);
 }
 
+.section-panel {
+    display: none;
+}
+
+.section-panel.active {
+    display: block;
+}
+
 /* =========================================================
    ANIMATION
 ========================================================= */
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes starDrift {
+    from {
+        transform: translate3d(0, 0, 0);
+    }
+
+    to {
+        transform: translate3d(-70px, 70px, 0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .body::before {
+        animation: none;
+    }
 }
 
 /* =========================================================
@@ -228,11 +300,12 @@ nav {
     }
 }
 
-
 /* =====================================
-   📜 COPYRIGHT FOOTER
+   COPYRIGHT FOOTER
 ===================================== */
 .copyright {
+    position: relative;
+    z-index: 1;
     text-align: center;
     padding: 2rem 1rem;
     margin-top: 3rem;

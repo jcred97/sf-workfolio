@@ -8,7 +8,7 @@
     gap: 1.5rem;
 }
 
-/* 📱 TABLET */
+/* TABLET */
 @media (max-width: 900px) {
     .container {
         grid-template-columns: 1fr;
@@ -16,7 +16,7 @@
     }
 }
 
-/* 📱 MOBILE */
+/* MOBILE */
 @media (max-width: 600px) {
     .container {
         padding: 1rem;
@@ -44,7 +44,7 @@
     grid-column: span 2;
 }
 
-/* 📱 override for mobile */
+/* override for mobile */
 @media (max-width: 900px) {
     .full-width {
         grid-column: span 1 !important;
@@ -63,7 +63,7 @@
     font-weight: 600;
 }
 
-/* 📱 mobile title */
+/* mobile title */
 @media (max-width: 600px) {
     .card-header h3 {
         font-size: 16px;
@@ -82,7 +82,7 @@
     transition: height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* overflow: visible is applied by JS via transitionend — NOT here.
+/* overflow: visible is applied by JS via transitionend - NOT here.
    Keeping it hidden throughout the animation prevents content bleed. */
 .card-body.open {
     overflow: hidden;
@@ -155,7 +155,7 @@
     line-height: 1.5;
 }
 
-/* 📱 mobile tags */
+/* mobile tags */
 @media (max-width: 600px) {
     .skill-tag {
         font-size: 11px;

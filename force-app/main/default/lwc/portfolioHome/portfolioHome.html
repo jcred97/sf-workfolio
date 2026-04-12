@@ -11,65 +11,113 @@
 
     <!-- CONTENT -->
     <template if:false={hasError}>
-    <div class="container">
-        <div class="content">
+        <div class="container">
+            <div class="content">
+                <!-- PROFILE HEADER -->
+                <div class="profile-header">
+                    <img src={profilePicture} class="profile-pic" />
 
-            <!-- PROFILE HEADER -->
-            <div class="profile-header">
-                <img src={profilePicture} class="profile-pic"/>
+                    <div class="profile-text">
+                        <h1>{fullName}</h1>
+                        <h2>{designation}</h2>
+                    </div>
+                </div>
 
-                <div class="profile-text">
-                    <h1>{fullName}</h1>
-                    <h2>{designation}</h2>
+                <!-- DESCRIPTION -->
+                <h3>{experienceSummary}{introduction}</h3>
+                <p>{subIntroduction}</p>
+
+                <div class="cta-row">
+                    <button
+                        type="button"
+                        class="primary-cta"
+                        onclick={handleViewWork}
+                    >
+                        View work
+                    </button>
+                    <button
+                        type="button"
+                        class="secondary-cta"
+                        onclick={handleContactJump}
+                    >
+                        Contact me
+                    </button>
+                </div>
+
+                <!-- SOCIAL LINKS -->
+                <div class="social-links">
+                    <template if:true={linkedinUrl}>
+                        <a
+                            href={linkedinUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="social-pill"
+                        >
+                            <img src={linkedin} alt="LinkedIn" loading="lazy" />
+                            LinkedIn
+                        </a>
+                    </template>
+
+                    <template if:true={githubUrl}>
+                        <a
+                            href={githubUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="social-pill"
+                        >
+                            <img src={github} alt="GitHub" loading="lazy" />
+                            GitHub
+                        </a>
+                    </template>
+
+                    <template if:true={trailblazerUrl}>
+                        <a
+                            href={trailblazerUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="social-pill"
+                        >
+                            <img
+                                src={trailblazer}
+                                alt="Trailhead"
+                                loading="lazy"
+                            />
+                            Trailhead
+                        </a>
+                    </template>
                 </div>
             </div>
 
-            <!-- DESCRIPTION -->
-            <h3>{experienceSummary}{introduction}</h3>
-            <p>{subIntroduction}</p>
-            
-            <!-- SOCIAL LINKS -->
-            <div class="slds-grid social-links">
-                <template if:true={linkedinUrl}>
-                    <a href={linkedinUrl} target="_blank">
-                        <img src={linkedin} class="social-icon"/>
-                    </a>
-                </template>
-
-                <template if:true={githubUrl}>
-                    <a href={githubUrl} target="_blank">
-                        <img src={github} class="social-icon"/>
-                    </a>
-                </template>
-
-                <template if:true={trailblazerUrl}>
-                    <a href={trailblazerUrl} target="_blank">
-                        <img src={trailblazer} class="social-icon"/>
-                    </a>
-                </template>
-            </div>
+            <!-- RIGHT SIDE IMAGE -->
+            <section class="cert-summary" aria-label="Salesforce credentials">
+                <h3 class="cert-title">Certifications</h3>
+                <div class="cert-grid">
+                    <template for:each={certifications} for:item="cert">
+                        <div key={cert.Id} class="cert-badge-frame">
+                            <img
+                                src={cert.image}
+                                alt={cert.name}
+                                class="cert-badge"
+                            />
+                        </div>
+                    </template>
+                </div>
+            </section>
         </div>
 
-        <!-- RIGHT SIDE IMAGE -->
-        <div class="cert-grid">
-            <template for:each={certifications} for:item="cert">
-                <img key={cert.Id} src={cert.image} alt={cert.name} class="cert-badge"/>
-            </template>
+        <!-- CONTACT SECTION (MOVED FROM SEPARATE PAGE) -->
+        <div class="contact-section">
+            <h2 class="contact-title">Let's work together</h2>
+            <c-portfolio-contact
+                record-id={recordId}
+                linkedin={linkedin}
+                linkedin-url={linkedinUrl}
+                github={github}
+                github-url={githubUrl}
+                trailblazer={trailblazer}
+                trailblazer-url={trailblazerUrl}
+            >
+            </c-portfolio-contact>
         </div>
-    </div>
-
-    <!-- CONTACT SECTION (MOVED FROM SEPARATE PAGE) -->
-    <div class="contact-section">
-        <h2 class="contact-title">Let’s work together</h2>
-        <c-portfolio-contact
-            record-id={recordId}
-            linkedin={linkedin}
-            linkedin-url={linkedinUrl}
-            github={github}
-            github-url={githubUrl}
-            trailblazer={trailblazer}
-            trailblazer-url={trailblazerUrl}>
-        </c-portfolio-contact>
-    </div>
     </template>
 </template>

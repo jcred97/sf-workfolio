@@ -15,7 +15,6 @@ a {
     text-decoration: none;
 }
 
-
 /* =========================================================
    MAIN LAYOUT (2-COLUMN GRID)
    Left: Profile Content
@@ -32,7 +31,6 @@ a {
     gap: 2rem;
 }
 
-
 /* =========================================================
    PROFILE HEADER
    Profile image + name + title aligned horizontally
@@ -44,14 +42,13 @@ a {
     margin-bottom: 1.5rem;
 }
 
-
 /* =========================================================
    PROFILE IMAGE (CIRCULAR AVATAR)
    Includes gradient border effect
 ========================================================= */
 .profile-pic {
-    width: 120px;
-    height: 120px;
+    width: 132px;
+    height: 132px;
 
     border-radius: 50%;
     object-fit: cover;
@@ -61,9 +58,12 @@ a {
     padding: 4px;
 
     /* gradient ring effect */
-    background: radial-gradient(circle, var(--primary-color), var(--secondary-color));
+    background: radial-gradient(
+        circle,
+        var(--primary-color),
+        var(--secondary-color)
+    );
 }
-
 
 /* =========================================================
    PROFILE TEXT (NAME + ROLE)
@@ -72,7 +72,7 @@ a {
     margin: 0;
 
     color: var(--text-primary);
-    font-size: 2.5rem;
+    font-size: 2.75rem;
     font-weight: 700;
 }
 
@@ -83,7 +83,6 @@ a {
     font-size: 1.3rem;
     font-weight: 400;
 }
-
 
 /* =========================================================
    DESCRIPTION TEXT
@@ -104,42 +103,136 @@ a {
     font-size: 1rem;
 }
 
+.cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-bottom: 1.25rem;
+}
+
+.primary-cta,
+.secondary-cta {
+    border-radius: 999px;
+    padding: 0.7rem 1rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease;
+}
+
+.primary-cta {
+    border: 1px solid var(--primary-color);
+    color: var(--btn-text);
+    background: linear-gradient(
+        135deg,
+        var(--btn-gradient-start),
+        var(--btn-gradient-end)
+    );
+}
+
+.secondary-cta {
+    border: 1px solid color-mix(in srgb, var(--primary-color) 34%, transparent);
+    color: var(--text-primary);
+    background: transparent;
+}
+
+.primary-cta:hover,
+.secondary-cta:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-color);
+}
+
+.secondary-cta:hover {
+    background: color-mix(in srgb, var(--primary-color) 10%, transparent);
+}
 
 /* =========================================================
    RIGHT SIDE (Certification)
 ========================================================= */
+.cert-summary {
+    display: grid;
+    justify-items: center;
+    gap: 1.2rem;
+}
+
+.cert-title {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
 .cert-grid {
     display: grid;
-    grid-template-columns: repeat(3, 110px);
-    gap: 20px;
+    grid-template-columns: repeat(3, 96px);
+    gap: 18px 22px;
     justify-content: center;
 }
 
-.cert-badge {
-    width: 90px;
-    object-fit: contain;
-    transition: transform 0.25s ease, opacity 0.25s ease;
+.cert-badge-frame {
+    width: 96px;
+    height: 96px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+        transform 0.25s ease,
+        opacity 0.25s ease;
 }
 
-.cert-badge:hover {
+.cert-badge-frame:hover {
     transform: translateY(-5px) scale(1.05);
     filter: drop-shadow(0 10px 20px var(--primary-color));
 }
 
-/* =========================================================
-   SOCIAL ICONS (LinkedIn / Trailhead)
-========================================================= */
-.social-icon {
-    width: 40px;
-    height: 40px;
-
-    margin: 16px 16px 0 0;
-
-    transition: transform 0.2s ease;
+.cert-badge {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
-.social-icon:hover {
-    transform: scale(1.1); /* subtle hover interaction */
+/* =========================================================
+   SOCIAL LINKS
+========================================================= */
+.social-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.social-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: all 0.25s ease;
+    cursor: pointer;
+}
+
+.social-pill:hover {
+    border-color: var(--primary-color);
+    background: color-mix(in srgb, var(--primary-color) 10%, transparent);
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+.social-pill img {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
 }
 
 /* =========================================================
@@ -235,16 +328,20 @@ a {
     }
 
     .profile-pic {
-        width: 90px;
-        height: 90px;
+        width: 96px;
+        height: 96px;
     }
 
     .profile-text h1 {
-        font-size: 1.8rem;
+        font-size: 2rem;
     }
 
     .profile-text h2 {
         font-size: 1rem;
+    }
+
+    .availability-tagline {
+        font-size: 0.72rem;
     }
 
     .container .content h3 {
@@ -255,6 +352,24 @@ a {
         font-size: 0.9rem;
     }
 
+    .cta-row {
+        justify-content: center;
+    }
+
+    .cert-summary {
+        justify-items: center;
+    }
+
+    .cert-grid {
+        grid-template-columns: repeat(2, minmax(96px, 1fr));
+        gap: 16px;
+        width: min(100%, 240px);
+    }
+
+    .cert-badge-frame {
+        margin: auto;
+    }
+
     .container .image img {
         max-width: 180px;
         margin-top: 1.5rem;
@@ -262,5 +377,38 @@ a {
 
     .social-links {
         justify-content: center;
+    }
+}
+
+@media (max-width: 420px) {
+    .container {
+        padding: 1.5rem 1rem;
+    }
+
+    .profile-text h1 {
+        font-size: 1.75rem;
+    }
+
+    .availability-tagline {
+        max-width: 260px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.45;
+    }
+
+    .cert-grid {
+        grid-template-columns: repeat(2, 90px);
+        width: min(100%, 210px);
+    }
+
+    .cert-badge-frame {
+        width: 90px;
+        height: 90px;
+    }
+
+    .social-pill {
+        justify-content: center;
+        flex: 1 1 100%;
+        max-width: 220px;
     }
 }

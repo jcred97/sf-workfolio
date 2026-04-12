@@ -1,6 +1,5 @@
 <template>
     <div class="body">
-
         <!-- ========================================
              NAVBAR
         ========================================= -->
@@ -11,7 +10,11 @@
             </div>
 
             <!-- HAMBURGER BUTTON (mobile only) -->
-            <button class={hamburgerClass} onclick={toggleMenu} aria-label="Toggle navigation">
+            <button
+                class={hamburgerClass}
+                onclick={toggleMenu}
+                aria-label="Toggle navigation"
+            >
                 <span class="bar"></span>
                 <span class="bar"></span>
                 <span class="bar"></span>
@@ -20,16 +23,36 @@
             <!-- NAV LINKS -->
             <ul class={navLinksClass}>
                 <li class="link">
-                    <a class={homeClass} data-section="home" onclick={handleNavigation}>Home</a>
+                    <a
+                        class={homeClass}
+                        data-section="home"
+                        onclick={handleNavigation}
+                        >Home</a
+                    >
                 </li>
                 <li class="link">
-                    <a class={experienceClass} data-section="experience" onclick={handleNavigation}>Experience</a>
+                    <a
+                        class={experienceClass}
+                        data-section="experience"
+                        onclick={handleNavigation}
+                        >Experience</a
+                    >
                 </li>
                 <li class="link">
-                    <a class={projectsClass} data-section="projects" onclick={handleNavigation}>Projects</a>
+                    <a
+                        class={projectsClass}
+                        data-section="projects"
+                        onclick={handleNavigation}
+                        >Projects</a
+                    >
                 </li>
                 <li class="link">
-                    <a class={skillsClass} data-section="skills" onclick={handleNavigation}>Skills</a>
+                    <a
+                        class={skillsClass}
+                        data-section="skills"
+                        onclick={handleNavigation}
+                        >Skills</a
+                    >
                 </li>
             </ul>
         </nav>
@@ -38,46 +61,59 @@
              CONTENT WRAPPER (WITH TRANSITION)
         ========================================= -->
         <div class={contentClass}>
-
             <!-- HOME -->
-            <template if:true={showHome}>
-                <c-portfolio-home
-                    record-id={recordId}
-                    linkedin={social.linkedin}
-                    trailblazer={social.trailblazer}
-                    github={social.github}
-                    profile-picture={profilePicture}
-                    onnamechange={handleNameChange}>
-                </c-portfolio-home>
+            <template if:true={hasLoadedHome}>
+                <section class={homeSectionClass} aria-hidden={homeAriaHidden}>
+                    <c-portfolio-home
+                        record-id={recordId}
+                        linkedin={social.linkedin}
+                        trailblazer={social.trailblazer}
+                        github={social.github}
+                        profile-picture={profilePicture}
+                        onnamechange={handleNameChange}
+                        onsectionchange={handleHomeSectionChange}
+                    >
+                    </c-portfolio-home>
+                </section>
             </template>
 
             <!-- EXPERIENCE -->
-            <template if:true={showExperience}>
-                <c-portfolio-experience
-                    record-id={recordId}>
-                </c-portfolio-experience>
+            <template if:true={hasLoadedExperience}>
+                <section
+                    class={experienceSectionClass}
+                    aria-hidden={experienceAriaHidden}
+                >
+                    <c-portfolio-experience record-id={recordId}>
+                    </c-portfolio-experience>
+                </section>
             </template>
 
             <!-- PROJECTS -->
-            <template if:true={showProjects}>
-                <c-portfolio-projects
-                    record-id={recordId}>
-                </c-portfolio-projects>
+            <template if:true={hasLoadedProjects}>
+                <section
+                    class={projectsSectionClass}
+                    aria-hidden={projectsAriaHidden}
+                >
+                    <c-portfolio-projects record-id={recordId}>
+                    </c-portfolio-projects>
+                </section>
             </template>
 
             <!-- SKILLS -->
-            <template if:true={showSkills}>
-                <c-portfolio-skills
-                    record-id={recordId}>
-                </c-portfolio-skills>
+            <template if:true={hasLoadedSkills}>
+                <section
+                    class={skillsSectionClass}
+                    aria-hidden={skillsAriaHidden}
+                >
+                    <c-portfolio-skills record-id={recordId}>
+                    </c-portfolio-skills>
+                </section>
             </template>
-
         </div>
 
         <!-- FOOTER -->
         <footer class="copyright">
             &copy; {currentYear} John Carlo Red. All rights reserved.
         </footer>
-
     </div>
 </template>

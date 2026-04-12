@@ -24,6 +24,7 @@
 @media (max-width: 767px) {
     .experience-container {
         display: block;
+        padding: 1rem;
     }
 
     .experience-list,
@@ -35,7 +36,6 @@
         display: block !important;
     }
 }
-
 
 /* =====================================
    TIMELINE
@@ -55,11 +55,7 @@
     top: 0;
     bottom: 0;
     width: 2px;
-    background: linear-gradient(
-        to bottom,
-        var(--accent-color),
-        transparent
-    );
+    background: linear-gradient(to bottom, var(--accent-color), transparent);
 }
 
 .exp-item {
@@ -122,7 +118,6 @@
     box-shadow: 0 0 10px var(--primary-color);
 }
 
-
 /* =====================================
    DETAIL PANEL
 ===================================== */
@@ -136,8 +131,9 @@
 
     opacity: 0;
     transform: translateX(20px);
-    transition: opacity 0.5s cubic-bezier(0.25, 0.8, 0.25, 1),
-                transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition:
+        opacity 0.5s cubic-bezier(0.25, 0.8, 0.25, 1),
+        transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .detail-content.active {
@@ -150,7 +146,6 @@
     border: 1px solid var(--border);
     box-shadow: 0 10px 30px var(--card-shadow);
 }
-
 
 /* =====================================
    TEXT
@@ -181,7 +176,6 @@
     margin-bottom: 12px;
 }
 
-
 /* =====================================
    TOP ROW (Company + Current badge)
 ===================================== */
@@ -190,7 +184,6 @@
     align-items: center;
     gap: 8px;
 }
-
 
 /* =====================================
    CURRENT BADGE
@@ -211,7 +204,6 @@
     flex-shrink: 0;
 }
 
-
 /* =====================================
    DURATION BADGE
 ===================================== */
@@ -225,7 +217,6 @@
     border-radius: 4px;
     border: 1px solid rgba(255, 255, 255, 0.08);
 }
-
 
 /* =====================================
    EMPTY STATE
@@ -241,7 +232,6 @@
     font-style: italic;
     margin: 0;
 }
-
 
 /* =====================================
    TAGS
@@ -271,7 +261,6 @@
     box-shadow: 0 6px 14px var(--card-shadow);
 }
 
-
 /* =====================================
    EXPERIENCE BULLETS
 ===================================== */
@@ -291,7 +280,6 @@
 .bullet-list li:last-child {
     margin-bottom: 0;
 }
-
 
 /* =====================================
    INLINE PROJECTS (within detail)
@@ -313,7 +301,6 @@
     color: var(--text-primary);
     margin-bottom: 4px;
 }
-
 
 /* =====================================
    MOBILE ACCORDION
@@ -354,7 +341,6 @@
     flex-shrink: 0;
     margin-left: 12px;
 }
-
 
 /* =====================================
    ERROR STATE

@@ -8,7 +8,7 @@ export default class SkillNode extends LightningElement {
     }
 
     get icon() {
-        return this.node.isOpen ? '−' : '+';
+        return this.node.isOpen ? '-' : '+';
     }
 
     toggle(event) {
@@ -30,7 +30,7 @@ export default class SkillNode extends LightningElement {
 
     get allChildrenAreLeaf() {
         return this.node.children?.every(
-            child => !child.children || child.children.length === 0
+            (child) => !child.children || child.children.length === 0
         );
     }
 

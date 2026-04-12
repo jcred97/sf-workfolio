@@ -1,13 +1,12 @@
 @IsTest
 private class PortfolioControllerTest {
-
     @testSetup
     static void setupData() {
         // Create Portfolio (if required lookup)
         Portfolio__c portfolio = new Portfolio__c(
-                Name = 'Test Portfolio',
-                FullName__c = 'Test Portfolio'
-            );
+            Name = 'Test Portfolio',
+            FullName__c = 'Test Portfolio'
+        );
         insert portfolio;
 
         // Create Skills
@@ -121,19 +120,87 @@ private class PortfolioControllerTest {
     }
 
     @IsTest
-    static void testSubmitLead_BlankEmail() {
-        Test.startTest();
+    static void testSubmitLead_BlankEmailRejected() {
+        try {
+            Test.startTest();
+            PortfolioController.submitLead(
+                'Jane',
+                'Doe',
+                null,
+                'No email case'
+            );
+            Test.stopTest();
 
-        PortfolioController.submitLead(
-            'Jane',
-            'Doe',
-            null,
-            'No email case'
-        );
+            System.assert(false, 'Blank email should be rejected');
+        } catch (AuraHandledException e) {
+            System.assert(
+                true,
+                'Blank email was rejected with AuraHandledException'
+            );
+        }
+    }
 
-        Test.stopTest();
+    @IsTest
+    static void testSubmitLead_BlankLastNameRejected() {
+        try {
+            Test.startTest();
+            PortfolioController.submitLead(
+                'Jane',
+                '   ',
+                'jane@test.com',
+                'No last name case'
+            );
+            Test.stopTest();
 
-        System.assert(true, 'Handled blank email correctly');
+            System.assert(false, 'Blank last name should be rejected');
+        } catch (AuraHandledException e) {
+            System.assert(
+                true,
+                'Blank last name was rejected with AuraHandledException'
+            );
+        }
+    }
+
+    @IsTest
+    static void testSubmitLead_InvalidEmailRejected() {
+        try {
+            Test.startTest();
+            PortfolioController.submitLead(
+                'Jane',
+                'Doe',
+                'not-an-email',
+                'Invalid email case'
+            );
+            Test.stopTest();
+
+            System.assert(false, 'Invalid email should be rejected');
+        } catch (AuraHandledException e) {
+            System.assert(
+                true,
+                'Invalid email was rejected with AuraHandledException'
+            );
+        }
+    }
+
+    @IsTest
+    static void testSubmitLead_BlankMessageRejected() {
+        try {
+            Test.startTest();
+            PortfolioController.submitLead(
+                'Jane',
+                'Doe',
+                'jane@test.com',
+                '   '
+            );
+            Test.stopTest();
+
+            System.assert(false, 'Blank message should be rejected');
+        } catch (AuraHandledException e) {
+            System.assert(
+                true,
+                'Blank message was rejected with AuraHandledException'
+            );
+        }
     }
 
     @IsTest
@@ -153,7 +220,9 @@ private class PortfolioControllerTest {
         Portfolio__c portfolio = [SELECT Id FROM Portfolio__c LIMIT 1];
 
         Test.startTest();
-        Portfolio_Setting__c setting = PortfolioController.getPortfolioSettings(portfolio.Id);
+        Portfolio_Setting__c setting = PortfolioController.getPortfolioSettings(
+            portfolio.Id
+        );
         Test.stopTest();
 
         System.assertNotEquals(null, setting);
@@ -209,14 +278,31 @@ private class PortfolioControllerTest {
         Portfolio__c portfolio = [SELECT Id FROM Portfolio__c LIMIT 1];
 
         Test.startTest();
-        List<WorkExperience__c> result = PortfolioController.getWorkExperiences(portfolio.Id);
+        List<WorkExperience__c> result = PortfolioController.getWorkExperiences(
+            portfolio.Id
+        );
         Test.stopTest();
 
-        System.assertEquals(1, result.size(), 'Should return 1 work experience');
+        System.assertEquals(
+            1,
+            result.size(),
+            'Should return 1 work experience'
+        );
         System.assertEquals('Test Company', result[0].CompanyName__c);
-        System.assertEquals(1, result[0].Experience_Bullets__r.size(), 'Should return 1 experience bullet');
-        System.assertEquals('Built a cool feature', result[0].Experience_Bullets__r[0].Bullet_Text__c);
-        System.assertEquals(1, result[0].Projects__r.size(), 'Should return 1 project');
+        System.assertEquals(
+            1,
+            result[0].Experience_Bullets__r.size(),
+            'Should return 1 experience bullet'
+        );
+        System.assertEquals(
+            'Built a cool feature',
+            result[0].Experience_Bullets__r[0].Bullet_Text__c
+        );
+        System.assertEquals(
+            1,
+            result[0].Projects__r.size(),
+            'Should return 1 project'
+        );
         System.assertEquals('Test Project', result[0].Projects__r[0].Name);
     }
 
@@ -225,15 +311,24 @@ private class PortfolioControllerTest {
         Portfolio__c portfolio = [SELECT Id FROM Portfolio__c LIMIT 1];
 
         Test.startTest();
-        List<Personal_Project__c> result = PortfolioController.getPersonalProjects(portfolio.Id);
+        List<Personal_Project__c> result = PortfolioController.getPersonalProjects(
+            portfolio.Id
+        );
         Test.stopTest();
 
-        System.assertEquals(1, result.size(), 'Should return 1 personal project');
+        System.assertEquals(
+            1,
+            result.size(),
+            'Should return 1 personal project'
+        );
         System.assertEquals('My Side Project', result[0].Name);
         System.assertEquals('LWC, Node.js', result[0].Tech_Stack__c);
         System.assertNotEquals(null, result[0].YouTube_URL__c);
         System.assertNotEquals(null, result[0].GitHub_URL__c);
-        System.assert(!result[0].Project_Images__r.isEmpty(), 'Should have project images');
+        System.assert(
+            !result[0].Project_Images__r.isEmpty(),
+            'Should have project images'
+        );
     }
 
     @IsTest
@@ -241,12 +336,17 @@ private class PortfolioControllerTest {
         Portfolio__c portfolio = [SELECT Id FROM Portfolio__c LIMIT 1];
 
         Test.startTest();
-        List<Certification__c> result = PortfolioController.getCertifications(portfolio.Id);
+        List<Certification__c> result = PortfolioController.getCertifications(
+            portfolio.Id
+        );
         Test.stopTest();
 
         System.assertEquals(1, result.size(), 'Should return 1 certification');
         System.assertEquals('Platform Developer 1', result[0].Name);
-        System.assertEquals('https://example.com/pd1.png', result[0].Image_URL__c);
+        System.assertEquals(
+            'https://example.com/pd1.png',
+            result[0].Image_URL__c
+        );
     }
 
     @IsTest
@@ -259,6 +359,9 @@ private class PortfolioControllerTest {
 
         System.assertEquals(1, result.size(), 'Should return 1 project');
         System.assertEquals('Test Project', result[0].Name);
-        System.assertEquals('Test Company', result[0].Work_Experience__r.CompanyName__c);
+        System.assertEquals(
+            'Test Company',
+            result[0].Work_Experience__r.CompanyName__c
+        );
     }
 }

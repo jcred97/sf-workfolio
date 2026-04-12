@@ -9,7 +9,7 @@ export default class PortfolioExperience extends LightningElement {
     _activeId = null;
 
     /* =====================================
-       WIRE — WORK EXPERIENCE
+       WIRE - WORK EXPERIENCE
     ===================================== */
     @wire(getWorkExperiences, { portfolioId: '$recordId' })
     workExperienceHandler({ data, error }) {
@@ -18,13 +18,16 @@ export default class PortfolioExperience extends LightningElement {
             this.errorMessage = '';
             this.formatExperience(data);
 
+            // eslint-disable-next-line @lwc/lwc/no-async-operation
             requestAnimationFrame(() => {
                 this.animateHeight();
             });
-
         } else if (error) {
             this.hasError = true;
-            this.errorMessage = error?.body?.message || error?.message || 'Unable to load experience. Please try again later.';
+            this.errorMessage =
+                error?.body?.message ||
+                error?.message ||
+                'Unable to load experience. Please try again later.';
             this.workExperienceList = [];
             console.error(error);
         }
@@ -38,15 +41,19 @@ export default class PortfolioExperience extends LightningElement {
             const isCurrent = item.IsCurrent__c;
             const endDate = this.formatDate(item.JobEndDate__c);
             const isActive = index === 0;
-            const duration = this.calcDuration(item.JobStartDate__c, item.JobEndDate__c, isCurrent);
+            const duration = this.calcDuration(
+                item.JobStartDate__c,
+                item.JobEndDate__c,
+                isCurrent
+            );
 
             const allBullets = item.Experience_Bullets__r || [];
 
             // Group bullets under their parent project
-            const projects = (item.Projects__r || []).map(proj => {
+            const projects = (item.Projects__r || []).map((proj) => {
                 const projBullets = allBullets
-                    .filter(b => b.Project__c === proj.Id)
-                    .map(b => ({ Id: b.Id, Text: b.Bullet_Text__c }));
+                    .filter((b) => b.Project__c === proj.Id)
+                    .map((b) => ({ Id: b.Id, Text: b.Bullet_Text__c }));
 
                 return {
                     Id: proj.Id,
@@ -59,8 +66,8 @@ export default class PortfolioExperience extends LightningElement {
 
             // Bullets not linked to any project
             const generalBullets = allBullets
-                .filter(b => !b.Project__c)
-                .map(b => ({ Id: b.Id, Text: b.Bullet_Text__c }));
+                .filter((b) => !b.Project__c)
+                .map((b) => ({ Id: b.Id, Text: b.Bullet_Text__c }));
 
             const hasContent = generalBullets.length > 0 || projects.length > 0;
 
@@ -89,22 +96,24 @@ export default class PortfolioExperience extends LightningElement {
 
                 /* MOBILE */
                 isOpen: isActive,
-                icon: isActive ? '−' : '+',
+                icon: isActive ? '-' : '+',
                 bodyClass: isActive ? 'node-children open' : 'node-children',
 
                 /* DESKTOP */
                 isActive,
                 leftClass: `exp-item${isActive ? ' active' : ''}${isCurrent ? ' current' : ''}`,
-                rightClass: isActive ? 'detail-content active' : 'detail-content'
+                rightClass: isActive
+                    ? 'detail-content active'
+                    : 'detail-content'
             };
         });
     }
 
     /* =====================================
-       DESKTOP — Active detail (single panel)
+       DESKTOP - Active detail (single panel)
     ===================================== */
     get activeDetail() {
-        return this.workExperienceList.find(w => w.isActive) || null;
+        return this.workExperienceList.find((w) => w.isActive) || null;
     }
 
     /* =====================================
@@ -117,20 +126,27 @@ export default class PortfolioExperience extends LightningElement {
         }
 
         const id = event.currentTarget.dataset.id;
+        const affectedIds = new Set([
+            id,
+            ...this.workExperienceList
+                .filter((item) => item.isOpen)
+                .map((item) => item.id)
+        ]);
 
-        this.workExperienceList = this.workExperienceList.map(item => {
+        this.workExperienceList = this.workExperienceList.map((item) => {
             const isOpen = item.id === id ? !item.isOpen : false;
 
             return {
                 ...item,
                 isOpen,
-                icon: isOpen ? '−' : '+',
+                icon: isOpen ? '-' : '+',
                 bodyClass: isOpen ? 'node-children open' : 'node-children'
             };
         });
 
+        // eslint-disable-next-line @lwc/lwc/no-async-operation
         requestAnimationFrame(() => {
-            this.animateHeight();
+            this.animateHeight([...affectedIds]);
         });
     }
 
@@ -148,7 +164,7 @@ export default class PortfolioExperience extends LightningElement {
         this._activeId = id;
 
         // Step 1: remove active
-        this.workExperienceList = this.workExperienceList.map(item => ({
+        this.workExperienceList = this.workExperienceList.map((item) => ({
             ...item,
             isActive: false,
             leftClass: `exp-item${item.isCurrent ? ' current' : ''}`,
@@ -156,15 +172,18 @@ export default class PortfolioExperience extends LightningElement {
         }));
 
         // Step 2: next frame activate (enables animation)
+        // eslint-disable-next-line @lwc/lwc/no-async-operation
         requestAnimationFrame(() => {
-            this.workExperienceList = this.workExperienceList.map(item => {
+            this.workExperienceList = this.workExperienceList.map((item) => {
                 const isActive = item.id === id;
 
                 return {
                     ...item,
                     isActive,
                     leftClass: `exp-item${isActive ? ' active' : ''}${item.isCurrent ? ' current' : ''}`,
-                    rightClass: isActive ? 'detail-content active' : 'detail-content'
+                    rightClass: isActive
+                        ? 'detail-content active'
+                        : 'detail-content'
                 };
             });
         });
@@ -173,22 +192,31 @@ export default class PortfolioExperience extends LightningElement {
     /* =====================================
        MOBILE ANIMATION
     ===================================== */
-    animateHeight() {
-        const sections = this.template.querySelectorAll('.node-children');
+    animateHeight(ids) {
+        const sections = ids?.length
+            ? ids
+                  .map((id) =>
+                      this.template.querySelector(
+                          `.node-children[data-id="${id}"]`
+                      )
+                  )
+                  .filter(Boolean)
+            : this.template.querySelectorAll('.node-children');
 
-        sections.forEach(section => {
+        sections.forEach((section) => {
             if (section.classList.contains('open')) {
                 section.style.height = 'auto';
                 const height = section.scrollHeight + 'px';
                 section.style.height = '0px';
 
+                // eslint-disable-next-line @lwc/lwc/no-async-operation
                 requestAnimationFrame(() => {
                     section.style.height = height;
                 });
-
             } else {
                 section.style.height = section.scrollHeight + 'px';
 
+                // eslint-disable-next-line @lwc/lwc/no-async-operation
                 requestAnimationFrame(() => {
                     section.style.height = '0px';
                 });
@@ -201,24 +229,35 @@ export default class PortfolioExperience extends LightningElement {
     ===================================== */
     splitTechStack(value) {
         if (!value) return null;
-        const result = value.split(',').map(t => t.trim()).filter(Boolean);
+        const result = value
+            .split(',')
+            .map((t) => t.trim())
+            .filter(Boolean);
         return result.length ? result : null;
     }
 
     formatDate(dateStr) {
         if (!dateStr) return null;
         const date = new Date(dateStr + 'T00:00:00');
-        return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+        return date.toLocaleDateString('en-US', {
+            month: 'short',
+            year: 'numeric'
+        });
     }
 
     calcDuration(startStr, endStr, isCurrent) {
         if (!startStr) return '';
 
         const start = new Date(startStr + 'T00:00:00');
-        const end = isCurrent ? new Date() : (endStr ? new Date(endStr + 'T00:00:00') : new Date());
+        const end = isCurrent
+            ? new Date()
+            : endStr
+              ? new Date(endStr + 'T00:00:00')
+              : new Date();
 
-        let months = (end.getFullYear() - start.getFullYear()) * 12
-                   + (end.getMonth() - start.getMonth());
+        let months =
+            (end.getFullYear() - start.getFullYear()) * 12 +
+            (end.getMonth() - start.getMonth());
         if (months < 0) months = 0;
 
         const yrs = Math.floor(months / 12);
