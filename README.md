@@ -10,7 +10,6 @@ A personal developer portfolio built entirely on Salesforce, showcasing work exp
 - Platform Events
 - Custom Metadata Types
 - Flows
-- Jest (LWC unit testing)
 - ESLint + Prettier + Husky (code quality)
 
 ## Project Structure
@@ -99,14 +98,11 @@ force-app/main/default/
 
 ## Scripts
 
-| Command                      | Description                         |
-| ---------------------------- | ----------------------------------- |
-| `npm test`                   | Run LWC Jest tests                  |
-| `npm run test:unit:watch`    | Jest watch mode                     |
-| `npm run test:unit:coverage` | Jest with coverage report           |
-| `npm run lint`               | Lint JavaScript in Aura/LWC bundles |
-| `npm run prettier`           | Format all code                     |
-| `npm run prettier:verify`    | Check formatting without writing    |
+| Command                   | Description                         |
+| ------------------------- | ----------------------------------- |
+| `npm run lint`            | Lint JavaScript in Aura/LWC bundles |
+| `npm run prettier`        | Format all code                     |
+| `npm run prettier:verify` | Check formatting without writing    |
 
 ## License
 

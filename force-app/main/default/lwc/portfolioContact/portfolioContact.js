@@ -1,7 +1,6 @@
 import { LightningElement, api, wire } from 'lwc';
-import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
+import getPortfolio from '@salesforce/apex/PortfolioController.getPortfolio';
 import submitLead from '@salesforce/apex/PortfolioController.submitLead';
-import EMAIL from '@salesforce/schema/Portfolio__c.Email__c';
 
 /**
  * PortfolioContact
@@ -54,18 +53,17 @@ export default class PortfolioContact extends LightningElement {
     /* =========================================================
        WIRE - Portfolio email from record
     ========================================================= */
-    @wire(getRecord, { recordId: '$recordId', fields: [EMAIL] })
-    wiredPortfolioData(result) {
-        this.portfolioData = result;
-
-        if (result.data) {
+    @wire(getPortfolio, { portfolioId: '$recordId' })
+    wiredPortfolioData({ data, error }) {
+        if (data) {
+            this.portfolioData = data;
             this.hasWireError = false;
             this.wireErrorMessage = '';
-        } else if (result.error) {
+        } else if (error) {
             this.hasWireError = true;
             this.wireErrorMessage =
-                result.error?.body?.message ||
-                result.error?.message ||
+                error?.body?.message ||
+                error?.message ||
                 'Unable to load contact details. Please try again later.';
         }
     }
@@ -207,9 +205,7 @@ export default class PortfolioContact extends LightningElement {
     }
 
     get email() {
-        return this.portfolioData?.data
-            ? getFieldValue(this.portfolioData.data, EMAIL)
-            : null;
+        return this.portfolioData?.Email__c;
     }
 
     get mailtoLink() {

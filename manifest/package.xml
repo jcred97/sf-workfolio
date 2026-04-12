@@ -113,6 +113,18 @@
         <name>Queue</name>
     </types>
     <types>
+        <members>Certification__c</members>
+        <members>Experience_Bullet__c</members>
+        <members>Lead</members>
+        <members>Personal_Project__c</members>
+        <members>Portfolio__c</members>
+        <members>Portfolio_Setting__c</members>
+        <members>Project__c</members>
+        <members>Skill__c</members>
+        <members>WorkExperience__c</members>
+        <name>SharingRules</name>
+    </types>
+    <types>
         <members>PortfolioAssets</members>
         <members>Favicon</members>
         <name>StaticResource</name>

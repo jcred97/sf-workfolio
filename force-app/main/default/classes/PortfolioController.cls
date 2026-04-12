@@ -99,6 +99,28 @@ public with sharing class PortfolioController {
     }
 
     @AuraEnabled(cacheable=true)
+    public static Portfolio__c getPortfolio(Id portfolioId) {
+        List<Portfolio__c> portfolios = [
+            SELECT
+                Id,
+                FullName__c,
+                Designation__c,
+                Career_Start_Date__c,
+                Email__c,
+                Introduction__c,
+                Sub_Introduction__c,
+                LinkedIn_URL__c,
+                Github_URL__c,
+                Trailblazer_URL__c
+            FROM Portfolio__c
+            WHERE Id = :portfolioId
+            LIMIT 1
+        ];
+
+        return portfolios.isEmpty() ? null : portfolios[0];
+    }
+
+    @AuraEnabled(cacheable=true)
     public static List<Skill__c> getSkills(Id portfolioId) {
         return [
             SELECT Id, Name, Priority__c, Parent_Skill__c, Is_Full_Width__c

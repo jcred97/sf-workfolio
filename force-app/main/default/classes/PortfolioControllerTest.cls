@@ -5,7 +5,15 @@ private class PortfolioControllerTest {
         // Create Portfolio (if required lookup)
         Portfolio__c portfolio = new Portfolio__c(
             Name = 'Test Portfolio',
-            FullName__c = 'Test Portfolio'
+            FullName__c = 'Test Portfolio',
+            Designation__c = 'Salesforce Developer',
+            Career_Start_Date__c = Date.today().addYears(-6),
+            Email__c = 'portfolio@example.com',
+            Introduction__c = '+ years building enterprise Salesforce',
+            Sub_Introduction__c = 'I design and build scalable Salesforce solutions',
+            LinkedIn_URL__c = 'https://www.linkedin.com/in/example',
+            Github_URL__c = 'https://github.com/example',
+            Trailblazer_URL__c = 'https://trailhead.salesforce.com/example'
         );
         insert portfolio;
 
@@ -201,6 +209,21 @@ private class PortfolioControllerTest {
                 'Blank message was rejected with AuraHandledException'
             );
         }
+    }
+
+    @IsTest
+    static void testGetPortfolio() {
+        Portfolio__c portfolio = [SELECT Id FROM Portfolio__c LIMIT 1];
+
+        Test.startTest();
+        Portfolio__c result = PortfolioController.getPortfolio(portfolio.Id);
+        Test.stopTest();
+
+        System.assertNotEquals(null, result, 'Should return portfolio data');
+        System.assertEquals('Test Portfolio', result.FullName__c);
+        System.assertEquals('Salesforce Developer', result.Designation__c);
+        System.assertEquals('https://github.com/example', result.Github_URL__c);
+        System.assertEquals('portfolio@example.com', result.Email__c);
     }
 
     @IsTest

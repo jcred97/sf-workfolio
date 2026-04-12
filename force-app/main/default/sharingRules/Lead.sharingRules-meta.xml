@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
     <sharingGuestRules>
         <fullName>Guest_User_Portofolio_Sharing_Rule</fullName>
         <accessLevel>Read</accessLevel>
         <label>Guest User Portofolio Sharing Rule</label>
         <sharedTo>
-            <guestUser>Salesforce_Portfolio</guestUser>
+            <guestUser>Portfolio</guestUser>
         </sharedTo>
         <criteriaItems>
             <field>OwnerId</field>

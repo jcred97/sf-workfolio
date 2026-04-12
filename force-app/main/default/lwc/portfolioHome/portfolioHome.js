@@ -1,15 +1,6 @@
 import { LightningElement, api, wire } from 'lwc';
-import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
+import getPortfolio from '@salesforce/apex/PortfolioController.getPortfolio';
 import getCertifications from '@salesforce/apex/PortfolioController.getCertifications';
-
-import FULLNAME from '@salesforce/schema/Portfolio__c.FullName__c';
-import DESIGNATION from '@salesforce/schema/Portfolio__c.Designation__c';
-import CAREER_START_DATE from '@salesforce/schema/Portfolio__c.Career_Start_Date__c';
-import INTRODUCTION from '@salesforce/schema/Portfolio__c.Introduction__c';
-import SUB_INTRODUCTION from '@salesforce/schema/Portfolio__c.Sub_Introduction__c';
-import LINKEDIN_URL from '@salesforce/schema/Portfolio__c.LinkedIn_URL__c';
-import GITHUB_URL from '@salesforce/schema/Portfolio__c.Github_URL__c';
-import TRAILBLAZER_URL from '@salesforce/schema/Portfolio__c.Trailblazer_URL__c';
 
 export default class PortfolioHome extends LightningElement {
     @api recordId;
@@ -30,27 +21,14 @@ export default class PortfolioHome extends LightningElement {
     /* =========================================================
        WIRE - Portfolio record
     ========================================================= */
-    @wire(getRecord, {
-        recordId: '$recordId',
-        fields: [
-            FULLNAME,
-            DESIGNATION,
-            CAREER_START_DATE,
-            INTRODUCTION,
-            SUB_INTRODUCTION,
-            LINKEDIN_URL,
-            GITHUB_URL,
-            TRAILBLAZER_URL
-        ]
-    })
-    wiredPortfolio(result) {
-        this.portfolioData = result;
-
-        if (result.data) {
+    @wire(getPortfolio, { portfolioId: '$recordId' })
+    wiredPortfolio({ data, error }) {
+        if (data) {
+            this.portfolioData = data;
             this.hasError = false;
             this.errorMessage = '';
 
-            const name = getFieldValue(result.data, FULLNAME);
+            const name = data.FullName__c;
 
             // Only dispatch when name is available and hasn't been sent yet
             if (name && name !== this._lastSentName) {
@@ -59,11 +37,11 @@ export default class PortfolioHome extends LightningElement {
                     new CustomEvent('namechange', { detail: name })
                 );
             }
-        } else if (result.error) {
+        } else if (error) {
             this.hasError = true;
             this.errorMessage =
-                result.error?.body?.message ||
-                result.error?.message ||
+                error?.body?.message ||
+                error?.message ||
                 'Unable to load profile. Please try again later.';
         }
     }
@@ -89,38 +67,35 @@ export default class PortfolioHome extends LightningElement {
        GETTERS
     ========================================================= */
     get fullName() {
-        return getFieldValue(this.portfolioData.data, FULLNAME);
+        return this.portfolioData.FullName__c;
     }
 
     get designation() {
-        return getFieldValue(this.portfolioData.data, DESIGNATION);
+        return this.portfolioData.Designation__c;
     }
 
     get introduction() {
-        return getFieldValue(this.portfolioData.data, INTRODUCTION);
+        return this.portfolioData.Introduction__c;
     }
 
     get subIntroduction() {
-        return getFieldValue(this.portfolioData.data, SUB_INTRODUCTION);
+        return this.portfolioData.Sub_Introduction__c;
     }
 
     get linkedinUrl() {
-        return getFieldValue(this.portfolioData.data, LINKEDIN_URL);
+        return this.portfolioData.LinkedIn_URL__c;
     }
 
     get githubUrl() {
-        return getFieldValue(this.portfolioData.data, GITHUB_URL);
+        return this.portfolioData.Github_URL__c;
     }
 
     get trailblazerUrl() {
-        return getFieldValue(this.portfolioData.data, TRAILBLAZER_URL);
+        return this.portfolioData.Trailblazer_URL__c;
     }
 
     get experienceSummary() {
-        const startDate = getFieldValue(
-            this.portfolioData.data,
-            CAREER_START_DATE
-        );
+        const startDate = this.portfolioData.Career_Start_Date__c;
         if (!startDate) return '';
 
         const start = new Date(startDate);
