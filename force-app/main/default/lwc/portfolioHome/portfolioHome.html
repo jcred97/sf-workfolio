@@ -136,6 +136,45 @@
             </section>
         </div>
 
+        <!-- FEATURED COMPANIES / CLIENTS -->
+        <template if:true={isFeaturedCompaniesLoading}>
+            <div class="featured-companies-skel">
+                <div class="skel skel-section-label-sm"></div>
+                <div class="skel-company-strip-inner">
+                    <div class="skel skel-company-logo"></div>
+                    <div class="skel skel-company-logo"></div>
+                    <div class="skel skel-company-logo"></div>
+                    <div class="skel skel-company-logo"></div>
+                </div>
+            </div>
+        </template>
+        <template if:false={isFeaturedCompaniesLoading}>
+            <template if:true={hasFeaturedCompanies}>
+                <section
+                    class="featured-companies"
+                    aria-label="Companies and clients"
+                >
+                    <p class="section-label">Worked With</p>
+                    <div class="company-strip">
+                        <template
+                            for:each={featuredCompanies}
+                            for:item="company"
+                        >
+                            <div key={company.Id} class="company-logo-frame">
+                                <img
+                                    src={company.logoUrl}
+                                    alt={company.name}
+                                    class="company-logo"
+                                    loading="lazy"
+                                    title={company.name}
+                                />
+                            </div>
+                        </template>
+                    </div>
+                </section>
+            </template>
+        </template>
+
         <!-- CONTACT SECTION (MOVED FROM SEPARATE PAGE) -->
         <div class="contact-section">
             <h2 class="contact-title">Let's work together</h2>

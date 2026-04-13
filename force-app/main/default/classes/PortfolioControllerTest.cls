@@ -387,4 +387,58 @@ private class PortfolioControllerTest {
             result[0].Work_Experience__r.CompanyName__c
         );
     }
+
+    @IsTest
+    static void testGetFeaturedCompanies() {
+        Portfolio__c portfolio = [SELECT Id FROM Portfolio__c LIMIT 1];
+
+        List<Featured_Company__c> companies = new List<Featured_Company__c>{
+            new Featured_Company__c(
+                Name = 'Accenture',
+                Logo_Filename__c = 'accenture.png',
+                Display_Order__c = 1,
+                Portfolio__c = portfolio.Id
+            ),
+            new Featured_Company__c(
+                Name = 'Quantrics',
+                Logo_Filename__c = 'quantrics.png',
+                Display_Order__c = 2,
+                Portfolio__c = portfolio.Id
+            )
+        };
+        insert companies;
+
+        Test.startTest();
+        List<Featured_Company__c> result = PortfolioController.getFeaturedCompanies(
+            portfolio.Id
+        );
+        Test.stopTest();
+
+        System.assertEquals(
+            2,
+            result.size(),
+            'Should return 2 featured companies'
+        );
+        System.assertEquals('Accenture', result[0].Name);
+        System.assertEquals('accenture.png', result[0].Logo_Filename__c);
+        System.assertEquals(1, result[0].Display_Order__c);
+        System.assertEquals('Quantrics', result[1].Name);
+    }
+
+    @IsTest
+    static void testGetFeaturedCompanies_Empty() {
+        Portfolio__c portfolio = [SELECT Id FROM Portfolio__c LIMIT 1];
+
+        Test.startTest();
+        List<Featured_Company__c> result = PortfolioController.getFeaturedCompanies(
+            portfolio.Id
+        );
+        Test.stopTest();
+
+        System.assertEquals(
+            0,
+            result.size(),
+            'Should return empty list when no featured companies exist'
+        );
+    }
 }

@@ -225,6 +225,18 @@ public with sharing class PortfolioController {
     }
 
     @AuraEnabled(cacheable=true)
+    public static List<Featured_Company__c> getFeaturedCompanies(
+        Id portfolioId
+    ) {
+        return [
+            SELECT Id, Name, Logo_Filename__c, Display_Order__c
+            FROM Featured_Company__c
+            WHERE Portfolio__c = :portfolioId
+            ORDER BY Display_Order__c ASC NULLS LAST, Name ASC
+        ];
+    }
+
+    @AuraEnabled(cacheable=true)
     public static List<Project__c> getProjects(Id portfolioId) {
         return [
             SELECT

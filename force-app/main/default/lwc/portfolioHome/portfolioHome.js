@@ -1,6 +1,8 @@
 import { LightningElement, api, wire } from 'lwc';
 import getPortfolio from '@salesforce/apex/PortfolioController.getPortfolio';
 import getCertifications from '@salesforce/apex/PortfolioController.getCertifications';
+import getFeaturedCompanies from '@salesforce/apex/PortfolioController.getFeaturedCompanies';
+import PORTFOLIO_ASSETS from '@salesforce/resourceUrl/PortfolioAssets';
 
 export default class PortfolioHome extends LightningElement {
     @api recordId;
@@ -14,9 +16,11 @@ export default class PortfolioHome extends LightningElement {
     ========================================================= */
     portfolioData = {};
     certifications = [];
+    featuredCompanies = [];
     _lastSentName = '';
     isProfileLoading = true;
     isCertificationsLoading = true;
+    isFeaturedCompaniesLoading = true;
     hasError = false;
     errorMessage = '';
 
@@ -82,8 +86,35 @@ export default class PortfolioHome extends LightningElement {
     }
 
     /* =========================================================
+       WIRE - Featured Companies from Featured_Company__c
+    ========================================================= */
+    @wire(getFeaturedCompanies, { portfolioId: '$recordId' })
+    wiredFeaturedCompanies({ data, error }) {
+        if (!this.recordId || (data === undefined && !error)) return;
+
+        this.isFeaturedCompaniesLoading = false;
+
+        if (data) {
+            this.featuredCompanies = data
+                .filter((c) => c.Logo_Filename__c)
+                .map((c) => ({
+                    Id: c.Id,
+                    name: c.Name,
+                    logoUrl: `${PORTFOLIO_ASSETS}/PortfolioAssets/Company/${c.Logo_Filename__c}`
+                }));
+        } else if (error) {
+            console.error('Featured companies load error', error);
+            this.featuredCompanies = [];
+        }
+    }
+
+    /* =========================================================
        GETTERS
     ========================================================= */
+    get hasFeaturedCompanies() {
+        return this.featuredCompanies.length > 0;
+    }
+
     get fullName() {
         return this.portfolioData.FullName__c;
     }

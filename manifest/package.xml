@@ -26,6 +26,10 @@
         <members>Lead.Follow_Up_Log__c</members>
         <members>Lead.Follow_Up_Sent__c</members>
         <members>Certification__c.Source_Key__c</members>
+        <members>Featured_Company__c.Logo_Filename__c</members>
+        <members>Featured_Company__c.Display_Order__c</members>
+        <members>Featured_Company__c.Portfolio__c</members>
+        <members>Featured_Company__c.Source_Key__c</members>
         <members>Experience_Bullet__c.Source_Key__c</members>
         <members>Personal_Project__c.Source_Key__c</members>
         <members>Portfolio_Setting__c.Source_Key__c</members>
@@ -52,6 +56,7 @@
     <types>
         <members>Certification__c</members>
         <members>Experience_Bullet__c</members>
+        <members>Featured_Company__c</members>
         <members>Job_Application__c</members>
         <members>Lead_Submission__e</members>
         <members>Notification_Config__mdt</members>
@@ -83,6 +88,7 @@
     </types>
     <types>
         <members>Certification__c-Certification Layout</members>
+        <members>Featured_Company__c-Featured Company Layout</members>
         <members>Lead-Lead Layout</members>
         <members>Personal_Project__c-Personal Project Layout</members>
         <members>Project_Image__c-Project Image Layout</members>
@@ -115,6 +121,7 @@
     <types>
         <members>Certification__c</members>
         <members>Experience_Bullet__c</members>
+        <members>Featured_Company__c</members>
         <members>Lead</members>
         <members>Personal_Project__c</members>
         <members>Portfolio__c</members>
