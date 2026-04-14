@@ -133,6 +133,7 @@
     </types>
     <types>
         <members>PortfolioAssets</members>
+        <members>PortfolioCertificates</members>
         <members>Favicon</members>
         <name>StaticResource</name>
     </types>
