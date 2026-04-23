@@ -1,50 +1,32 @@
 <template>
     <template if:true={hasChildren}>
-        
-        <div class="node">
-
-            <div class="node-header"
-                 onclick={toggle}
-                 role="button"
-                 tabindex="0"
-                 aria-expanded={node.isOpen}
-                 onkeydown={toggle}>
+        <section class="node">
+            <div class="node-header">
                 <span class="node-label">{node.Name}</span>
-                <span class="toggle" aria-hidden="true">{icon}</span>
             </div>
 
-            <template if:true={node.isOpen}>
-                <div class="node-children">
-
-                    <template if:true={allChildrenAreLeaf}>
-                        <div class="tag-group">
-                            <template for:each={node.children} for:item="child">
-                                <span 
-                                    key={child.Id} 
-                                    class="skill-tag"
-                                    data-name={child.Name}
-                                    onclick={handleTagClick}>
-                                    {child.Name}
-                                </span>
-                            </template>
-                        </div>
-                    </template>
-
-                    <template if:false={allChildrenAreLeaf}>
+            <div class="node-children">
+                <template if:true={allChildrenAreLeaf}>
+                    <div class="tag-group">
                         <template for:each={node.children} for:item="child">
-                            <c-skill-node key={child.Id} node={child}></c-skill-node>
+                            <span key={child.Id} class="skill-tag">
+                                {child.Name}
+                            </span>
                         </template>
+                    </div>
+                </template>
+
+                <template if:false={allChildrenAreLeaf}>
+                    <template for:each={node.children} for:item="child">
+                        <c-skill-node key={child.Id} node={child}>
+                        </c-skill-node>
                     </template>
-
-                </div>
-            </template>
-        </div>
-
+                </template>
+            </div>
+        </section>
     </template>
 
     <template if:false={hasChildren}>
-        <span class="skill-tag">
-            {node.Name}
-        </span>
+        <span class="skill-tag">{node.Name}</span>
     </template>
 </template>

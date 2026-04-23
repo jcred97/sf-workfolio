@@ -1,13 +1,15 @@
 import { LightningElement, api, wire } from 'lwc';
 import getSkills from '@salesforce/apex/PortfolioController.getSkills';
 
+const SALESFORCE_LABELS = ['salesforce'];
+const DELIVERY_LABELS = ['devops', 'delivery', 'deployment'];
+const TOOLING_LABELS = ['tools', 'tooling'];
+const DEFAULT_PRIORITY = Number.MAX_SAFE_INTEGER;
+
 export default class PortfolioSkills extends LightningElement {
     @api recordId;
-    treeData = [];
 
-    /* =========================================================
-       WIRE
-    ========================================================= */
+    treeData = [];
     isLoading = true;
     hasError = false;
     errorMessage = '';
@@ -27,21 +29,8 @@ export default class PortfolioSkills extends LightningElement {
             this.errorMessage = '';
 
             const tree = this.buildTree(data);
-            this.treeData = this.initializeTree(tree);
-
-            // Set initial open heights - no animation on first load, just snap open
-            // eslint-disable-next-line @lwc/lwc/no-async-operation
-            requestAnimationFrame(() => {
-                // eslint-disable-next-line @lwc/lwc/no-async-operation
-                requestAnimationFrame(() => {
-                    this.template
-                        .querySelectorAll('.card-body.open')
-                        .forEach((el) => {
-                            el.style.height = 'auto';
-                            el.style.overflow = 'visible';
-                        });
-                });
-            });
+            const curatedTree = this.curateSalesforceTree(tree);
+            this.treeData = this.initializeNodes(curatedTree);
         } else if (error) {
             this.hasError = true;
             this.errorMessage =
@@ -53,191 +42,170 @@ export default class PortfolioSkills extends LightningElement {
         }
     }
 
-    /* =========================================================
-       TOP-LEVEL TOGGLE (card open/close)
-    ========================================================= */
-    toggleCard(event) {
-        if (event.type === 'keydown') {
-            if (event.key !== 'Enter' && event.key !== ' ') return;
-            if (event.key === ' ') event.preventDefault();
+    initializeNodes(nodes) {
+        return [...nodes]
+            .sort((leftNode, rightNode) =>
+                this.compareNodes(leftNode, rightNode)
+            )
+            .map((node) => {
+                const children = this.normalizeChildren(node.children || []);
+
+                return this.decorateNode({
+                    ...node,
+                    children: this.initializeNodes(children)
+                });
+            });
+    }
+
+    compareNodes(leftNode, rightNode) {
+        const leftPriority = this.normalizePriority(leftNode.Priority__c);
+        const rightPriority = this.normalizePriority(rightNode.Priority__c);
+
+        if (leftPriority !== rightPriority) {
+            return leftPriority - rightPriority;
         }
 
-        const id = event?.currentTarget?.dataset?.id;
-        if (!id) return;
-
-        this.treeData = this.treeData.map((item) => {
-            const isOpen = item.Id === id ? !item.isOpen : item.isOpen;
-
-            return {
-                ...item,
-                isOpen,
-                icon: isOpen ? '-' : '+',
-                bodyClass: isOpen ? 'card-body open' : 'card-body',
-                cssClass:
-                    item.Is_Full_Width__c && isOpen
-                        ? 'skill-card full-width'
-                        : 'skill-card'
-            };
-        });
-
-        // Run scrollHeight animation after LWC re-renders
-        // eslint-disable-next-line @lwc/lwc/no-async-operation
-        requestAnimationFrame(() => {
-            this.animateCards([id]);
-        });
+        return (leftNode.Name || '').localeCompare(rightNode.Name || '');
     }
 
-    /* =========================================================
-       SCROLL HEIGHT ANIMATION
-       - Opening: set pixel height so transition has a to-value
-       - Closing: pin current height first (from-value), then
-         animate to 0 in the next frame
-       - overflow stays hidden throughout; only flips to visible
-         after transitionend so content never bleeds during expand
-    ========================================================= */
-    animateCards(ids) {
-        const cards = ids?.length
-            ? ids
-                  .map((id) =>
-                      this.template.querySelector(`.card-body[data-id="${id}"]`)
-                  )
-                  .filter(Boolean)
-            : this.template.querySelectorAll('.card-body');
+    normalizePriority(priority) {
+        const parsedPriority = Number(priority);
 
-        cards.forEach((el) => {
-            // Remove any leftover transitionend listener before re-attaching
-            if (el._onTransitionEnd) {
-                el.removeEventListener('transitionend', el._onTransitionEnd);
-            }
-
-            if (el.classList.contains('open')) {
-                el.style.overflow = 'hidden';
-                el.style.height = el.scrollHeight + 'px';
-
-                // Only unlock overflow once the expand animation is fully done
-                el._onTransitionEnd = () => {
-                    el.style.overflow = 'visible';
-                    el.style.height = 'auto';
-                    el.removeEventListener(
-                        'transitionend',
-                        el._onTransitionEnd
-                    );
-                };
-                el.addEventListener('transitionend', el._onTransitionEnd);
-            } else {
-                // Lock overflow before collapsing so nothing bleeds during close
-                el.style.overflow = 'hidden';
-                // Pin to current pixel height so CSS has a from-value
-                el.style.height = el.scrollHeight + 'px';
-
-                // eslint-disable-next-line @lwc/lwc/no-async-operation
-                requestAnimationFrame(() => {
-                    el.style.height = '0px';
-                });
-            }
-        });
+        return Number.isFinite(parsedPriority)
+            ? parsedPriority
+            : DEFAULT_PRIORITY;
     }
 
-    /* =========================================================
-       DEEP TOGGLE (child node open/close via event bubble)
-       bodyClass is passed down so c-skill-node can drive its
-       own scrollHeight animation with the same pattern
-    ========================================================= */
-    handleToggle(event) {
-        const id = event.detail?.id;
-        if (!id) return;
-
-        this.treeData = this.toggleNode(this.treeData, id);
-    }
-
-    toggleNode(nodes, id) {
-        return nodes.map((node) => {
-            if (node.Id === id) {
-                const isOpen = !node.isOpen;
-                return {
-                    ...node,
-                    isOpen,
-                    icon: isOpen ? '-' : '+',
-                    bodyClass: isOpen ? 'card-body open' : 'card-body'
-                };
-            }
-
-            if (node.children && node.children.length > 0) {
-                return {
-                    ...node,
-                    children: this.toggleNode(node.children, id)
-                };
-            }
-
-            return node;
-        });
-    }
-
-    /* =========================================================
-       TREE INIT
-       - Opens all nodes by default
-       - Sets full-width class via Is_Full_Width__c field
-       - Pre-computes hasChildren + allChildrenAreLeaf flags
-       - Fixes bad data (camelCase concat OR comma-separated strings)
-         using else-if so only one split strategy runs per node
-    ========================================================= */
-    initializeTree(nodes) {
-        return nodes.map((node) => {
-            let children = node.children
-                ? this.initializeTree(node.children)
-                : [];
-
-            // Bad data fix - only one branch runs per node
-            if (children.length === 1 && !children[0].children?.length) {
-                const raw = children[0].Name;
-                const originalId = children[0].Id;
-
-                if (raw && raw.length > 10 && !raw.includes(' ')) {
-                    // CamelCase concatenated string e.g. "ApexVisualforce"
-                    const split = raw.match(/[A-Z][a-z]+/g);
-                    if (split && split.length > 1) {
-                        children = split.map((name, i) => ({
-                            Id: `${originalId}-${i}`,
-                            Name: name,
-                            children: []
-                        }));
-                    }
-                } else if (raw && raw.includes(',')) {
-                    // Comma-separated string e.g. "Apex, LWC, Flows"
-                    children = raw.split(',').map((name, i) => ({
-                        Id: `${originalId}-${i}`,
-                        Name: name.trim(),
-                        children: []
-                    }));
-                }
-            }
-
-            const isOpen = true;
-            const hasChildren = children.length > 0;
-            const allChildrenAreLeaf = children.every(
+    decorateNode(node) {
+        const children = node.children || [];
+        const hasChildren = children.length > 0;
+        const allChildrenAreLeaf =
+            hasChildren &&
+            children.every(
                 (child) => !child.children || child.children.length === 0
             );
 
-            return {
-                ...node,
-                isOpen,
-                icon: '-',
-                children,
-                hasChildren,
-                allChildrenAreLeaf,
-                bodyClass: 'card-body open',
-                cssClass:
-                    node.Is_Full_Width__c && isOpen
-                        ? 'skill-card full-width'
-                        : 'skill-card'
-            };
-        });
+        return {
+            ...node,
+            children,
+            hasChildren,
+            allChildrenAreLeaf,
+            cardClass: node.Is_Full_Width__c
+                ? 'skill-card skill-card--full'
+                : 'skill-card'
+        };
     }
 
-    /* =========================================================
-       BUILD TREE
-       O(n) parent-child linking via Map
-    ========================================================= */
+    normalizeChildren(children) {
+        if (children.length !== 1 || children[0].children?.length) {
+            return children;
+        }
+
+        const onlyChild = children[0];
+        const names = this.splitMalformedSkillNames(onlyChild.Name);
+
+        if (!names) {
+            return children;
+        }
+
+        return names.map((name, index) => ({
+            Id: `${onlyChild.Id}-${index}`,
+            Name: name,
+            children: []
+        }));
+    }
+
+    splitMalformedSkillNames(rawName) {
+        if (!rawName) return null;
+
+        if (rawName.includes(',')) {
+            return rawName
+                .split(',')
+                .map((name) => name.trim())
+                .filter(Boolean);
+        }
+
+        if (rawName.length > 10 && !rawName.includes(' ')) {
+            const splitNames = rawName.match(/[A-Z][a-z0-9+#&]+/g);
+            if (splitNames && splitNames.length > 1) {
+                return splitNames;
+            }
+        }
+
+        return null;
+    }
+
+    curateSalesforceTree(roots) {
+        const salesforceNode = this.findNodeByLabels(roots, SALESFORCE_LABELS);
+        const devopsNode = roots.find((node) =>
+            this.includesAnyLabel(node.Name, DELIVERY_LABELS)
+        );
+        const toolsNode = roots.find((node) =>
+            this.includesAnyLabel(node.Name, TOOLING_LABELS)
+        );
+
+        const curated = [];
+
+        if (salesforceNode?.children?.length) {
+            curated.push({
+                ...salesforceNode,
+                Name: 'Salesforce Platform',
+                Is_Full_Width__c: true
+            });
+        }
+
+        if (devopsNode) {
+            const toolingChildren =
+                toolsNode && toolsNode.Id !== devopsNode.Id
+                    ? toolsNode.children || []
+                    : [];
+            const mergedChildren = [
+                ...(devopsNode.children || []),
+                ...toolingChildren
+            ];
+
+            curated.push({
+                ...devopsNode,
+                Name: 'Delivery, Deployment & Tooling',
+                Is_Full_Width__c: true,
+                children: mergedChildren
+            });
+        }
+
+        if (toolsNode && !devopsNode) {
+            curated.push({
+                ...toolsNode,
+                Name: 'Delivery, Deployment & Tooling',
+                Is_Full_Width__c: true
+            });
+        }
+
+        return curated.length ? curated : roots;
+    }
+
+    findNodeByLabels(nodes, labels) {
+        for (const node of nodes) {
+            if (this.includesAnyLabel(node.Name, labels)) {
+                return node;
+            }
+
+            if (node.children?.length) {
+                const match = this.findNodeByLabels(node.children, labels);
+                if (match) {
+                    return match;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    includesAnyLabel(value, labels) {
+        const normalizedValue = value?.toLowerCase() || '';
+
+        return labels.some((label) => normalizedValue.includes(label));
+    }
+
     buildTree(data) {
         const map = new Map();
         const roots = [];
@@ -247,12 +215,12 @@ export default class PortfolioSkills extends LightningElement {
         });
 
         data.forEach((skill) => {
+            const node = map.get(skill.Id);
+
             if (skill.Parent_Skill__c) {
-                map.get(skill.Parent_Skill__c)?.children.push(
-                    map.get(skill.Id)
-                );
+                map.get(skill.Parent_Skill__c)?.children.push(node);
             } else {
-                roots.push(map.get(skill.Id));
+                roots.push(node);
             }
         });
 

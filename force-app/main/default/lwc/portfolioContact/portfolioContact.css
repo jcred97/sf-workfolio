@@ -244,7 +244,6 @@ a {
 }
 
 .btn:hover {
-    transform: translateY(-2px);
     box-shadow: 0 10px 28px
         color-mix(in srgb, var(--primary-color) 35%, transparent);
 }
@@ -368,7 +367,6 @@ a {
 .copy-btn:hover {
     background: color-mix(in srgb, var(--primary-color) 30%, transparent);
     color: #fff;
-    transform: translateY(-1px);
 }
 
 /* =========================================================
@@ -454,7 +452,6 @@ a {
     border-color: var(--primary-color);
     background: color-mix(in srgb, var(--primary-color) 10%, transparent);
     color: #fff;
-    transform: translateY(-2px);
 }
 
 .social-pill img {

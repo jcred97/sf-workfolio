@@ -90,7 +90,6 @@
 }
 
 .project-card:hover {
-    transform: translateY(-4px);
     border-color: var(--primary-color);
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
 }
@@ -322,7 +321,6 @@
 }
 
 .skill-tag:hover {
-    transform: translateY(-2px);
     box-shadow: 0 4px 10px var(--card-shadow);
 }
 
@@ -356,7 +354,6 @@
     color: var(--text-primary);
     border-color: var(--primary-color);
     background: color-mix(in srgb, var(--primary-color) 10%, transparent);
-    transform: translateY(-1px);
 }
 
 .project-link.live {

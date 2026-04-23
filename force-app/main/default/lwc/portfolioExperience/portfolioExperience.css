@@ -256,7 +256,6 @@
 }
 
 .skill-tag:hover {
-    transform: translateY(-4px);
     border-color: var(--primary-color);
     box-shadow: 0 6px 14px var(--card-shadow);
 }
