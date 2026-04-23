@@ -1,0 +1,62 @@
+{
+    "type": "sfdc_cms__view",
+    "title": "Service Not Available",
+    "contentBody": {
+        "component": {
+            "children": [
+                {
+                    "children": [
+                        {
+                            "attributes": {
+                                "backgroundImageConfig": "",
+                                "backgroundImageOverlay": "rgba(0,0,0,0)",
+                                "componentSpacerSize": "",
+                                "layoutDirectionDesktop": "row",
+                                "layoutDirectionMobile": "column",
+                                "layoutDirectionTablet": "column",
+                                "maxContentWidth": "",
+                                "sectionColumnGutterWidth": "",
+                                "sectionConfig": "{\"UUID\":\"60305ad5-b1b0-40ae-b204-41fc191ba02e\",\"columns\":[{\"UUID\":\"1c3177d3-a953-49c5-9c7a-b05f73209f2f\",\"columnName\":\"Column 1\",\"columnKey\":\"col1\",\"columnWidth\":\"12\",\"seedComponents\":null}]}",
+                                "sectionMinHeight": "",
+                                "sectionVerticalAlign": "flex-start"
+                            },
+                            "children": [
+                                {
+                                    "children": [
+                                        {
+                                            "attributes": {
+                                                "imageInfos": "",
+                                                "richTextValue": "<div style=\"display: flex; align-items: center; flex-direction: column; margin: 60px 25px 40px 25px;\">\n\t<div style=\"background: url(assets/img/serviceNotAvailable.svg) center no-repeat !important; background-size: contain; height: 331px; width: 100%; max-width: 538px;\"></div>\n</div>\n<div style=\"margin: 0 25px; text-align: center;\">\n\t<h1><b style=\"font-size: 2em\">Looks like the site is temporarily unavailable</b></h1>\n\t<br/>\n\t<p><span style=\"font-size: 1.5em;\">Please try again in a bit.</span></p>\n</div>"
+                                            },
+                                            "definition": "community_builder:htmlEditor",
+                                            "id": "7b6b851c-6a06-4c76-b7d5-1b113d78cc8f",
+                                            "type": "component"
+                                        }
+                                    ],
+                                    "id": "1c3177d3-a953-49c5-9c7a-b05f73209f2f",
+                                    "name": "col1",
+                                    "title": "Column 1",
+                                    "type": "region"
+                                }
+                            ],
+                            "definition": "community_layout:section",
+                            "id": "60305ad5-b1b0-40ae-b204-41fc191ba02e",
+                            "type": "component"
+                        }
+                    ],
+                    "id": "ce999c2d-262e-4c80-b083-7b08aefa6517",
+                    "name": "content",
+                    "title": "Content",
+                    "type": "region"
+                }
+            ],
+            "definition": "community_layout:sldsFlexibleLayout",
+            "id": "0db8b04e-322f-4949-98db-be35f9070b80",
+            "type": "component"
+        },
+        "dataProviders": [],
+        "themeLayoutType": "ServiceNotAvailable",
+        "viewType": "service-not-available"
+    },
+    "urlName": "service-not-available"
+}

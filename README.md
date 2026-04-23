@@ -1,10 +1,11 @@
 # sf-workfolio
 
-A personal developer portfolio built entirely on Salesforce, showcasing work experience, projects, skills, and certifications through Lightning Web Components. Includes a lead capture contact form and a job application tracker.
+A personal developer portfolio built on Salesforce Experience Cloud, showcasing work experience, projects, skills, and certifications through Lightning Web Components. Includes a lead capture contact form, job application tracker, and versioned Experience Cloud site source.
 
 ## Tech Stack
 
 - Salesforce DX (API v65.0)
+- Experience Cloud (LWR)
 - Lightning Web Components (LWC)
 - Apex
 - Platform Events
@@ -17,13 +18,21 @@ A personal developer portfolio built entirely on Salesforce, showcasing work exp
 ```
 force-app/main/default/
   classes/          Apex controllers + tests
-  lwc/              7 LWC components
-  objects/          12 custom and standard object folders
+  digitalExperiences/ Experience Cloud site source (routes, views, theme, styles)
+  navigationMenus/  Experience Cloud navigation metadata
+  lwc/              Portfolio UI components
+  objects/          Portfolio data model
   flows/            Lead submission and follow-up automation
   staticresources/  Portfolio assets (images, icons)
   customMetadata/   Email notification config
   permissionsets/   Access control
 ```
+
+## Experience Cloud Source
+
+- `force-app/main/default/digitalExperiences/` contains the versioned site definition for the portfolio Experience Cloud site
+- `force-app/main/default/navigationMenus/` contains the site navigation menu metadata
+- Site shell metadata such as `CustomSite` and `NetworkBranding` is intentionally not tracked by default
 
 ## Custom Objects
 
@@ -51,7 +60,7 @@ force-app/main/default/
 | portfolioContact    | Contact form (publishes Lead_Submission\_\_e platform event) + contact details |
 | portfolioExperience | Work experience timeline with nested projects and experience bullets           |
 | portfolioProjects   | Personal projects with video embeds and image lightbox gallery                 |
-| portfolioSkills     | Hierarchical skill tree with collapsible categories                            |
+| portfolioSkills     | Salesforce-focused hierarchical skills section                                 |
 | skillNode           | Recursive child component for nested skill rendering                           |
 
 ## Setup
@@ -81,7 +90,9 @@ force-app/main/default/
     sf project deploy start
     ```
 
-5. Create required data:
+5. Publish or update the Experience Cloud site as needed in the target org.
+
+6. Create required data:
     - 1 **Portfolio\_\_c** record (your name, designation, intro text, social URLs)
     - 1 **Portfolio_Setting\_\_c** record (theme colors, or leave blank for defaults)
     - **WorkExperience\_\_c** records with related **Project\_\_c** and **Experience_Bullet\_\_c** records
@@ -89,12 +100,18 @@ force-app/main/default/
     - **Certification\_\_c** records for badge display
     - **Skill\_\_c** records (use Parent_Skill\_\_c for hierarchy)
 
-6. Upload static resources:
+7. Upload static resources:
     - **PortfolioAssets** -- profile picture, social icons, certification logos
 
-7. Configure lead notifications:
+8. Configure lead notifications:
     - Create a **Portfolio_Leads** queue
     - Create **Notification_Config\_\_mdt** custom metadata records (email templates, recipients)
+
+## Seed Data
+
+- Seed CSVs live in `data/portfolio-seed/` for local import workflows
+- The seed folder is intentionally ignored by Git and is not treated as deployable source metadata
+- Re-import seed data only when you want to refresh org content
 
 ## Scripts
 

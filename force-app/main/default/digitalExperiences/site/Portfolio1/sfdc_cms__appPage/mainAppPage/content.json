@@ -1,0 +1,12 @@
+{
+    "type": "sfdc_cms__appPage",
+    "title": "main",
+    "contentBody": {
+        "currentThemeId": "Build_Your_Own_LWR",
+        "headMarkup": "<meta charset=\"UTF-8\" />\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n<title>John Carlo Red</title>\n<link rel=\"shortcut icon\" href=\"/resource/Favicon?v=2\" type=\"image/x-icon\" />\n<link rel=\"stylesheet\" href=\"{ basePath }/assets/styles/styles.css?{ versionKey }\" />\n\n\n<!-- webruntime-branding-shared stylesheets -->\n<link rel=\"stylesheet\" href=\"{ basePath }/assets/styles/salesforce-lightning-design-system.min.css?{ versionKey }\" />\n\n\n<!-- webruntime-branding-shared stylesheets -->\n\n<style> \n    .interactions-component.webruntimedesign-componentWrapper_componentWrapper{\n        min-height: 0px !important;\n    }\n    \n    .section-content.community_layout-section_section{\n        padding:0px !important;\n    }\n    \n    .currency-app .slds-dropdown_fluid{\n        min-width: 120px !important\n    }\n</style>",
+        "isLockerServiceEnabled": true,
+        "isRelaxedCSPLevel": false,
+        "templateName": "talon-template-byo"
+    },
+    "urlName": "main"
+}

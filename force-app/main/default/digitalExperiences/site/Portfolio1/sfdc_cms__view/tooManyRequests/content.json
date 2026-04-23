@@ -1,0 +1,68 @@
+{
+    "type": "sfdc_cms__view",
+    "title": "Too Many Requests",
+    "contentBody": {
+        "component": {
+            "children": [
+                {
+                    "children": [
+                        {
+                            "attributes": {
+                                "backgroundImageConfig": "",
+                                "backgroundImageOverlay": "rgba(0,0,0,0)",
+                                "componentSpacerSize": "",
+                                "layoutDirectionDesktop": "row",
+                                "layoutDirectionMobile": "column",
+                                "layoutDirectionTablet": "column",
+                                "maxContentWidth": "",
+                                "sectionColumnGutterWidth": "",
+                                "sectionConfig": "{\"UUID\":\"3b0b7997-4f50-4ec1-b185-740b37a39813\",\"columns\":[{\"UUID\":\"2c30d2c3-c537-4d9f-976a-a7a50da16dbc\",\"columnName\":\"Column 1\",\"columnKey\":\"col1\",\"columnWidth\":\"12\",\"seedComponents\":null}]}",
+                                "sectionMinHeight": "",
+                                "sectionVerticalAlign": "flex-start"
+                            },
+                            "children": [
+                                {
+                                    "children": [
+                                        {
+                                            "attributes": {
+                                                "imageInfos": "",
+                                                "richTextValue": "<div style=\"display: flex; align-items: center; flex-direction: column; margin: 60px 25px 30px 25px;\">\n\t<div style=\"background-image: url(assets/img/tooManyRequests.svg) !important; background-size: contain; height: 350px; width: 100%; background-repeat: no-repeat; background-position: center;\"></div>\n</div>\n<div style=\"margin: 0 25px; text-align: center;\">\n\t<h1 class=\"slds-text-heading_large\">Looks like the site is experiencing higher than usual demand&#8230;</h1>\n\t<p class=\"slds-text-heading_small\">Don't go anywhere. We'll redirect you in a moment.</p>\n</div>"
+                                            },
+                                            "definition": "community_builder:htmlEditor",
+                                            "id": "39f71297-fb14-4595-8e8f-1e9a753da58a",
+                                            "type": "component"
+                                        },
+                                        {
+                                            "attributes": {},
+                                            "definition": "experience_availability:autoRefresh",
+                                            "id": "d800532b-8403-4eac-8221-43aabfe2cd87",
+                                            "type": "component"
+                                        }
+                                    ],
+                                    "id": "2c30d2c3-c537-4d9f-976a-a7a50da16dbc",
+                                    "name": "col1",
+                                    "title": "Column 1",
+                                    "type": "region"
+                                }
+                            ],
+                            "definition": "community_layout:section",
+                            "id": "3b0b7997-4f50-4ec1-b185-740b37a39813",
+                            "type": "component"
+                        }
+                    ],
+                    "id": "9192a37e-074f-47fe-9deb-e36c64f50ad0",
+                    "name": "content",
+                    "title": "Content",
+                    "type": "region"
+                }
+            ],
+            "definition": "community_layout:sldsFlexibleLayout",
+            "id": "0316a07c-7df4-4ab9-95c6-f97346c638f1",
+            "type": "component"
+        },
+        "dataProviders": [],
+        "themeLayoutType": "ServiceNotAvailable",
+        "viewType": "too-many-requests"
+    },
+    "urlName": "too-many-requests"
+}
