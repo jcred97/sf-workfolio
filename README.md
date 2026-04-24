@@ -107,12 +107,6 @@ force-app/main/default/
     - Create a **Portfolio_Leads** queue
     - Create **Notification_Config\_\_mdt** custom metadata records (email templates, recipients)
 
-## Seed Data
-
-- Seed CSVs live in `data/portfolio-seed/` for local import workflows
-- The seed folder is intentionally ignored by Git and is not treated as deployable source metadata
-- Re-import seed data only when you want to refresh org content
-
 ## Scripts
 
 | Command                   | Description                         |
